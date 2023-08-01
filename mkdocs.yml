@@ -28,9 +28,12 @@ nav:
     - examples/rabi.py
     - examples/ramsey.py
     - examples/floquet.py
+    - examples/example-2-lp-gate.py
     - examples/example-3-2d-ordered-state.py
     - examples/example-3-time-sweep.py
-
+    - examples/example-4-quantum-scar-dynamics.py
+    - examples/example-5-MIS-UDG.py
+    
   - bloqade-python Github:
     - https://github.com/QuEraComputing/bloqade-python
 
