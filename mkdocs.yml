@@ -23,7 +23,6 @@ nav:
   #    - Asking a question: https://github.com/QuEraComputing/bloqade-python/discussions
 
   - Tutorials:
-    - tutorials/index.md
     - examples/adiabatic.py
     - examples/multi-qubit-blockaded-rabi.py
     - examples/rabi.py
@@ -37,11 +36,6 @@ nav:
 
   - Home:
     - https://literate-guacamole-35n48l9.pages.github.io/dev/
-
-  - Blog:
-    - blog/index.md
-    - 2023:
-      - blog/posts/bloqade-release.md
 
 copyright: Copyright &copy; 2022 - QuEra Computing Inc.
 theme:
@@ -89,21 +83,21 @@ theme:
 plugins:
   - search:
       separator: '[\s\-,:!=\[\]()"`/]+|\.(?!\d)|&[lg]t;|(?!\b)(?=[A-Z][a-z])'
-  - gen-files:
-      scripts:
-      - scripts/gen_ref_nav.py
+  #- gen-files:
+  #    scripts:
+  #    - scripts/gen_ref_nav.py
   - literate-nav:
       nav_file: SUMMARY.txt
-  - mkdocstrings:
-      handlers:
-        python:
-          paths: [../src]
-          options:
-            show_if_no_docstring: false
-            separate_signature: true
-            merge_init_into_class: true
-            docstring_options:
-              ignore_init_summary: true
+  #- mkdocstrings:
+  #    handlers:
+  #      python:
+  #        paths: [../src]
+  #        options:
+  #          show_if_no_docstring: false
+  #          separate_signature: true
+  #          merge_init_into_class: true
+  #          docstring_options:
+  #            ignore_init_summary: true
   - minify:
       minify_html: true
   - mkdocs-jupyter:
