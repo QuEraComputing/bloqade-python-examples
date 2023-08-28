@@ -22,7 +22,7 @@
 
 # %%
 from bloqade import start, cast
-from bloqade.task import HardwareBatchResult
+import bloqade
 
 import os
 import numpy as np
@@ -66,7 +66,7 @@ rabi_oscillation_job = rabi_oscillations_program.assign(
 # `run_time` variable), let the task have 10000 shots.
 
 # %%
-emu_report = rabi_oscillation_job.braket_local_simulator(10000).submit().report()
+emu_report = rabi_oscillation_job.braket.local_emulator().run(shots=10000).report()
 
 # %% [markdown]
 # Submit the same program to hardware,
@@ -84,8 +84,8 @@ emu_report = rabi_oscillation_job.braket_local_simulator(10000).submit().report(
 """
 (
     rabi_oscillation_job.parallelize(24)
-    .braket(100)
-    .submit()
+    .braket.aquila()
+    .submit(shots=100)
     .save_json("rabi-job.json")
 )
 """
@@ -94,7 +94,7 @@ emu_report = rabi_oscillation_job.braket_local_simulator(10000).submit().report(
 # Load JSON and pull results from Braket
 
 # %%
-hw_future = HardwareBatchResult.load_json(
+hw_future = bloqade.load_batch(
     os.getcwd() + "/docs/docs/examples/" + "rabi-job.json"
 )
 hw_rydberg_densities = hw_future.report().rydberg_densities()

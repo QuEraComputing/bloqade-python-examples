@@ -15,6 +15,6 @@ mis_udg_program = (
 
 mis_udg_job = mis_udg_program.batch_assign(final_detuning=np.linspace(0, 80, 81))
 # submit to HW
-hw_job = mis_udg_job.braket(1000).submit().save_json("example-5-MIS-UDG.json")
+hw_job = mis_udg_job.braket.aquila().submit(shots=1000).save_json("example-5-MIS-UDG.json")
 
 # submit to emulator would take too many resources

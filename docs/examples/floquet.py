@@ -19,8 +19,7 @@
 
 # %%
 from bloqade import start, cast
-from bloqade.task import HardwareBatchResult
-
+import bloqade
 import numpy as np
 import os
 
@@ -74,16 +73,16 @@ floquet_job = floquet_program.assign(
 # is considered too small by validation
 
 # submit to emulator
-emu_job = floquet_job.braket_local_simulator(10000).submit().report()
+emu_job = floquet_job.braket.local_emulator().run(shots=10000).report()
 
 # submit to HW
 """
 (
-    floquet_job.parallelize(24).braket(50).submit().save_json("example-1c-floquet-job.json")
+    floquet_job.parallelize(24).braket.aquila().submit(shots=50).save_json("example-1c-floquet-job.json")
 )
 """
 
-hw_future = HardwareBatchResult.load_json(
+hw_future = bloqade.load_batch(
     os.getcwd() + "/docs/docs/examples/" + "floquet-job.json"
 )
 hw_rydberg_densities = hw_future.report().rydberg_densities()

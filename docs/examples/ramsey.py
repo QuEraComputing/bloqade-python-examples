@@ -22,7 +22,7 @@
 
 # %%
 from bloqade import start
-from bloqade.task import HardwareBatchResult
+import bloqade
 
 import os
 
@@ -64,7 +64,7 @@ ramsey_job = ramsey_program.batch_assign(t_run=np.around(np.arange(0, 30, 1) * 0
 # `t_run` variable), let the task have 10000 shots.
 
 # %%
-emu_job = ramsey_job.braket_local_simulator(10000).submit().report()
+emu_job = ramsey_job.braket.local_emulator().run(shots=10000).report()
 
 # %% [markdown]
 # Submit the same program to hardware,
@@ -82,8 +82,8 @@ emu_job = ramsey_job.braket_local_simulator(10000).submit().report()
 """
 (
     ramsey_job.parallelize(24)
-    .braket(100)
-    .submit()
+    .braket.aquila()
+    .submit(shots=100)
     .save_json("ramsey-job.json")
 )
 """
@@ -91,7 +91,7 @@ emu_job = ramsey_job.braket_local_simulator(10000).submit().report()
 # Load JSON and pull results from Braket
 
 # %%
-hw_future = HardwareBatchResult.load_json(
+hw_future = bloqade.load_batch(
     os.getcwd() + "/docs/docs/examples/" + "ramsey-job.json"
 )
 hw_rydberg_densities = hw_future.report().rydberg_densities()
