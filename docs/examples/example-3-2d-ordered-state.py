@@ -54,16 +54,16 @@ ordered_state_2D_job = ordered_state_2D_prog.assign(delta_end=42.66, sweep_time=
 
 # Can only run on HW because 121 atoms infeasible on simulator
 """
-(
+batch = (
     ordered_state_2D_job.braket.aquila
     .submit(shots=100)
-    .save_json("example-3-ordered-state-2D-job.json")
 )
+bloqade.save_batch("example-3-ordered-state-2D-job.json")
 """
 
 # retrieve results from HW
 hw_future = bloqade.load_batch(
-    os.getcwd() + "/docs/docs/examples/" + "example-3-2d-ordered-state-job.json"
+    os.getcwd() + "/docs/examples/" + "example-3-2d-ordered-state-job.json"
 )
 hw_job = hw_future.report()
 
