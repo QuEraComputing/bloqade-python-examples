@@ -77,13 +77,14 @@ emu_job = floquet_job.braket.local_emulator().run(shots=10000).report()
 
 # submit to HW
 """
-(
-    floquet_job.parallelize(24).braket.aquila().submit(shots=50).save_json("example-1c-floquet-job.json")
+batch=(
+    floquet_job.parallelize(24).braket.aquila().submit(shots=50)
 )
+bloqade.save_batch("example-1c-floquet-job.json",batch)
 """
 
 hw_future = bloqade.load_batch(
-    os.getcwd() + "/docs/docs/examples/" + "floquet-job.json"
+    os.getcwd() + "/docs/examples/" + "floquet-job.json"
 )
 hw_rydberg_densities = hw_future.report().rydberg_densities()
 

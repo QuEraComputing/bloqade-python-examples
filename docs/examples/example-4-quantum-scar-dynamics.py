@@ -44,13 +44,12 @@ emu_job = quantum_scar_job.braket.local_emulator().run(shots=n_shots).report()
 
 # run on HW
 """
-(
+batch=(
     quantum_scar_job.parallelize(24)
-    .braket.aquila.submit(shots=100)
-    .remove_invalid_tasks()
-    .resubmit()
-    .save_json("example-4-quantum-scar-dynamics-job.json")
+    .braket.aquila.submit(shots=100, ignore_error=True)
+    .remove_tasks("Unaccepted")
 )
+bloqade.save_batch("example-4-quantum-scar-dynamics-job.json",batch)
 """
 
 # retrieve results from HW

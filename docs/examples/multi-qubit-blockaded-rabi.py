@@ -88,12 +88,13 @@ emu_job = multi_qubit_blockade_job.braket.local_emulator().run(shots=10000).repo
 
 # run on hardware
 """
-(
+batch = (
     multi_qubit_blockade_job.parallelize(24)
     .braket.aquila()
     .submit(shots=100)
-    .save_json("example-2-multi-qubit-blockaded-job.json")
+    .remove_tasks("Unaccepted")
 )
+bloqade.save_batch("example-2-multi-qubit-blockaded-job.json",batch)
 """
 
 # %% [markdown]

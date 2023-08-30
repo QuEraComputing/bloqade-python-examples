@@ -53,17 +53,18 @@ emu_job = time_sweep_z2_job.braket.local_emulator().run(shots=10000).report()
 
 # submit to HW
 """
-(
+batch=(
     time_sweep_z2_job.parallelize(lattice_const * 3)
-    .braket.aquila
-    .submit(shots=100)
-    .save_json("example-3-time-sweep-job.json")
+    .braket.aquila()
+    .submit(shots=100,ignore_error=True)
+    .remove_tasks("Unaccepted")
 )
+bloqade.save_batch("example-3-time-sweep-job.json",batch)
 """
 
 # retrieve results from HW
 hw_future = bloqade.load_batch(
-    os.getcwd() + "/docs/docs/examples/" + "example-3-time-sweep-job.json"
+    os.getcwd() + "/docs/examples/" + "example-3-time-sweep-job.json"
 )
 hw_job = hw_future.report()
 
@@ -129,3 +130,5 @@ for legend_label, source_key, color in zip(legend_labels, source_keys, colors):
 z2_probabilities_plt.add_tools(CrosshairTool(dimensions="height"))
 
 show(z2_probabilities_plt)
+
+# %%

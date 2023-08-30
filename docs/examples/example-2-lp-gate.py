@@ -82,13 +82,14 @@ hw_jobs_json_dir = "./example-2-lp-gate-jobs/"
 os.makedirs(hw_jobs_json_dir)
 """
 for lp_gate_job, file_name in zip(lp_gate_jobs, atom_positions_names):
-    (
+    batch=(
         lp_gate_job.parallelize(24)
         .braket.aquila()
         .submit(shots=100, ignore_error=True) 
     ).remove_tasks("Unaccepted")
-    .save_json(
-        hw_jobs_json_dir + "/" + "example-2-lp-gate-" + file_name + "-job.json"
+    bloqade.save_batch(
+        hw_jobs_json_dir + "/" + "example-2-lp-gate-" + file_name + "-job.json",
+        batch
     )
 """
 
