@@ -82,12 +82,12 @@ emu_report = rabi_oscillation_job.braket.local_emulator().run(shots=10000).repor
 
 # %%
 """
-(
+batch=(
     rabi_oscillation_job.parallelize(24)
     .braket.aquila()
     .submit(shots=100)
-    .save_json("rabi-job.json")
 )
+bloqade.save_batch("rabi-job.json", batch)
 """
 
 # %% [markdown]

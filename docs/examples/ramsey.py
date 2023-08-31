@@ -80,12 +80,12 @@ emu_job = ramsey_job.braket.local_emulator().run(shots=10000).report()
 
 # %%
 """
-(
+batch = (
     ramsey_job.parallelize(24)
     .braket.aquila()
     .submit(shots=100)
-    .save_json("ramsey-job.json")
 )
+bloqade.save_batch("ramsey-job.json",batch)
 """
 # %% [markdown]
 # Load JSON and pull results from Braket

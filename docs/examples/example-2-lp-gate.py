@@ -91,6 +91,7 @@ for lp_gate_job, file_name in zip(lp_gate_jobs, atom_positions_names):
         hw_jobs_json_dir + "/" + "example-2-lp-gate-" + file_name + "-job.json",
         batch
     )
+    batch.pull()
 """
 
 
@@ -101,6 +102,7 @@ single_atom_hw_future = bloqade.load_batch(
 dual_atom_hw_future = bloqade.load_batch(
     hw_jobs_json_dir + "example-2-lp-gate-" + atom_positions_names[1] + "-job.json"
 )
+
 
 hw_jobs = [single_atom_hw_future.report(), dual_atom_hw_future.report()]
 
