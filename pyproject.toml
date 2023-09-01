@@ -14,7 +14,7 @@ dependencies = [
     "mkdocs-gen-files>=0.5.0",
     "mkdocs-literate-nav>=0.6.0",
     "mike>=1.1.2",
-    "bloqade @ file:///Users/khwu/bloqade-python",
+    "bloqade @ file:///${PROJECT_ROOT}/../bloqade-python",
 ]
 requires-python = ">=3.10"
 readme = "README.md"
@@ -66,6 +66,7 @@ dev = [
     "jupytext>=1.14.5",
     "pytest-recording>=0.12.2",
     "vcrpy==4.4.0",
+    "-e file:///${PROJECT_ROOT}/../bloqade-python#egg=bloqade",
 ]
 
 [tool.pdm.scripts]
