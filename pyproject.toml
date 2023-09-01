@@ -1,7 +1,7 @@
 [project]
-name = "bloqade-python-examples"
-version = "0.1.0"
-description = "Example notebooks for bloqade-python"
+name = ""
+version = ""
+description = ""
 authors = [
     {name = "QuEra Computing Inc.", email = "info@quera.com"},
 ]
@@ -14,10 +14,9 @@ dependencies = [
     "mkdocs-gen-files>=0.5.0",
     "mkdocs-literate-nav>=0.6.0",
     "mike>=1.1.2",
-    "bloqade @ file:///${PROJECT_ROOT}/../bloqade-python",
+    "bloqade>=0.3.1",
 ]
 requires-python = ">=3.10"
-readme = "README.md"
 license = {text = "MIT"}
 
 [tool.black]
@@ -66,7 +65,6 @@ dev = [
     "jupytext>=1.14.5",
     "pytest-recording>=0.12.2",
     "vcrpy==4.4.0",
-    "-e file:///${PROJECT_ROOT}/../bloqade-python#egg=bloqade",
 ]
 
 [tool.pdm.scripts]
