@@ -23,7 +23,6 @@
 # %%
 from bloqade import start, cast, save_batch, load_batch
 from decimal import Decimal
-import bloqade
 import os
 import numpy as np
 

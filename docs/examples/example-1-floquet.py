@@ -18,9 +18,8 @@
 # # Floquet Protocol
 
 # %%
-from decimal import Decimal
 from bloqade import start, cast, save_batch, load_batch
-import bloqade
+from decimal import Decimal
 import numpy as np
 import os
 

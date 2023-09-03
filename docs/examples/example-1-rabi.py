@@ -21,8 +21,7 @@
 # Rabi oscillation as well as run it on hardware.
 
 # %%
-from bloqade import start, cast
-from bloqade.task.json import load_batch, save_batch
+from bloqade import start, cast, load_batch, save_batch
 from decimal import Decimal
 import matplotlib.pyplot as plt
 import os
