@@ -79,7 +79,7 @@ emu_batch = ramsey_job.braket.local_emulator().run(shots=10000)
 
 # %%
 filename = os.path.join(os.path.dirname(__file__), "data" , "ramsey-job.json")
-if not os.path.exists("ramsey-job.json"):
+if not os.path.exists(filename):
     batch = (
         ramsey_job.parallelize(24)
         .braket.aquila()
