@@ -15,6 +15,7 @@ dependencies = [
     "mkdocs-literate-nav>=0.6.0",
     "mike>=1.1.2",
     "bloqade>=0.3.1",
+    "numpy>=1.25.2",
 ]
 requires-python = ">=3.10"
 license = {text = "MIT"}
