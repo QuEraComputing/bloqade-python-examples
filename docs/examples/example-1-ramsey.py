@@ -51,8 +51,8 @@ ramsey_program = (
 # %%
 n_steps = 100
 max_time = Decimal("3.0")
-dt = (max_time - Decimal("0.05"))/n_steps
-run_times = [dt * i for i in range(101)]
+dt = (max_time - Decimal("0.05")) / n_steps
+run_times = [Decimal("0.05") + dt * i for i in range(101)]
 
 ramsey_job = ramsey_program.batch_assign(run_time=run_times)
 
@@ -78,18 +78,16 @@ emu_batch = ramsey_job.braket.local_emulator().run(shots=10000)
 # how long it may take for the machine to handle tasks in the queue)
 
 # %%
-filename = os.path.join(os.path.dirname(__file__), "data" , "ramsey-job.json")
-if not os.path.exists(filename):
-    batch = (
-        ramsey_job.parallelize(24)
-        .braket.aquila()
-        .submit(shots=100)
-    )
-    save_batch(filename,batch)
+filename = os.path.join(os.path.dirname(__file__), "data", "ramsey-job.json")
+if not os.path.isfile(filename):
+    batch = ramsey_job.parallelize(24).braket.aquila().submit(shots=100)
+    save_batch(filename, batch)
 # %% [markdown]
 # Load JSON and pull results from Braket
 filename = os.path.join(os.path.dirname(__file__), "data", "ramsey-job.json")
 hardware_batch = load_batch(filename)
+hardware_batch.fetch()
+save_batch(filename, hardware_batch)
 
 # %% [markdown]
 # We can now plot the results from the hardware and emulation together.
@@ -103,11 +101,11 @@ hardware_report = hardware_batch.fetch().report()
 emulator_report = emu_batch.report()
 
 times = emulator_report.list_param("run_time")
-density = [ele.mean() for ele in  emulator_report.bitstrings()]
+density = [1 - ele.mean() for ele in emulator_report.bitstrings()]
 plt.plot(times, density)
 
 times = hardware_report.list_param("run_time")
-density = [ele.mean() for ele in hardware_report.bitstrings()]
+density = [1 - ele.mean() for ele in hardware_report.bitstrings()]
 
 plt.plot(times, density)
 plt.show()

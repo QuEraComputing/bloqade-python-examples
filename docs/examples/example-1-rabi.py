@@ -52,8 +52,8 @@ rabi_oscillations_program = (
 # %%
 n_steps = 100
 max_time = Decimal("3.0")
-dt = (max_time - Decimal("0.05"))/n_steps
-run_times = [dt * i for i in range(101)]
+dt = (max_time - Decimal("0.05")) / n_steps
+run_times = [Decimal("0.05") + dt * i for i in range(101)]
 
 rabi_oscillation_job = rabi_oscillations_program.assign(
     ramp_time=0.06, rabi_value=15, detuning_value=0.0
@@ -84,13 +84,16 @@ emu_batch = rabi_oscillation_job.braket.local_emulator().run(1000)
 # %%
 filename = os.path.join(os.path.dirname(__file__), "data", "rabi-job.json")
 
-if not os.path.exists(filename):
+if not os.path.isfile(filename):
     hardware_batch = rabi_oscillation_job.parallelize(24).braket.aquila().submit(1000)
     save_batch(filename, hardware_batch)
 
-
 # %% [markdown]
 # Load JSON and pull results from Braket
+filename = os.path.join(os.path.dirname(__file__), "data", "rabi-job.json")
+hardware_batch = load_batch(filename)
+hardware_batch.fetch()
+save_batch(filename, hardware_batch)
 
 # %%
 
@@ -100,11 +103,11 @@ hardware_report = load_batch(filename).fetch().report()
 emulator_report = emu_batch.report()
 
 times = emulator_report.list_param("run_time")
-density = [ele.mean() for ele in  emulator_report.bitstrings()]
+density = [1 - ele.mean() for ele in emulator_report.bitstrings()]
 plt.plot(times, density)
 
 times = hardware_report.list_param("run_time")
-density = [ele.mean() for ele in hardware_report.bitstrings()]
+density = [1 - ele.mean() for ele in hardware_report.bitstrings()]
 
 plt.plot(times, density)
 plt.show()
