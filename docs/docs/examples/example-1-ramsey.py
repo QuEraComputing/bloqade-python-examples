@@ -77,13 +77,13 @@ emu_batch = ramsey_job.braket.local_emulator().run(shots=10000)
 # how long it may take for the machine to handle tasks in the queue)
 
 # %%
-filename = os.path.join(os.path.dirname(__file__), "data", "ramsey-job.json")
+filename = os.path.join(os.path.abspath(""), "data", "ramsey-job.json")
 if not os.path.isfile(filename):
     batch = ramsey_job.parallelize(24).braket.aquila().submit(shots=100)
     save_batch(filename, batch)
 # %% [markdown]
 # Load JSON and pull results from Braket
-filename = os.path.join(os.path.dirname(__file__), "data", "ramsey-job.json")
+filename = os.path.join(os.path.abspath(""), "data", "ramsey-job.json")
 hardware_batch = load_batch(filename)
 hardware_batch.fetch()
 save_batch(filename, hardware_batch)
@@ -94,7 +94,7 @@ save_batch(filename, hardware_batch)
 # %%
 import matplotlib.pyplot as plt
 
-filename = os.path.join(os.path.dirname(__file__), "data", "ramsey-job.json")
+filename = os.path.join(os.path.abspath(""), "data", "ramsey-job.json")
 
 hardware_report = hardware_batch.fetch().report()
 emulator_report = emu_batch.report()
@@ -103,8 +103,8 @@ times = emulator_report.list_param("run_time")
 density = [1 - ele.mean() for ele in emulator_report.bitstrings()]
 plt.plot(times, density)
 
-times = hardware_report.list_param("run_time")
-density = [1 - ele.mean() for ele in hardware_report.bitstrings()]
+# times = hardware_report.list_param("run_time")
+# density = [1 - ele.mean() for ele in hardware_report.bitstrings()]
 
-plt.plot(times, density)
-plt.show()
+# plt.plot(times, density)
+# plt.show()

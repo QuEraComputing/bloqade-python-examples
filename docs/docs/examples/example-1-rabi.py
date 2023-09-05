@@ -81,7 +81,7 @@ emu_batch = rabi_oscillation_job.braket.local_emulator().run(1000)
 # how long it may take for the machine to handle tasks in the queue)
 
 # %%
-filename = os.path.join(os.path.dirname(__file__), "data", "rabi-job.json")
+filename = os.path.join(os.path.abspath(""), "data", "rabi-job.json")
 
 if not os.path.isfile(filename):
     hardware_batch = rabi_oscillation_job.parallelize(24).braket.aquila().submit(1000)
@@ -89,27 +89,26 @@ if not os.path.isfile(filename):
 
 # %% [markdown]
 # Load JSON and pull results from Braket
-filename = os.path.join(os.path.dirname(__file__), "data", "rabi-job.json")
+filename = os.path.join(os.path.abspath(""), "data", "rabi-job.json")
 hardware_batch = load_batch(filename)
-hardware_batch.fetch()
-save_batch(filename, hardware_batch)
+#hardware_batch.fetch()
+#save_batch(filename, hardware_batch)
 
 # %%
 
-filename = os.path.join(os.path.dirname(__file__), "data", "rabi-job.json")
+filename = os.path.join(os.path.abspath(""), "data", "rabi-job.json")
 
-hardware_report = load_batch(filename).fetch().report()
+# hardware_report = load_batch(filename).fetch().report()
 emulator_report = emu_batch.report()
 
 times = emulator_report.list_param("run_time")
 density = [1 - ele.mean() for ele in emulator_report.bitstrings()]
 plt.plot(times, density)
 
-times = hardware_report.list_param("run_time")
-density = [1 - ele.mean() for ele in hardware_report.bitstrings()]
+# times = hardware_report.list_param("run_time")
+# density = [1 - ele.mean() for ele in hardware_report.bitstrings()]
 
-plt.plot(times, density)
-plt.show()
+# plt.plot(times, density)
+# plt.show()
 
 
-# %%
