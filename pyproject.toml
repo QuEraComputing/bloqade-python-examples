@@ -1,7 +1,7 @@
 [project]
-name = "bloqade-python-examples"
-version = "0.1.0"
-description = "Example notebooks for bloqade-python"
+name = ""
+version = ""
+description = ""
 authors = [
     {name = "QuEra Computing Inc.", email = "info@quera.com"},
 ]
@@ -14,9 +14,10 @@ dependencies = [
     "mkdocs-gen-files>=0.5.0",
     "mkdocs-literate-nav>=0.6.0",
     "mike>=1.1.2",
+    "bloqade>=0.3.1",
+    "numpy>=1.25.2",
 ]
 requires-python = ">=3.10"
-readme = "README.md"
 license = {text = "MIT"}
 
 [tool.black]
@@ -75,7 +76,7 @@ publish = {composite = ["build", "upload"]}
 test = {shell = "git clean -f && pytest tests docs/examples/*.py"}
 coverage = {shell = "git clean -f && coverage run -m pytest tests/ docs/examples/*.py && coverage report"}
 coverage-html = {shell = "git clean -f && coverage run -m pytest tests/ docs/examples/*.py && coverage html"}
-doc = {cmd = "mkdocs serve"}
+doc = {cmd = "mkdocs serve -f docs/mkdocs.yml"}
 doc_build = {cmd = "mkdocs build"}
 doc_deploy = {cmd = "pdm mike deploy --push --update-aliases dev"}
 jupytext = {cmd = "jupytext --sync docs/examples/*.py"}

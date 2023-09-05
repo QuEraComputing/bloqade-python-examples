@@ -19,10 +19,10 @@
 
 # %%
 from bloqade.ir.location import Chain
-from bloqade.task import HardwareBatchResult
-
+import bloqade
 import numpy as np
 import os
+
 
 from bokeh.plotting import figure, show
 from bokeh.io import output_notebook
@@ -49,21 +49,22 @@ time_sweep_z2_job = time_sweep_z2_prog.batch_assign(
 )  # starting at 0.0 not feasible, just use min_time_step
 
 # submit to emulator
-emu_job = time_sweep_z2_job.braket_local_simulator(10000).submit().report()
+emu_job = time_sweep_z2_job.braket.local_emulator().run(shots=10000).report()
 
 # submit to HW
 """
-(
+batch=(
     time_sweep_z2_job.parallelize(lattice_const * 3)
-    .braket(100)
-    .submit()
-    .save_json("example-3-time-sweep-job.json")
+    .braket.aquila()
+    .submit(shots=100,ignore_error=True)
+    .remove_tasks("Unaccepted")
 )
+bloqade.save_batch("example-3-time-sweep-job.json",batch)
 """
 
 # retrieve results from HW
-hw_future = HardwareBatchResult.load_json(
-    os.getcwd() + "/docs/docs/examples/" + "example-3-time-sweep-job.json"
+hw_future = bloqade.load_batch(
+    os.getcwd() + "/docs/examples/" + "example-3-time-sweep-job.json"
 )
 hw_job = hw_future.report()
 
@@ -129,3 +130,5 @@ for legend_label, source_key, color in zip(legend_labels, source_keys, colors):
 z2_probabilities_plt.add_tools(CrosshairTool(dimensions="height"))
 
 show(z2_probabilities_plt)
+
+# %%

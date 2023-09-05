@@ -19,7 +19,7 @@
 
 # %%
 from bloqade.ir.location import Square
-from bloqade.task import HardwareBatchResult
+import bloqade
 
 from bokeh.plotting import figure, show
 from bokeh.io import output_notebook
@@ -54,19 +54,22 @@ ordered_state_2D_job = ordered_state_2D_prog.assign(delta_end=42.66, sweep_time=
 
 # Can only run on HW because 121 atoms infeasible on simulator
 """
-(
-    ordered_state_2D_job.braket(100)
-    .submit()
-    .save_json("example-3-ordered-state-2D-job.json")
+batch = (
+    ordered_state_2D_job.braket.aquila()
+    .submit(shots=100,ignore_error=True)
+    .remove_tasks("Unaccepted")
 )
+bloqade.save_batch("example-3-ordered-state-2D-job.json",batch)
 """
 
 # retrieve results from HW
-hw_future = HardwareBatchResult.load_json(
-    os.getcwd() + "/docs/docs/examples/" + "example-3-2d-ordered-state-job.json"
+hw_future = bloqade.load_batch(
+    os.getcwd() + "/docs/examples/" + "example-3-2d-ordered-state-job.json"
 )
 hw_job = hw_future.report()
 
+hw_job.show()
+"""
 # Plots
 ## Standard Density Plot
 density_plt_source = ColumnDataSource(
@@ -109,7 +112,7 @@ density_plt.add_tools(
 )
 
 show(density_plt)
-
+"""
 
 ## two point correlation plot
 def in_bounds(x, y, n_atoms_square):
@@ -211,3 +214,5 @@ two_pt_corr_plt.add_tools(
 )
 
 show(two_pt_corr_plt)
+
+# %%

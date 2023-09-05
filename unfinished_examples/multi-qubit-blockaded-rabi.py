@@ -6,7 +6,7 @@
 
 # %%
 from bloqade import start, cast
-from bloqade.task import HardwareBatchResult
+import bloqade
 
 import numpy as np
 import os
@@ -74,9 +74,9 @@ multi_qubit_blockade_program = program.rydberg.rabi.amplitude.uniform.piecewise_
 ).detuning.uniform.constant(value=0, duration=sum(durations))
 
 
-multi_qubit_blockade_job = multi_qubit_blockade_program.batch_assign(
+multi_qubit_blockade_job = multi_qubit_blockade_program.assign(ramp_time=0.06).batch_assign(
     t_run=0.05 * np.arange(21)
-).assign(ramp_time=0.06)
+)
 
 # %% [markdown]
 # We now run the program on the local emulator as well as hardware
@@ -84,16 +84,17 @@ multi_qubit_blockade_job = multi_qubit_blockade_program.batch_assign(
 # %%
 
 # run on local emulator
-emu_job = multi_qubit_blockade_job.braket_local_simulator(10000).submit().report()
+emu_job = multi_qubit_blockade_job.braket.local_emulator().run(shots=10000).report()
 
 # run on hardware
 """
-(
+batch = (
     multi_qubit_blockade_job.parallelize(24)
-    .braket(100)
-    .submit()
-    .save_json("example-2-multi-qubit-blockaded-job.json")
+    .braket.aquila()
+    .submit(shots=100, ignore_error=True)
+    .remove_tasks("Unaccepted")
 )
+bloqade.save_batch("example-2-multi-qubit-blockaded-job.json",batch)
 """
 
 # %% [markdown]
@@ -102,7 +103,7 @@ emu_job = multi_qubit_blockade_job.braket_local_simulator(10000).submit().report
 # load results from HW
 
 # %%
-hw_future = HardwareBatchResult.load_json(
+hw_future = bloqade.load_batch(
     os.getcwd() + "/docs/docs/examples/" + "multi-qubit-blockaded-rabi-job.json"
 )
 hw_densities = hw_future.report().rydberg_densities()
