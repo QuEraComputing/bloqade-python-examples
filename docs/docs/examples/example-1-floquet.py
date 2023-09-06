@@ -97,17 +97,15 @@ hardware_batch = load_batch(filename)
 # %%
 import matplotlib.pyplot as plt
 
-filename = os.path.join(os.path.abspath(""), "data", "floquet-job.json")
-
-# hardware_report = hardware_batch.fetch().report()
+hardware_report = hardware_batch.report()
 emulator_report = emu_batch.report()
 
 times = emulator_report.list_param("run_time")
 density = [1 - ele.mean() for ele in emulator_report.bitstrings()]
 plt.plot(times, density)
 
-# times = hardware_report.list_param("run_time")
-# density = [1 - ele.mean() for ele in hardware_report.bitstrings()]
+times = hardware_report.list_param("run_time")
+density = [1 - ele.mean() for ele in hardware_report.bitstrings()]
 
-# plt.plot(times, density)
-# plt.show()
+plt.plot(times, density)
+plt.show()
