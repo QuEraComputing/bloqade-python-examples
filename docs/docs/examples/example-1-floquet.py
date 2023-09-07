@@ -76,7 +76,7 @@ floquet_job = floquet_program.assign(
 emu_batch = floquet_job.braket.local_emulator().run(shots=10000)
 
 # submit to HW
-filename = os.path.join(os.path.dirname(__file__), "data", "floquet-job.json")
+filename = os.path.join(os.path.abspath(""), "data", "floquet-job.json")
 
 if not os.path.isfile(filename):
     batch = floquet_job.parallelize(24).braket.aquila().submit(shots=50)
@@ -84,10 +84,12 @@ if not os.path.isfile(filename):
 
 # %% [markdown]
 # Load JSON and pull results from Braket
-filename = os.path.join(os.path.dirname(__file__), "data", "floquet-job.json")
+
+# %%
+filename = os.path.join(os.path.abspath(""), "data", "floquet-job.json")
 hardware_batch = load_batch(filename)
-hardware_batch.fetch()
-save_batch(filename, hardware_batch)
+# hardware_batch.fetch()
+# save_batch(filename, hardware_batch)
 
 # %% [markdown]
 # We can now plot the results from the hardware and emulation together.
@@ -95,9 +97,7 @@ save_batch(filename, hardware_batch)
 # %%
 import matplotlib.pyplot as plt
 
-filename = os.path.join(os.path.dirname(__file__), "data", "floquet-job.json")
-
-hardware_report = hardware_batch.fetch().report()
+hardware_report = hardware_batch.report()
 emulator_report = emu_batch.report()
 
 times = emulator_report.list_param("run_time")
