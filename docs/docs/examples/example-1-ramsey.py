@@ -101,12 +101,13 @@ emulator_report = emu_batch.report()
 
 times = emulator_report.list_param("run_time")
 density = [1 - ele.mean() for ele in emulator_report.bitstrings()]
-plt.plot(times, density)
+plt.plot(times, density, color="#878787", marker=".", label="emulation")
 
 times = hardware_report.list_param("run_time")
 density = [1 - ele.mean() for ele in hardware_report.bitstrings()]
 
-plt.plot(times, density)
+plt.plot(times, density, color="#6437FF", linewidth=4, label="qpu")
 plt.xlabel("Time ($\mu s$)")
 plt.ylabel("Rydberg population")
+plt.legend()
 plt.show()
