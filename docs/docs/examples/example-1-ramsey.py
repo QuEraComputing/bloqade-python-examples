@@ -21,7 +21,7 @@
 # Ramsey protocol as well as run it on hardware.
 
 # %%
-from bloqade import start, cast, save_batch, load_batch
+from bloqade import start, cast, save, load
 from decimal import Decimal
 import os
 import numpy as np
@@ -80,15 +80,15 @@ emu_batch = ramsey_job.braket.local_emulator().run(shots=10000)
 filename = os.path.join(os.path.abspath(""), "data", "ramsey-job.json")
 if not os.path.isfile(filename):
     batch = ramsey_job.parallelize(24).braket.aquila().submit(shots=100)
-    save_batch(filename, batch)
+    save(filename, batch)
 # %% [markdown]
 # Load JSON and pull results from Braket
 
 # %%
 filename = os.path.join(os.path.abspath(""), "data", "ramsey-job.json")
-hardware_batch = load_batch(filename)
-#hardware_batch.fetch()
-#save_batch(filename, hardware_batch)
+hardware_batch = load(filename)
+hardware_batch.fetch()
+#save(filename, hardware_batch)
 
 # %% [markdown]
 # We can now plot the results from the hardware and emulation together.
@@ -107,4 +107,6 @@ times = hardware_report.list_param("run_time")
 density = [1 - ele.mean() for ele in hardware_report.bitstrings()]
 
 plt.plot(times, density)
+plt.xlabel("Time ($\mu s$)")
+plt.ylabel("Rydberg population")
 plt.show()

@@ -94,7 +94,7 @@ batch = (
     .submit(shots=100, ignore_error=True)
     .remove_tasks("Unaccepted")
 )
-bloqade.save_batch("example-2-multi-qubit-blockaded-job.json",batch)
+bloqade.save("example-2-multi-qubit-blockaded-job.json",batch)
 """
 
 # %% [markdown]
@@ -103,7 +103,7 @@ bloqade.save_batch("example-2-multi-qubit-blockaded-job.json",batch)
 # load results from HW
 
 # %%
-hw_future = bloqade.load_batch(
+hw_future = bloqade.load(
     os.getcwd() + "/docs/docs/examples/" + "multi-qubit-blockaded-rabi-job.json"
 )
 hw_densities = hw_future.report().rydberg_densities()
