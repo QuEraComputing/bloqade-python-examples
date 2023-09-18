@@ -21,7 +21,7 @@
 # Rabi oscillation as well as run it on hardware.
 
 # %%
-from bloqade import start, cast, load_batch, save_batch
+from bloqade import start, cast, load, save
 from decimal import Decimal
 import matplotlib.pyplot as plt
 import os
@@ -85,19 +85,19 @@ filename = os.path.join(os.path.abspath(""), "data", "rabi-job.json")
 
 if not os.path.isfile(filename):
     hardware_batch = rabi_oscillation_job.parallelize(24).braket.aquila().submit(1000)
-    save_batch(filename, hardware_batch)
+    save(filename, hardware_batch)
 
 # %% [markdown]
 # Load JSON and pull results from Braket
 
 # %%
-hardware_batch = load_batch(filename)
+hardware_batch = load(filename)
 #hardware_batch.fetch()
-#save_batch(filename, hardware_batch)
+#save(filename, hardware_batch)
 
 # %%
 
-hardware_report = load_batch(filename).report()
+hardware_report = load(filename).report()
 emulator_report = emu_batch.report()
 
 times = emulator_report.list_param("run_time")
@@ -108,6 +108,8 @@ times = hardware_report.list_param("run_time")
 density = [1 - ele.mean() for ele in hardware_report.bitstrings()]
 
 plt.plot(times, density)
+plt.xlabel("Time ($\mu s$)")
+plt.ylabel("Rydberg population")
 plt.show()
 
 

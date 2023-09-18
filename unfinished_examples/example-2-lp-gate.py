@@ -87,7 +87,7 @@ for lp_gate_job, file_name in zip(lp_gate_jobs, atom_positions_names):
         .braket.aquila()
         .submit(shots=100, ignore_error=True) 
     ).remove_tasks("Unaccepted")
-    bloqade.save_batch(
+    bloqade.save(
         hw_jobs_json_dir + "/" + "example-2-lp-gate-" + file_name + "-job.json",
         batch
     )
@@ -96,10 +96,10 @@ for lp_gate_job, file_name in zip(lp_gate_jobs, atom_positions_names):
 
 
 # load results from HW
-single_atom_hw_future = bloqade.load_batch(
+single_atom_hw_future = bloqade.load(
     hw_jobs_json_dir + "example-2-lp-gate-" + atom_positions_names[0] + "-job.json"
 )
-dual_atom_hw_future = bloqade.load_batch(
+dual_atom_hw_future = bloqade.load(
     hw_jobs_json_dir + "example-2-lp-gate-" + atom_positions_names[1] + "-job.json"
 )
 
