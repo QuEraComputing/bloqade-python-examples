@@ -17,7 +17,7 @@
 # %%
 
 
-from bloqade import save_batch, load_batch
+from bloqade import save, load
 from bloqade.ir.location import Chain
 
 import numpy as np
@@ -44,15 +44,15 @@ filename = os.path.join(
 
 if not os.path.isfile(filename):
     hardware_batch = batch.parallelize(24).braket.aquila().submit(shots=100)
-    save_batch(filename, hardware_batch)
+    save(filename, hardware_batch)
 
 # plot data
 emu_report = emu_batch.report()
 emu_counts = emu_report.counts
 
-hardware_batch = load_batch(filename)
+hardware_batch = load(filename)
 # hardware_batch.fetch()
-# save_batch(filename, hardware_batch)
+# save(filename, hardware_batch)
 hardware_report = hardware_batch.report()
 hardware_counts = hardware_report.counts
 
@@ -80,20 +80,27 @@ hw_probabilities = rydberg_state_probabilities(hardware_counts)
 # plot 0, 1, and 2 rydberg state probabilities but in separate plots
 figure, axs = plt.subplots(1, 3, figsize=(12, 6), sharey=True)
 
-run_times = 0.05 * np.arange(31)
+emu_run_times = emu_report.get_params("run_time")
+hardware_run_times = hardware_report.get_params("run_time")
 
-axs[0].plot(run_times, emu_probabilities["0"], marker=".", color="#878787")
-axs[0].plot(run_times, hw_probabilities["0"], color="#6437FF", linewidth=4)
+axs[0].plot(emu_run_times, emu_probabilities["0"], marker=".", color="#878787")
+axs[0].plot(hardware_run_times, hw_probabilities["0"], color="#6437FF", linewidth=4)
 axs[0].title.set_text("0 Rydberg State")
 
-axs[1].plot(run_times, emu_probabilities["1"], marker=".", color="#878787")
-axs[1].plot(run_times, hw_probabilities["1"], color="#6437FF", linewidth=4)
+axs[1].plot(emu_run_times, emu_probabilities["1"], marker=".", color="#878787")
+axs[1].plot(hardware_run_times, hw_probabilities["1"], color="#6437FF", linewidth=4)
 axs[1].title.set_text("1 Rydberg State")
 
 axs[2].plot(
-    run_times, emu_probabilities["2"], marker=".", color="#878787", label="emulation"
+    emu_run_times,
+    emu_probabilities["2"],
+    marker=".",
+    color="#878787",
+    label="emulation",
 )
-axs[2].plot(run_times, hw_probabilities["2"], color="#6437FF", linewidth=4, label="qpu")
+axs[2].plot(
+    hardware_run_times, hw_probabilities["2"], color="#6437FF", linewidth=4, label="qpu"
+)
 axs[2].title.set_text("2 Rydberg State")
 
 axs[0].set_ylabel("Probability")
