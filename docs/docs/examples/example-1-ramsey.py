@@ -87,7 +87,7 @@ if not os.path.isfile(filename):
 # %%
 filename = os.path.join(os.path.abspath(""), "data", "ramsey-job.json")
 hardware_batch = load(filename)
-hardware_batch.fetch()
+# hardware_batch.fetch()
 #save(filename, hardware_batch)
 
 # %% [markdown]
