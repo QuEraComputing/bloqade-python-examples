@@ -59,11 +59,11 @@ batch=(
     .submit(shots=100,ignore_error=True)
     .remove_tasks("Unaccepted")
 )
-bloqade.save_batch("example-3-time-sweep-job.json",batch)
+bloqade.save("example-3-time-sweep-job.json",batch)
 """
 
 # retrieve results from HW
-hw_future = bloqade.load_batch(
+hw_future = bloqade.load(
     os.getcwd() + "/docs/examples/" + "example-3-time-sweep-job.json"
 )
 hw_job = hw_future.report()

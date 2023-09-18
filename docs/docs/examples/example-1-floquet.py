@@ -18,7 +18,7 @@
 # # Floquet Protocol
 
 # %%
-from bloqade import start, cast, save_batch, load_batch
+from bloqade import start, cast, save, load
 from decimal import Decimal
 import numpy as np
 import os
@@ -80,16 +80,16 @@ filename = os.path.join(os.path.abspath(""), "data", "floquet-job.json")
 
 if not os.path.isfile(filename):
     batch = floquet_job.parallelize(24).braket.aquila().submit(shots=50)
-    save_batch(filename, batch)
+    save(filename, batch)
 
 # %% [markdown]
 # Load JSON and pull results from Braket
 
 # %%
 filename = os.path.join(os.path.abspath(""), "data", "floquet-job.json")
-hardware_batch = load_batch(filename)
+hardware_batch = load(filename)
 # hardware_batch.fetch()
-# save_batch(filename, hardware_batch)
+# save(filename, hardware_batch)
 
 # %% [markdown]
 # We can now plot the results from the hardware and emulation together.
@@ -108,4 +108,6 @@ times = hardware_report.list_param("run_time")
 density = [1 - ele.mean() for ele in hardware_report.bitstrings()]
 
 plt.plot(times, density)
+plt.xlabel("Time ($\mu s$)")
+plt.ylabel("Rydberg population")
 plt.show()
