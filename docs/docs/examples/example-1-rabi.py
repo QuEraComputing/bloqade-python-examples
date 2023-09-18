@@ -39,7 +39,7 @@ rabi_oscillations_program = (
     .rydberg.rabi.amplitude.uniform.piecewise_linear(
         durations=durations, values=[0, "rabi_value", "rabi_value", 0]
     )
-    .detuning.uniform.constant(duration=sum(durations), value=0)
+    .detuning.uniform.constant(duration=sum(durations), value="detuning_value")
 )
 
 # %% [markdown]
@@ -91,8 +91,8 @@ if not os.path.isfile(filename):
 
 # %%
 hardware_batch = load(filename)
-#hardware_batch.fetch()
-#save(filename, hardware_batch)
+# hardware_batch.fetch()
+# save(filename, hardware_batch)
 
 # %%
 import matplotlib.pyplot as plt
@@ -113,5 +113,3 @@ plt.xlabel("Time ($\mu s$)")
 plt.ylabel("Rydberg population")
 plt.legend()
 plt.show()
-
-

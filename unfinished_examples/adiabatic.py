@@ -54,22 +54,27 @@ large_program.submit(shots=1000)
 small_program.run(shots=1000)
 
 # %%
-batch = location.Square(15).rydberg.detuning.uniform.piecewise_linear(
-    ["up_time", "anneal_time", "up_time"],
-    ["initial_detuning", "initial_detuning", "final_detuning", "final_detuning"],
-).rabi.amplitude.uniform.piecewise_linear(
-    ["up_time", "anneal_time", "up_time"],
-    [0.0, "rabi_amplitude_max", "rabi_amplitude_max", 0.0],
-).assign(
-    initial_detuning=-15,
-    final_detuning=10,
-    up_time=0.1,
-    anneal_time=3,
-    rabi_amplitude_max=15,
-).parallelize(
-    20
-).quera.mock()\
-.submit(shots=1000)
+batch = (
+    location.Square(15)
+    .rydberg.detuning.uniform.piecewise_linear(
+        ["up_time", "anneal_time", "up_time"],
+        ["initial_detuning", "initial_detuning", "final_detuning", "final_detuning"],
+    )
+    .rabi.amplitude.uniform.piecewise_linear(
+        ["up_time", "anneal_time", "up_time"],
+        [0.0, "rabi_amplitude_max", "rabi_amplitude_max", 0.0],
+    )
+    .assign(
+        initial_detuning=-15,
+        final_detuning=10,
+        up_time=0.1,
+        anneal_time=3,
+        rabi_amplitude_max=15,
+    )
+    .parallelize(20)
+    .quera.mock()
+    .submit(shots=1000)
+)
 
 batch.fetch()
 batch.report()
