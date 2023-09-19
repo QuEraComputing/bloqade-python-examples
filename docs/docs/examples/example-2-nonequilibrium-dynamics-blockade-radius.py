@@ -70,11 +70,11 @@ if not os.path.isfile(emu_filename):
 # %% [markdown]
 # When running on the hardware we can use the `braket` provider as well.
 # However, we will need to specify the `device` to run on. In this case
-# we will use `Aquila` via the `aquila` method. Before that we must note 
+# we will use `Aquila` via the `aquila` method. Before that we must note
 # that because Aquila can support up to 256 atoms we need to make full use
 # of the capabilities of the device. As we discussed in the previous examples
 # we can use the `parallelize` which will allow us to run multiple copies of
-# the program in parallel using the full user provided area of Aquila. This 
+# the program in parallel using the full user provided area of Aquila. This
 # has to be put before the `braket` provider. Then we dump the results
 # to a file so that we can use them later.
 
@@ -90,17 +90,18 @@ if not os.path.isfile(filename):
 
 # %% [markdown]
 # ## Plotting the Results
-# In order to show the complex dynamics of the system we will plot the
-# probability of having `0`, `1`, or `2` Rydberg atoms as a function of time.
-# We will do this for both the emulator and the hardware. We can use the 
-# following function to get the probabilities from the shot counts of each 
-# of the different configuration of the two Rydberg atoms: `00` `10`, `01`, `11`.
-# Note that `0` corresponds to the Rydberg state while `1` corresponds to the
-# ground state. as such `00` corresponds to two Rydberg atoms, `10`  and `01`
-# corresponds to one Rydberg atom and one ground state atom, and `11` corresponds
-# to two ground state atoms.
+# Borrowing from the previous example we will plot the probability of
+# having `0`, `1`, or `2` Rydberg atoms as a function of time. This will
+# show the complex dynamics of the system. We will do this for both the
+# emulator and the hardware. We can use the `rydberg_state_probabilities`
+# function to extract the probabilities from the counts. This function
+# takes a list of counts and returns a dictionary of probabilities for
+# each state. The counts are obtained from the `report` of the `batch`
+# object.
+
 
 # %%
+
 
 def rydberg_state_probabilities(shot_counts):
     probabilities_dict = {"0": [], "1": [], "2": []}
@@ -117,6 +118,7 @@ def rydberg_state_probabilities(shot_counts):
         probabilities_dict["2"].append(task_result.get("00", 0) / total_shots)
 
     return probabilities_dict
+
 
 # %% [markdown]
 # ## Extracting the counts amd probabilities
@@ -145,11 +147,9 @@ hardware_batch = load(filename)
 emu_report = emu_batch.report()
 hardware_report = hardware_batch.report()
 
-emu_counts = emu_report.counts
-hardware_counts = hardware_report.counts
 
-emu_probabilities = rydberg_state_probabilities(emu_counts)
-hw_probabilities = rydberg_state_probabilities(hardware_counts)
+emu_rydberg_state_probabilities = rydberg_state_probabilities(emu_report.counts)
+hw_rydberg_state_probabilities = rydberg_state_probabilities(hardware_report.counts)
 
 # %% [markdown]
 #  plot 0, 1, and 2 Rydberg state probabilities but in separate plots
@@ -160,27 +160,32 @@ figure, axs = plt.subplots(1, 3, figsize=(12, 6), sharey=True)
 emu_run_times = emu_report.list_param("run_time")
 hardware_run_times = hardware_report.list_param("run_time")
 
-axs[0].plot(emu_run_times, emu_probabilities["0"], marker=".", color="#878787")
-axs[0].plot(hardware_run_times, hw_probabilities["0"], color="#6437FF", linewidth=4)
-axs[0].title.set_text("0 Rydberg State")
+fig, ax = plt.subplots()
+emu_colors = ["#55DE79", "#EDFF1A", "#C2477F"]  # Green, Yellow, Red
 
-axs[1].plot(emu_run_times, emu_probabilities["1"], marker=".", color="#878787")
-axs[1].plot(hardware_run_times, hw_probabilities["1"], color="#6437FF", linewidth=4)
-axs[1].title.set_text("1 Rydberg State")
+emu_lines = []
+hw_lines = []
+for rydberg_state, color in zip(
+    emu_rydberg_state_probabilities.hw_rydberg_state_probabilities, emu_colors
+):
+    (emu_line,) = ax.plot(
+        emu_run_times,
+        emu_rydberg_state_probabilities[rydberg_state],
+        label=rydberg_state + "Rydberg",
+        color=color,
+    )
+    (hw_line,) = ax.plot(
+        hardware_run_times,
+        hw_rydberg_state_probabilities[rydberg_state],
+        color="#878787",
+    )
+    hw_lines.set_label("QPU")
 
-axs[2].plot(
-    emu_run_times,
-    emu_probabilities["2"],
-    marker=".",
-    color="#878787",
-    label="emulation",
-)
-axs[2].plot(
-    hardware_run_times, hw_probabilities["2"], color="#6437FF", linewidth=4, label="qpu"
-)
-axs[2].title.set_text("2 Rydberg State")
+    emu_lines.append(emu_line)
+    hw_lines.append(hw_line)
 
-axs[0].set_ylabel("Probability")
-axs[2].legend()
 
-figure.show()
+ax.legend(handles=[*emu_lines, hw_lines[-1]])
+ax.set_xlabel("time ($\mu s$)")
+ax.set_ylabel("Probability")
+fig.show()

@@ -82,11 +82,11 @@ if not os.path.isfile(emu_filename):
 # %% [markdown]
 # When running on the hardware we can use the `braket` provider as well.
 # However, we will need to specify the `device` to run on. In this case
-# we will use `Aquila` via the `aquila` method. Before that we must note 
+# we will use `Aquila` via the `aquila` method. Before that we must note
 # that because Aquila can support up to 256 atoms we need to make full use
 # of the capabilities of the device. As we discussed in the Rabi example
 # we can use the `parallelize` which will allow us to run multiple copies of
-# the program in parallel using the full user provided area of Aquila. This 
+# the program in parallel using the full user provided area of Aquila. This
 # has to be put before the `braket` provider. Then we dump the results
 # to a file so that we can use them later.
 
@@ -101,8 +101,8 @@ if not os.path.isfile(hardware_filename):
 # Exactly like in the Rabi Oscillation example, we can now plot the results
 # from the hardware and emulation together. Again we will use the `report`
 # to calculate the mean Rydberg population for each run, and then plot
-# the results. 
-# 
+# the results.
+#
 # first we load the results from the emulation and hardware.
 
 # %%

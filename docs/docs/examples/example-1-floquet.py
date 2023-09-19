@@ -21,7 +21,7 @@
 # We will define the probotol using a python function and then
 # use the Bloqade API to sample the function at certain intervals
 # to make it compatible with the hardware, which only supports
-# piecewise linear/constant functions. First let us start with 
+# piecewise linear/constant functions. First let us start with
 # the imports.
 
 # %%
@@ -31,13 +31,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # %% [markdown]
-# ## Define the program. 
+# ## Define the program.
 # For the floquet protocol we keep
 # a constant Rabi frequency but allow the detuning to vary sinusoidally.
 # We do this by defining a smooth function for the detuning and then
 # sampling it at certain intervals (in this case,
 # the minimum hardware-supported time step). Note that the `sample` method
-# will always sample at equal to or greater than the specified time step. 
+# will always sample at equal to or greater than the specified time step.
 # If the total time interval is not divisible by the time step, the last
 # time step will be larger than the specified time step. Also note that
 # the arguments of your function must be named arguments, e.g. no `*args`
@@ -103,11 +103,11 @@ if not os.path.isfile(emu_filename):
 # %% [markdown]
 # When running on the hardware we can use the `braket` provider as well.
 # However, we will need to specify the `device` to run on. In this case
-# we will use `Aquila` via the `aquila` method. Before that we must note 
+# we will use `Aquila` via the `aquila` method. Before that we must note
 # that because Aquila can support up to 256 atoms we need to make full use
 # of the capabilities of the device. As we discussed in the Rabi example
 # we can use the `parallelize` which will allow us to run multiple copies of
-# the program in parallel using the full user provided area of Aquila. This 
+# the program in parallel using the full user provided area of Aquila. This
 # has to be put before the `braket` provider. Then we dump the results
 # to a file so that we can use them later.
 
@@ -125,7 +125,7 @@ if not os.path.isfile(hardware_filename):
 # from the files that we saved earlier. Next each batch has a `report`
 # method that will return a `Report` object. This object has a number
 # of methods that are useful for different types of analysis. In this
-# case we will use both the `list_param` and `bitstrings` methods. 
+# case we will use both the `list_param` and `bitstrings` methods.
 # To load the results we can use the `load` function from the `bloqade`
 
 # %%

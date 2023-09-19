@@ -85,10 +85,8 @@ plugins:
       include: ["*.py"] # only include scripts
       ignore: [
           "*.ipynb",
-          # "example-1-floquet.py",
-          # "example-1-rabi.py",
-          # "example-1-ramsey.py",
-          # "example-2-*"
+          # "example-1-*",
+          # "example-2-nonequilibrium-dynamics-blockade-radius.py"
         ]
       execute: true # always execute
       include_source: True
