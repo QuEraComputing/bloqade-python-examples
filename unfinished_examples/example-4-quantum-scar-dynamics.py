@@ -46,14 +46,14 @@ emu_job = quantum_scar_job.braket.local_emulator().run(shots=n_shots).report()
 """
 batch=(
     quantum_scar_job.parallelize(24)
-    .braket.aquila().submit(shots=100, ignore_error=True)
+    .braket.aquila().run_async(shots=100, ignore_error=True)
     .remove_tasks("Unaccepted")
 )
-bloqade.save_batch("example-4-quantum-scar-dynamics-job.json",batch)
+bloqade.save("example-4-quantum-scar-dynamics-job.json",batch)
 """
 
 # retrieve results from HW
-hw_future = bloqade.load_batch("example-4-quantum-scar-dynamics-job.json")
+hw_future = bloqade.load("example-4-quantum-scar-dynamics-job.json")
 
 # Plot results
 ## Mean of Rydberg Densities

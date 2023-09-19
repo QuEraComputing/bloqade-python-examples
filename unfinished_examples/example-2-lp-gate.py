@@ -1,5 +1,6 @@
 from bloqade import start, var
-#from bloqade.task import RemoteBatch
+
+# from bloqade.task import RemoteBatch
 import bloqade
 import numpy as np
 import os
@@ -70,12 +71,12 @@ for lp_gate_program in lp_gate_programs:
         )
     )
 
-# submit to emulator
+# run_async to emulator
 emu_jobs = []
 for lp_gate_job in lp_gate_jobs:
     emu_jobs.append(lp_gate_job.braket.local_emulator().run(shots=10000).report())
 
-# submit to HW
+# run_async to HW
 
 
 hw_jobs_json_dir = "./example-2-lp-gate-jobs/"
@@ -85,9 +86,9 @@ for lp_gate_job, file_name in zip(lp_gate_jobs, atom_positions_names):
     batch=(
         lp_gate_job.parallelize(24)
         .braket.aquila()
-        .submit(shots=100, ignore_error=True) 
+        .run_async(shots=100, ignore_error=True) 
     ).remove_tasks("Unaccepted")
-    bloqade.save_batch(
+    bloqade.save(
         hw_jobs_json_dir + "/" + "example-2-lp-gate-" + file_name + "-job.json",
         batch
     )
@@ -96,10 +97,10 @@ for lp_gate_job, file_name in zip(lp_gate_jobs, atom_positions_names):
 
 
 # load results from HW
-single_atom_hw_future = bloqade.load_batch(
+single_atom_hw_future = bloqade.load(
     hw_jobs_json_dir + "example-2-lp-gate-" + atom_positions_names[0] + "-job.json"
 )
-dual_atom_hw_future = bloqade.load_batch(
+dual_atom_hw_future = bloqade.load(
     hw_jobs_json_dir + "example-2-lp-gate-" + atom_positions_names[1] + "-job.json"
 )
 
@@ -168,5 +169,3 @@ dual_atom_src = ColumnDataSource(
 show(generate_plots("Single Atom LP Gate", single_atom_src))
 
 show(generate_plots("Dual Atom LP Gate", dual_atom_src))
-
-

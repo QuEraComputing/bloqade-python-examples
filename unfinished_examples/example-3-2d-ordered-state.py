@@ -56,14 +56,14 @@ ordered_state_2D_job = ordered_state_2D_prog.assign(delta_end=42.66, sweep_time=
 """
 batch = (
     ordered_state_2D_job.braket.aquila()
-    .submit(shots=100,ignore_error=True)
+    .run_async(shots=100,ignore_error=True)
     .remove_tasks("Unaccepted")
 )
-bloqade.save_batch("example-3-ordered-state-2D-job.json",batch)
+bloqade.save("example-3-ordered-state-2D-job.json",batch)
 """
 
 # retrieve results from HW
-hw_future = bloqade.load_batch(
+hw_future = bloqade.load(
     os.getcwd() + "/docs/examples/" + "example-3-2d-ordered-state-job.json"
 )
 hw_job = hw_future.report()
@@ -113,6 +113,7 @@ density_plt.add_tools(
 
 show(density_plt)
 """
+
 
 ## two point correlation plot
 def in_bounds(x, y, n_atoms_square):

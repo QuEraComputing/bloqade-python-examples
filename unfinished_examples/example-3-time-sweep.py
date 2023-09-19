@@ -48,22 +48,22 @@ time_sweep_z2_job = time_sweep_z2_prog.batch_assign(
     sweep_time=np.linspace(min_time_step, 2.4, 20)
 )  # starting at 0.0 not feasible, just use min_time_step
 
-# submit to emulator
+# run_async to emulator
 emu_job = time_sweep_z2_job.braket.local_emulator().run(shots=10000).report()
 
-# submit to HW
+# run_async to HW
 """
 batch=(
     time_sweep_z2_job.parallelize(lattice_const * 3)
     .braket.aquila()
-    .submit(shots=100,ignore_error=True)
+    .run_async(shots=100,ignore_error=True)
     .remove_tasks("Unaccepted")
 )
-bloqade.save_batch("example-3-time-sweep-job.json",batch)
+bloqade.save("example-3-time-sweep-job.json",batch)
 """
 
 # retrieve results from HW
-hw_future = bloqade.load_batch(
+hw_future = bloqade.load(
     os.getcwd() + "/docs/examples/" + "example-3-time-sweep-job.json"
 )
 hw_job = hw_future.report()

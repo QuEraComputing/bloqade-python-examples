@@ -18,18 +18,28 @@
 # # Ramsey Protocol
 # ## Introduction
 # In this example we show how to use Bloqade to emulate a
-# Ramsey protocol as well as run it on hardware.
+# Ramsey protocol as well as run it on hardware. We will define a Ramsey protocol
+# as a sequence of two $\pi/2$ pulses separated by a variable time gap $\tau$. These
+# procols are used to measure the coherence time of a qubit. In practice, the Rabi
+# frequency has to start and end at 0.0, so we will use a piecewise linear function
+# to ramp up and down the Rabi frequency.
+
 
 # %%
-from bloqade import start, cast, save_batch, load_batch
+from bloqade import start, cast, save, load
 from decimal import Decimal
 import os
 import numpy as np
+import matplotlib.pyplot as plt
+
 
 # %% [markdown]
-
+# ## Define the program.
 # define program with one atom, with constant detuning but variable Rabi frequency,
-# where an initial pi/2 pulse is applied, followed by some time gap and a -pi/2 pulse
+# where an initial pi/2 pulse is applied, followed by some time gap and a -pi/2 pulse.
+# Note that the plateau time was chosen such that the area under the curve is pi/2 given
+# given the constraint on how fast the Rabi frequency can change as well as the minimum
+# allowed time step.
 
 # %%
 plateau_time = (np.pi / 2 - 0.625) / 12.5
@@ -37,7 +47,7 @@ wf_durations = cast([0.05, plateau_time, 0.05, "run_time", 0.05, plateau_time, 0
 rabi_wf_values = [0.0, 12.5, 12.5, 0.0] * 2  # repeat values twice
 
 ramsey_program = (
-    start.add_position([0, 0])
+    start.add_position((0, 0))
     .rydberg.rabi.amplitude.uniform.piecewise_linear(wf_durations, rabi_wf_values)
     .detuning.uniform.constant(10.5, sum(wf_durations))
 )
@@ -56,55 +66,68 @@ run_times = [Decimal("0.05") + dt * i for i in range(101)]
 ramsey_job = ramsey_program.batch_assign(run_time=run_times)
 
 # %% [markdown]
-# Run the program in emulation, obtaining a report
-# object. For each possible set of variable values
-# to simulate (in this case, centered around the
-# `run_time` variable), let the task have 10000 shots.
+# ## Run Emulation and Hardware
+# To run the program on the emulator we can select the `braket` provider
+# as a property of the `batch` object. Braket has its own emulator that
+# we can use to run the program. To do this select `local_emulator` as
+# the next option followed by the `run` method. Then we dump the results
+# to a file so that we can use them later.
 
 # %%
-emu_batch = ramsey_job.braket.local_emulator().run(shots=10000)
+emu_filename = os.path.join(os.path.abspath(""), "data", "ramsey-emulation.json")
+
+if not os.path.isfile(emu_filename):
+    emu_batch = ramsey_job.braket.local_emulator().run(10000)
+    save(emu_batch, emu_filename)
+# %% [markdown]
+# When running on the hardware we can use the `braket` provider as well.
+# However, we will need to specify the `device` to run on. In this case
+# we will use `Aquila` via the `aquila` method. Before that we must note
+# that because Aquila can support up to 256 atoms we need to make full use
+# of the capabilities of the device. As we discussed in the Rabi example
+# we can use the `parallelize` which will allow us to run multiple copies of
+# the program in parallel using the full user provided area of Aquila. This
+# has to be put before the `braket` provider. Then we dump the results
+# to a file so that we can use them later.
+
+# %%
+hardware_filename = os.path.join(os.path.abspath(""), "data", "ramsey-job.json")
+if not os.path.isfile(hardware_filename):
+    batch = ramsey_job.parallelize(24).braket.aquila().run_async(shots=100)
+    save(batch, hardware_filename)
 
 # %% [markdown]
-# Submit the same program to hardware,
-# this time using `.parallelize` to make a copy of the original geometry
-# (a single atom) that fills the FOV (Field-of-View Space), with at least
-# 24 micrometers of distance between each atom.
+# ## Plot the results
+# Exactly like in the Rabi Oscillation example, we can now plot the results
+# from the hardware and emulation together. Again we will use the `report`
+# to calculate the mean Rydberg population for each run, and then plot
+# the results.
 #
-# Unlike the emulation above, we only let each task
-# run with 100 shots. A collection of tasks is known as a
-# "Job" in Bloqade and jobs can be saved in JSON format
-# so you can reload them later (a necessity considering
-# how long it may take for the machine to handle tasks in the queue)
+# first we load the results from the emulation and hardware.
 
 # %%
-filename = os.path.join(os.path.dirname(__file__), "data", "ramsey-job.json")
-if not os.path.isfile(filename):
-    batch = ramsey_job.parallelize(24).braket.aquila().submit(shots=100)
-    save_batch(filename, batch)
-# %% [markdown]
-# Load JSON and pull results from Braket
-filename = os.path.join(os.path.dirname(__file__), "data", "ramsey-job.json")
-hardware_batch = load_batch(filename)
-hardware_batch.fetch()
-save_batch(filename, hardware_batch)
+emu_batch = load(emu_filename)
+hardware_batch = load(hardware_filename)
+# hardware_batch.fetch()
+# save(filename, hardware_batch)
 
 # %% [markdown]
-# We can now plot the results from the hardware and emulation together.
+# Next we can calculate the Rydberg population for each run and plot the results.
 
 # %%
-import matplotlib.pyplot as plt
 
-filename = os.path.join(os.path.dirname(__file__), "data", "ramsey-job.json")
-
-hardware_report = hardware_batch.fetch().report()
+hardware_report = hardware_batch.report()
 emulator_report = emu_batch.report()
 
 times = emulator_report.list_param("run_time")
 density = [1 - ele.mean() for ele in emulator_report.bitstrings()]
-plt.plot(times, density)
+plt.plot(times, density, color="#878787", marker=".", label="emulation")
 
 times = hardware_report.list_param("run_time")
 density = [1 - ele.mean() for ele in hardware_report.bitstrings()]
 
-plt.plot(times, density)
+plt.plot(times, density, color="#6437FF", linewidth=4, label="qpu")
+plt.xlabel("Time ($\mu s$)")
+plt.ylabel("Rydberg population")
+plt.legend()
 plt.show()
