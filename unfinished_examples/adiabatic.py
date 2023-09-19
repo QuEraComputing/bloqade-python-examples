@@ -50,7 +50,7 @@ task_builder = task_builder.assign(
 
 small_program = task_builder.braket.local_emulator()
 large_program = task_builder.parallelize(25.0).quera.mock()
-large_program.submit(shots=1000)
+large_program.run_async(shots=1000)
 small_program.run(shots=1000)
 
 # %%
@@ -73,7 +73,7 @@ batch = (
     )
     .parallelize(20)
     .quera.mock()
-    .submit(shots=1000)
+    .run_async(shots=1000)
 )
 
 batch.fetch()
