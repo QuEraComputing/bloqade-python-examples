@@ -84,13 +84,11 @@ plugins:
   - mkdocs-jupyter:
       include: ["*.py"] # only include scripts
       ignore: [
-        "*.ipynb"
-        # "example-1-*",
-        # "example-2-*",
-        # "example-3-*",
-        "example-4-*",
-        # "example-5-*",
-        # "example-6-*",
+          "*.ipynb",
+          # "example-1-floquet.py",
+          # "example-1-rabi.py",
+          # "example-1-ramsey.py",
+          # "example-2-*"
         ]
       execute: true # always execute
       include_source: True

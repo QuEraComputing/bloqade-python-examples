@@ -56,7 +56,7 @@ ordered_state_2D_job = ordered_state_2D_prog.assign(delta_end=42.66, sweep_time=
 """
 batch = (
     ordered_state_2D_job.braket.aquila()
-    .submit(shots=100,ignore_error=True)
+    .run_async(shots=100,ignore_error=True)
     .remove_tasks("Unaccepted")
 )
 bloqade.save("example-3-ordered-state-2D-job.json",batch)
