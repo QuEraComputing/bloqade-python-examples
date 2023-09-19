@@ -71,12 +71,12 @@ for lp_gate_program in lp_gate_programs:
         )
     )
 
-# submit to emulator
+# run_async to emulator
 emu_jobs = []
 for lp_gate_job in lp_gate_jobs:
     emu_jobs.append(lp_gate_job.braket.local_emulator().run(shots=10000).report())
 
-# submit to HW
+# run_async to HW
 
 
 hw_jobs_json_dir = "./example-2-lp-gate-jobs/"
@@ -86,7 +86,7 @@ for lp_gate_job, file_name in zip(lp_gate_jobs, atom_positions_names):
     batch=(
         lp_gate_job.parallelize(24)
         .braket.aquila()
-        .submit(shots=100, ignore_error=True) 
+        .run_async(shots=100, ignore_error=True) 
     ).remove_tasks("Unaccepted")
     bloqade.save(
         hw_jobs_json_dir + "/" + "example-2-lp-gate-" + file_name + "-job.json",

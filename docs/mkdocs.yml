@@ -83,7 +83,13 @@ plugins:
       minify_html: true
   - mkdocs-jupyter:
       include: ["*.py"] # only include scripts
-      ignore: ["*.ipynb"]
+      ignore: [
+          "*.ipynb",
+          # "example-1-floquet.py",
+          # "example-1-rabi.py",
+          # "example-1-ramsey.py",
+          # "example-2-*"
+        ]
       execute: true # always execute
       include_source: True
   - mike
