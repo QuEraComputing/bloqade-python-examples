@@ -17,10 +17,10 @@
 # %% [markdown]
 # # Two Qubit Adiabatic Sweep
 # ## Introduction
-# In this example we show how to use Bloqade to emulate the behavior of an adiabatic 
-# sweep on a pair of atoms, with the distance between atoms gradually increasing per 
-# task. As such we will explore the Nature of the rudberg interaction as the distance 
-# between atoms going from the non-interacting regime to the blockade regime. The 
+# In this example we show how to use Bloqade to emulate the behavior of an adiabatic
+# sweep on a pair of atoms, with the distance between atoms gradually increasing per
+# task. As such we will explore the Nature of the rudberg interaction as the distance
+# between atoms going from the non-interacting regime to the blockade regime. The
 # cross-over between these two regimes will coincide with the blockade radius.
 
 
@@ -93,7 +93,6 @@ if not os.path.isfile(filename):
     save(hardware_batch, filename)
 
 
-
 # %% [markdown]
 # ## Plot the Results
 # In order to show the blockade effect on the system we will plot the
@@ -105,6 +104,7 @@ if not os.path.isfile(filename):
 # ground state. as such `00` corresponds to two Rydberg atoms, `10`  and `01`
 # corresponds to one Rydberg atom and one ground state atom, and `11` corresponds
 # to two ground state atoms.
+
 
 # %%
 def rydberg_state_probabilities(emu_counts):
@@ -122,6 +122,7 @@ def rydberg_state_probabilities(emu_counts):
         probabilities_dict["2"].append(task_result.get("00", 0) / total_shots)
 
     return probabilities_dict
+
 
 # %% [markdown]
 # Before we can plot the results we need to load the data from the files.
@@ -161,9 +162,7 @@ emu_colors = ["#55DE79", "#EDFF1A", "#C2477F"]  # Green, Yellow, Red
 
 emu_lines = []
 hw_lines = []
-for rydberg_state, color in zip(
-    ["0", "1", "2"], emu_colors
-):
+for rydberg_state, color in zip(["0", "1", "2"], emu_colors):
     (emu_line,) = ax.plot(
         emu_distances,
         emu_rydberg_state_probabilities[rydberg_state],
