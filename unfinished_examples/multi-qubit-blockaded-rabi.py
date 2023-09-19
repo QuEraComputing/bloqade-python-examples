@@ -74,9 +74,9 @@ multi_qubit_blockade_program = program.rydberg.rabi.amplitude.uniform.piecewise_
 ).detuning.uniform.constant(value=0, duration=sum(durations))
 
 
-multi_qubit_blockade_job = multi_qubit_blockade_program.assign(ramp_time=0.06).batch_assign(
-    t_run=0.05 * np.arange(21)
-)
+multi_qubit_blockade_job = multi_qubit_blockade_program.assign(
+    ramp_time=0.06
+).batch_assign(t_run=0.05 * np.arange(21))
 
 # %% [markdown]
 # We now run the program on the local emulator as well as hardware

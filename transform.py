@@ -36,7 +36,6 @@ for tid, task in tasks:
     new_tasks.append([tid, tsk])
 
 
-
 new_future = {
     "bloqade.task.batch.RemoteBatch": {
         "source": src["remote_batch"]["source"],
@@ -49,7 +48,7 @@ a = loads(json.dumps(new_future))
 
 # str = json.dumps(new_future)
 
-with open(sys.argv[1]+".new","w") as f:
-	json.dump(new_future,f,indent=2)
+with open(sys.argv[1] + ".new", "w") as f:
+    json.dump(new_future, f, indent=2)
 
 # print(str)
