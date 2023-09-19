@@ -21,9 +21,8 @@
 # Rabi oscillation as well as run it on hardware.
 
 # %%
-from bloqade import start, cast, load_batch, save_batch
+from bloqade import start, cast, load, save
 from decimal import Decimal
-import matplotlib.pyplot as plt
 import os
 
 
@@ -40,7 +39,7 @@ rabi_oscillations_program = (
     .rydberg.rabi.amplitude.uniform.piecewise_linear(
         durations=durations, values=[0, "rabi_value", "rabi_value", 0]
     )
-    .detuning.uniform.constant(duration=sum(durations), value=0)
+    .detuning.uniform.constant(duration=sum(durations), value="detuning_value")
 )
 
 # %% [markdown]
@@ -81,35 +80,36 @@ emu_batch = rabi_oscillation_job.braket.local_emulator().run(1000)
 # how long it may take for the machine to handle tasks in the queue)
 
 # %%
-filename = os.path.join(os.path.dirname(__file__), "data", "rabi-job.json")
+filename = os.path.join(os.path.abspath(""), "data", "rabi-job.json")
 
 if not os.path.isfile(filename):
     hardware_batch = rabi_oscillation_job.parallelize(24).braket.aquila().submit(1000)
-    save_batch(filename, hardware_batch)
+    save(filename, hardware_batch)
 
 # %% [markdown]
 # Load JSON and pull results from Braket
-filename = os.path.join(os.path.dirname(__file__), "data", "rabi-job.json")
-hardware_batch = load_batch(filename)
-hardware_batch.fetch()
-save_batch(filename, hardware_batch)
 
 # %%
+hardware_batch = load(filename)
+# hardware_batch.fetch()
+# save(filename, hardware_batch)
 
-filename = os.path.join(os.path.dirname(__file__), "data", "rabi-job.json")
+# %%
+import matplotlib.pyplot as plt
 
-hardware_report = load_batch(filename).fetch().report()
+
+hardware_report = load(filename).report()
 emulator_report = emu_batch.report()
 
 times = emulator_report.list_param("run_time")
 density = [1 - ele.mean() for ele in emulator_report.bitstrings()]
-plt.plot(times, density)
+plt.plot(times, density, color="#878787", marker=".", label="emulation")
 
 times = hardware_report.list_param("run_time")
 density = [1 - ele.mean() for ele in hardware_report.bitstrings()]
 
-plt.plot(times, density)
+plt.plot(times, density, color="#6437FF", linewidth=4, label="qpu")
+plt.xlabel("Time ($\mu s$)")
+plt.ylabel("Rydberg population")
+plt.legend()
 plt.show()
-
-
-# %%

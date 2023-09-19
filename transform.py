@@ -1,46 +1,54 @@
 import json
 import os, sys
 
+from bloqade import loads
+
 src = None
 with open(sys.argv[1], "r") as f:
     src = json.load(f)
 
 
-tasks = src["hardware_task_shot_results"]
+tasks = src["remote_batch"]["tasks"]
 
-
-new_future = {"remote_batch": {"source": None, "name": None, "tasks": []}}
-
-
-for tid, task in tasks.items():
-    task_id = task["task_id"]
-    task_ir = task["hardware_task"]["task_ir"]
-    task_result_ir = task["task_result_ir"]
-    backend = task["hardware_task"]["braket_backend"]
+new_tasks = []
+for tid, task in tasks:
+    task_id = task["braket_task"]["task_id"]
+    task_ir = task["braket_task"]["task_ir"]["quera_task_specification"]
+    task_result_ir = task["braket_task"]["task_result_ir"]["task_result_ir"]
+    backend = task["braket_task"]["backend"]["braket_backend"]
 
     parallel_decoder = (
         None
-        if "parallel_decoder" not in task["hardware_task"]
-        else task["hardware_task"]["parallel_decoder"]
+        if "parallel_decoder" not in task["braket_task"]
+        else task["braket_task"]["parallel_decoder"]["parallel_decoder"]
     )
 
     tsk = {
-        "braket_task": {
-            "backend": {"braket_backend": backend},
+        "bloqade.task.braket.BraketTask": {
+            "backend": backend,
             "parallel_decoder": parallel_decoder,
             "task_id": task_id,
-            "task_result_ir": {"task_result_ir": task_result_ir},
-            "task_ir": {"quera_task_specification": task_ir},
-            "metadata": {},
+            "task_result_ir": task_result_ir,
+            "task_ir": task_ir,
+            "metadata": task["braket_task"]["metadata"],
         }
     }
+    new_tasks.append([tid, tsk])
 
-    new_future["remote_batch"]["tasks"].append([int(tid), tsk])
 
+new_future = {
+    "bloqade.task.batch.RemoteBatch": {
+        "source": src["remote_batch"]["source"],
+        "name": src["remote_batch"]["name"],
+        "tasks": new_tasks,
+    }
+}
 
-str = json.dumps(new_future)
+a = loads(json.dumps(new_future))
+
+# str = json.dumps(new_future)
 
 with open(sys.argv[1] + ".new", "w") as f:
-    f.write(str)
+    json.dump(new_future, f, indent=2)
 
 # print(str)

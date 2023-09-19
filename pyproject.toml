@@ -16,6 +16,7 @@ dependencies = [
     "mike>=1.1.2",
     "bloqade>=0.3.1",
     "numpy>=1.25.2",
+    "matplotlib>=3.8.0",
 ]
 requires-python = ">=3.10"
 license = {text = "MIT"}
