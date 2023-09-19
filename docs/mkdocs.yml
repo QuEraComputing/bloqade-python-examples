@@ -85,9 +85,8 @@ plugins:
       include: ["*.py"] # only include scripts
       ignore: [
           "*.ipynb",
-          # "example-1-*",
-          # "example-2-nonequilibrium-dynamics-blockade-radius.py"
-          # "example-2-two-qubit-adiabatic.py"
+          "example-1-*",
+          "example-2-*"
         ]
       execute: true # always execute
       include_source: True
