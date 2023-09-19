@@ -1,5 +1,6 @@
 from bloqade import start, var
-#from bloqade.task import RemoteBatch
+
+# from bloqade.task import RemoteBatch
 import bloqade
 import numpy as np
 import os
@@ -168,5 +169,3 @@ dual_atom_src = ColumnDataSource(
 show(generate_plots("Single Atom LP Gate", single_atom_src))
 
 show(generate_plots("Dual Atom LP Gate", dual_atom_src))
-
-

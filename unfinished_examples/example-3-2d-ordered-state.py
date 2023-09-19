@@ -114,6 +114,7 @@ density_plt.add_tools(
 show(density_plt)
 """
 
+
 ## two point correlation plot
 def in_bounds(x, y, n_atoms_square):
     if x >= 0 and x <= n_atoms_square - 1 and y >= 0 and y <= n_atoms_square - 1:
