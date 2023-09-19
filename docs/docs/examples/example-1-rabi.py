@@ -37,7 +37,7 @@ import numpy as np
 # can be used to create a variable that can used in multiple places in the program.
 # These variables support basic arithmetic operations, such as addition, subtraction,
 # multiplication, and division. They also have `min` and `max` methods that can be used
-# in place of built-in python `min` and `max` functions, e.g. 
+# in place of built-in python `min` and `max` functions, e.g.
 # `cast("a").min(cast("b"))`.
 
 # %%
@@ -54,18 +54,18 @@ rabi_oscillations_program = (
 # %% [markdown]
 # ## Assign values to the variables in the program,
 # Once your program is built, you can use the `assign` method to assign values to the
-# variables in the program. These values must be numeric, and can be either `int`, 
-# `float`, or `Decimal` (from the `decimal` module). Note that the `Decimal` type 
-# is used to represent real numbers exactly, whereas `float` is a 64-bit floating 
-# point numberthat is only accurate to about 15 decimal places. The `Decimal` 
-# type is recommended for Bloqade programs, as it will ensure that your program 
-# is simulated and run with the highest possible precision. We can also do a parameter 
-# scan using the  `batch_assign` method, which will create a different program for each 
-# value provided in the list. In this case, we are sweeping the `run_time` variable, 
+# variables in the program. These values must be numeric, and can be either `int`,
+# `float`, or `Decimal` (from the `decimal` module). Note that the `Decimal` type
+# is used to represent real numbers exactly, whereas `float` is a 64-bit floating
+# point numberthat is only accurate to about 15 decimal places. The `Decimal`
+# type is recommended for Bloqade programs, as it will ensure that your program
+# is simulated and run with the highest possible precision. We can also do a parameter
+# scan using the  `batch_assign` method, which will create a different program for each
+# value provided in the list. In this case, we are sweeping the `run_time` variable,
 # which is the time that the Rabi amplitude stays at the value of `rabi_ampl`.
 
 # %%
-run_times = np.linspace(0,3,101)
+run_times = np.linspace(0, 3, 101)
 
 rabi_oscillation_job = rabi_oscillations_program.assign(
     ramp_time=0.06, rabi_ampl=15, detuning_value=0.0
@@ -90,15 +90,15 @@ if not os.path.isfile(emu_filename):
 # %% [markdown]
 # When running on the hardware we can use the `braket` provider as well.
 # However, we will need to specify the `device` to run on. In this case
-# we will use `Aquila` via the `aquila` method. Before that we must note 
+# we will use `Aquila` via the `aquila` method. Before that we must note
 # that because Aquila can support up to 256 atoms we need to make full use
 # of the capabilities of the device. As we discussed in the previous examples
 # we can use the `parallelize` which will allow us to run multiple copies of
-# the program in parallel using the full user provided area of Aquila. The 
+# the program in parallel using the full user provided area of Aquila. The
 # `parallelize` method takes a single argument, which is the distance between
 # each copy of the program on a grid. In this case, we want to make sure that
-# the distance between each atom is at least 24 micrometers, so that the 
-# Rydberg interactions between atoms are negligible. To run the program 
+# the distance between each atom is at least 24 micrometers, so that the
+# Rydberg interactions between atoms are negligible. To run the program
 # but not wait for the results, we can use the `run_async` method, which
 # will return a `Batch` object that can be used to fetch the results later.
 # After running the program, we dump the results to a file so that we can
@@ -122,7 +122,7 @@ if not os.path.isfile(hardware_filename):
 # the measurement outcomes for each shot. We can then use the `mean` method of
 # the numpy array to get the probability of being in the Rydberg state for each
 # shot. We can then plot the results as a function of time. the time value can be
-# obtained from the `run_time` parameter of the `Report` object as a list. 
+# obtained from the `run_time` parameter of the `Report` object as a list.
 #
 # before that we need to load the results from our previously saved files using
 # the `load` function from Bloqade:

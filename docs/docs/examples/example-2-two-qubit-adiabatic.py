@@ -17,11 +17,22 @@
 # %% [markdown]
 # # Two Qubit Adiabatic Sweep
 # ## Introduction
-# In this example we show how to use Bloqade to emulate the behavior
-# of an adiabatic sweep on a pair of atoms, with the distance between
-# atoms gradually increasing per task.
+# In this example we show how to use Bloqade to emulate the behavior of an adiabatic 
+# sweep on a pair of atoms, with the distance between atoms gradually increasing per 
+# task. As such we will explore the Nature of the rudberg interaction as the distance 
+# between atoms going from the non-interacting regime to the blockade regime. The 
+# cross-over between these two regimes will coincide with the blockade radius.
+
+
+# %% [markdown]
+# ## Defining the Program
+# Now we define our program of interest. As expected for an adiabatic protocol
+# we keep that Rabi frequency at a large value while slowly ramping the detuning from a
+# large negative to positive value.
 #
-# First we import the necessary libraries
+# Note that you can perform arithmetic operations directly on variables in the program
+# but this requires the variable to be explicitly declared by passing a string to the
+# `var` function and THEN doing arithmetic on it.
 
 # %%
 from bloqade import start, cast, var, save, load
@@ -31,44 +42,33 @@ import matplotlib.pyplot as plt
 
 import os
 
-# %% [markdown]
-# ## Defining the Program
-# Now we define our program of interest. As expected for an adiabatic protocol
-# we keep that Rabi frequency at a large value while slowly ramping the detuning from a 
-# large negative to positive value.
-#
-# Note that you can perform arithmetic operations directly on variables in the program 
-# but this requires the variable to be explicitly declared by passing a string to the 
-# `var` function and THEN doing arithmetic on it.
-
-# %%
+detuning_value = var("detuning_value")
 durations = cast(["ramp_time", "run_time", "ramp_time"])
 prog = (
-    start.add_positions([(0, 0), (0, "atom_distance")])
+    start.add_position([(0, 0), (0, "atom_distance")])
     .rydberg.rabi.amplitude.uniform.piecewise_linear(
         durations=durations, values=[0, "rabi_value", "rabi_value", 0]
     )
     .detuning.uniform.piecewise_linear(
         durations=durations,
         values=[
-            -1 * var("detuning_value"),
-            -1 * var("detuning_value"),
-            "detuning_value",
-            "detuning_value",
+            -detuning_value,
+            -detuning_value,
+            detuning_value,
+            detuning_value,
         ],
     )
 )
 
-distances = np.around(np.arange(4, 11, 1), 13)
+distances = np.arange(4, 11, 1)
 batch = prog.assign(
     ramp_time=1.0, run_time=2.0, rabi_value=15.0, detuning_value=15.0
 ).batch_assign(atom_distance=distances)
 
 # %% [markdown]
 # ## Run on Emulator and Hardware
-# With our program fully defined (now considered a "batch" owing to the fact that the 
-# parameter sweep on the atom distance generates a "batch" of tasks)
-# we have the ability to emulate it locally OR submit it to hardware.
+# In previous examples we have shown how to run a program on the emulator and hardware.
+# First we will run the program on the emulator and save the results to a file.
 
 # %%
 # get emulation batch, running 1000 shots per task
@@ -80,7 +80,11 @@ if not os.path.isfile(emu_filename):
     emu_batch = batch.braket.local_emulator().run(1000)
     save(emu_batch, emu_filename)
 
-# submit to HW, running 100 shots per task
+# %% [markdown]
+# Then we can run the program on the hardware after parallelizing the tasks.
+# We can then save the results to a file.
+
+# %%
 
 filename = os.path.join(os.path.abspath(""), "data", "two-qubit-adiabatic.json")
 
@@ -88,25 +92,19 @@ if not os.path.isfile(filename):
     hardware_batch = batch.parallelize(24).braket.aquila().submit(shots=100)
     save(hardware_batch, filename)
 
-# %%
 
-# get emulation report and number of shots per each state
-emu_batch = load(emu_filename)
-emu_report = emu_batch.report()
-emu_counts = emu_report.counts
-
-# get hardware report and number of shots per each state
-hardware_batch = load(filename)
-# hardware_batch.fetch()
-# save(filename, hardware_batch)
-hardware_report = hardware_batch.report()
-hardware_counts = hardware_report.counts
 
 # %% [markdown]
-#
-# We define the following function to look at the number of shots associated with each possible number of
-# rydberg states and calculate the associated probabilities per each atom distance.
-
+# ## Plot the Results
+# In order to show the blockade effect on the system we will plot the
+# probability of having `0`, `1`, or `2` Rydberg atoms as a function of time.
+# We will do this for both the emulator and the hardware. We can use the
+# following function to get the probabilities from the shot counts of each
+# of the different configuration of the two Rydberg atoms: `00` `10`, `01`, `11`.
+# Note that `0` corresponds to the Rydberg state while `1` corresponds to the
+# ground state. as such `00` corresponds to two Rydberg atoms, `10`  and `01`
+# corresponds to one Rydberg atom and one ground state atom, and `11` corresponds
+# to two ground state atoms.
 
 # %%
 def rydberg_state_probabilities(emu_counts):
@@ -125,28 +123,65 @@ def rydberg_state_probabilities(emu_counts):
 
     return probabilities_dict
 
+# %% [markdown]
+# Before we can plot the results we need to load the data from the files.
+# %%
+
+# get emulation report and number of shots per each state
+emu_batch = load(emu_filename)
+
+# get hardware report and number of shots per each state
+hardware_batch = load(filename)
+# hardware_batch.fetch()
+# save(hardware_batch, filename)
+
 
 # %% [markdown]
+# We can use the `rydberg_state_probabilities`
+# function to extract the probabilities from the counts. This function
+# takes a list of counts and returns a dictionary of probabilities for
+# each state. The counts are obtained from the `report` of the `batch`
+# object.
+#
 # Now we can plot the results!
 
 # %%
-emu_rydberg_state_probabilities = rydberg_state_probabilities(emu_counts)
-hw_rydberg_state_probabilities = rydberg_state_probabilities(hardware_counts)
+
+emu_report = emu_batch.report()
+hardware_report = hardware_batch.report()
+
+emu_rydberg_state_probabilities = rydberg_state_probabilities(emu_report.counts)
+hw_rydberg_state_probabilities = rydberg_state_probabilities(hardware_report.counts)
+
+emu_distances = emu_report.list_param("atom_distance")
+hw_distances = hardware_report.list_param("atom_distance")
 
 fig, ax = plt.subplots()
 emu_colors = ["#55DE79", "#EDFF1A", "#C2477F"]  # Green, Yellow, Red
-ax.set_xlabel("Distance ($\mu m$)")
-ax.set_ylabel("Probability")
-for rydberg_state, color in zip(emu_rydberg_state_probabilities, emu_colors):
-    ax.plot(
-        distances,
+
+emu_lines = []
+hw_lines = []
+for rydberg_state, color in zip(
+    ["0", "1", "2"], emu_colors
+):
+    (emu_line,) = ax.plot(
+        emu_distances,
         emu_rydberg_state_probabilities[rydberg_state],
-        label=rydberg_state + "Rydberg",
+        label=rydberg_state + "-Rydberg",
         color=color,
     )
+    (hw_line,) = ax.plot(
+        hw_distances,
+        hw_rydberg_state_probabilities[rydberg_state],
+        color="#878787",
+        label="QPU",
+    )
 
-for rydberg_state in hw_rydberg_state_probabilities:
-    ax.plot(distances, hw_rydberg_state_probabilities[rydberg_state], color="#878787")
-ax.legend()
+    emu_lines.append(emu_line)
+    hw_lines.append(hw_line)
 
+
+ax.legend(handles=[*emu_lines, hw_lines[-1]])
+ax.set_xlabel("time ($\mu s$)")
+ax.set_ylabel("Probability")
 fig.show()
