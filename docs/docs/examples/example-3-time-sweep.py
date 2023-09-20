@@ -17,10 +17,9 @@
 # %% [markdown]
 # # 1D Z2 State Preparation
 # ## Introduction
-# In this example we show how to create the Z2 ordered phase
-# on a 1D chain of atoms and how to perform a time sweep over its 
-# evolution to understand the behavior of an adiabatic pulse schedule
-# in its formation.
+# In this example we show how to create the Z2 ordered phase on a 1D chain of atoms and 
+# how to perform a scan over the sweep time to understand the behavior of an adiabatic 
+# pulse schedule in its formation.
 
 # %% [markdown]
 # Let's import all the tools we'll need.
@@ -33,14 +32,12 @@ import os
 import matplotlib.pyplot as plt
 
 # %% [markdown]
-# ## Program Definition
-# We define a program where our geometry is a chain of 11 atoms with
-# a distance of 6.1 micrometers between atoms.
+# ## Program Definition We define a program where our geometry is a chain of 11 atoms 
+# with a distance of 6.1 micrometers between atoms.
 
-# The pulse schedule presented here should be reminiscent of the 
-# Two Qubit Adiabatic Sweep example although we've opted to 
-# reserve variable usage for values that will actually have their
-# parameters swept. 
+# The pulse schedule presented here should be reminiscent of the Two Qubit Adiabatic 
+# Sweep example although we've opted to reserve variable usage for values that will 
+# actually have their parameters swept. 
 
 # %%
 
@@ -72,18 +69,19 @@ time_sweep_z2_job = time_sweep_z2_prog.batch_assign(
 
 # %% [markdown]
 # ## Running on the Emulator and Hardware
-# With our program properly composed we can now easily send it off to both the emulator and actual hardware.
+# With our program properly composed we can now easily send it off to both the emulator 
+# and hardware.
 
-# We select the Braket emulator and tell it that for each variation of the "time_sweep" variable 
-# we'd like to run 10000 shots (sampling the result, not actually re-running the task!). 
-# For the hardware we take advantage of the fact that 11 atoms takes up so little space on the machine 
-# we can duplicate that geometry multiple times to get more data per shot. 
-# We set a distance of 24 micrometers between copies to minimize potential interactions between them.
+# We select the Braket emulator and tell it that for each variation of the "time_sweep" 
+# variable we'd like to run 10000 shots. For the hardware we take advantage of the fact 
+# that 11 atoms takes up so little space on the machine we can duplicate that geometry 
+# multiple times to get more data per shot. We set a distance of 24 micrometers between 
+# copies to minimize potential interactions between them.
 
-# For both cases, to allow us to submit our program without having to wait on immediate results 
-# from hardware (which could take a while considering queueing and window restrictions), we 
-# save the necessary metadata to a file that can then be reloaded later and results fetched
-# when they are available.
+# For both cases, to allow us to submit our program without having to wait on immediate 
+# results from hardware (which could take a while considering queueing and window 
+# restrictions), we save the necessary metadata to a file that can then be reloaded 
+# later and results fetched when they are available.
 
 # %%
 
@@ -98,11 +96,9 @@ if not os.path.isfile(filename):
     save(future, filename)
     
 # %% [markdown]
-# ## Plotting the Results
-# To make our lives easier we define a trivial function to extract the probability of the Z2 phase
-# from each of the tasks generated from the parameter sweep. The counts are obtained from the `report`
-# of the batch object.
-
+# ## Plotting the Results To make our lives easier we define a trivial function to 
+# extract the probability of the Z2 phase from each of the tasks generated from the 
+# parameter sweep. The counts are obtained from the `report`of the batch object.
 
 # %% 
 
@@ -116,9 +112,9 @@ def get_z2_probabilities(report):
     return z2_probabilities
 
 # %% [markdown]
-# ## Extracting Counts And Probabilities
-# We will now extract the counts and probabilities from the emulator and hardware runs. 
-# We will then plot the results. First we load the data from the files:
+# ## Extracting Counts And ProbabilitiesWe will now extract the counts and probabilities
+# from the emulator and hardware runs. We will then plot the results. First we load the 
+# data from the files:
 
 # %%
 # retrieve results from HW
@@ -131,9 +127,9 @@ hardware_batch = load(filename)
 
 # %% [markdown]
 
-# To get the counts we need to get a report from the batch objects. 
-# Then with the report we can get the counts. 
-# The counts are a dictionary that maps the bitstring to the number of times that bitstring was measured.
+# To get the counts we need to get a report from the batch objects. Then with the 
+# report we can get the counts. The counts are a dictionary that maps the bitstring to 
+# the number of times that bitstring was measured.
 
 # %%
 emu_report = emu_batch.report()
