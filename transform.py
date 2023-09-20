@@ -20,6 +20,7 @@ for tid, task in tasks:
     parallel_decoder = (
         None
         if "parallel_decoder" not in task["braket_task"]
+        or task["braket_task"]["parallel_decoder"] is None
         else task["braket_task"]["parallel_decoder"]["parallel_decoder"]
     )
 
