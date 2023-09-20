@@ -17,18 +17,18 @@
 # %% [markdown]
 # # Two Qubit Adiabatic Sweep
 # ## Introduction
-# In this example we show how to use Bloqade to emulate the behavior of an adiabatic
+# In this example, we show how to use Bloqade to emulate the behavior of an adiabatic
 # sweep on a pair of atoms, with the distance between atoms gradually increasing per
-# task. As such we will explore the Nature of the rudberg interaction as the distance
+# task. As such, we will explore the Nature of the Rydberg interaction as the distance
 # between atoms going from the non-interacting regime to the blockade regime. The
 # cross-over between these two regimes will coincide with the blockade radius.
 
 
 # %% [markdown]
 # ## Defining the Program
-# Now we define our program of interest. As expected for an adiabatic protocol
-# we keep that Rabi frequency at a large value while slowly ramping the detuning from a
-# large negative to positive value.
+# Now, we define our program of interest. As expected for an adiabatic protocol,
+# we keep that Rabi frequency at a considerable value while slowly ramping the detuning 
+# from a large negative to a positive value.
 #
 # Note that you can perform arithmetic operations directly on variables in the program
 # but this requires the variable to be explicitly declared by passing a string to the
@@ -67,8 +67,8 @@ batch = prog.assign(
 
 # %% [markdown]
 # ## Run on Emulator and Hardware
-# In previous examples we have shown how to run a program on the emulator and hardware.
-# First we will run the program on the emulator and save the results to a file.
+# In previous examples, we have shown how to run a program on the emulator and hardware.
+# First, we will run the program on the emulator and save the results to a file.
 
 # %%
 # get emulation batch, running 1000 shots per task
@@ -81,12 +81,12 @@ if not os.path.isfile(emu_filename):
     save(emu_batch, emu_filename)
 
 # %% [markdown]
-# Then we can run the program on the hardware after parallelizing the tasks.
+# Then, we can run the program on the hardware after parallelizing the tasks.
 # We can then save the results to a file.
 
 # %%
 
-filename = os.path.join(os.path.abspath(""), "data", "two-qubit-adiabatic.json")
+filename = os.path.join(os.path.abspath(""), "data", "two-qubit-adiabatic-job.json")
 
 if not os.path.isfile(filename):
     hardware_batch = batch.parallelize(24).braket.aquila().submit(shots=100)
@@ -95,15 +95,15 @@ if not os.path.isfile(filename):
 
 # %% [markdown]
 # ## Plot the Results
-# In order to show the blockade effect on the system we will plot the
+# To show the blockade effect on the system, we will plot the
 # probability of having `0`, `1`, or `2` Rydberg atoms as a function of time.
 # We will do this for both the emulator and the hardware. We can use the
 # following function to get the probabilities from the shot counts of each
-# of the different configuration of the two Rydberg atoms: `00` `10`, `01`, `11`.
+# of the different configurations of the two Rydberg atoms: `00`, `10`, `01`, and `11`.
 # Note that `0` corresponds to the Rydberg state while `1` corresponds to the
-# ground state. as such `00` corresponds to two Rydberg atoms, `10`  and `01`
-# corresponds to one Rydberg atom and one ground state atom, and `11` corresponds
-# to two ground state atoms.
+# ground state. As such, `00` corresponds to two Rydberg atoms, `10`  and `01`
+# corresponds to one Rydberg atom and one ground-state atom, and `11` corresponds
+# to two ground-state atoms.
 
 
 # %%
@@ -144,7 +144,7 @@ hardware_batch = load(filename)
 # each state. The counts are obtained from the `report` of the `batch`
 # object.
 #
-# Now we can plot the results!
+# Now, we can plot the results!
 
 # %%
 

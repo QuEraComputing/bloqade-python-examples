@@ -85,8 +85,10 @@ plugins:
       include: ["*.py"] # only include scripts
       ignore: [
           "*.ipynb",
-          "example-1-*",
-          "example-2-*"
+          # "example-1-*",
+          # "example-2-*",
+          # "example-3-*",
+          # "example-4-*",
         ]
       execute: true # always execute
       include_source: True
