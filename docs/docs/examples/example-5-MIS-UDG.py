@@ -30,9 +30,9 @@
 # ## Define the program.
 # To define random defects on any Bloqade geometry simply call the `add_defect_density`
 # or `add_defect_count` methods on the geometry object. The `add_defect_density` method
-# takes a float between 0 and 1 and use that as the probability of a site being a 
-# defect. The `add_defect_count` method takes an integer and uses that as the number of 
-# defects to add to the geometry placed in random locations. Both methods take an 
+# takes a float between 0 and 1 and use that as the probability of a site being a
+# defect. The `add_defect_count` method takes an integer and uses that as the number of
+# defects to add to the geometry placed in random locations. Both methods take an
 # optional `rng` argument which is a numpy random number generator. If no `rng` argument
 # is provided, then the default numpy random number generator is used. Using the random
 # number generator allows you to set the seed for reproducibility. After that defining
@@ -94,7 +94,9 @@ batch = load(filename)
 
 report = batch.report()
 
-average_rydberg_excitation = report.rydberg_densities().sum(axis=1)
+average_rydberg_excitation = report.rydberg_densities(filter_perfect_filling=False).sum(
+    axis=1
+)
 final_detunings = report.list_param("final_detuning")
 
 plt.plot(final_detunings, average_rydberg_excitation)
