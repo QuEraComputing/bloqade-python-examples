@@ -18,25 +18,25 @@
 # %% [markdown]
 # # Solving the Maximal Independent Set Problem on defective King Graph
 # ## Introduction
-# In this tutorial we show how to use some of Bloqade's built-in tools to generate a
+# In this tutorial, we show how to use some of Bloqade's built-in tools to generate a
 # defects in a graph and then use Bloqade to solve the Maximal Independent Set (MIS)
-# problem on a Unit Disk Graph (UDG) which are easily expressable on Neutral Atom
+# problem on a Unit Disk Graph (UDG), which is easily expressable on Neutral Atom
 # Hardware via the Rydberg blockade mechanism. We will not cover hybrid quantum-
-# classical algorithms in this tutorial, but instead we will use a simple parameter
-# scan to find optimal detuning value for an adiabatic ramp. We will cover hybrid
-# quantum-classical algorithms in a future tutorials.
+# classical algorithms in this tutorial, but instead, we will use a simple parameter
+# scan to find the optimal detuning value for an adiabatic ramp. We will cover hybrid
+# quantum-classical algorithms in a future tutorial.
 
 # %% [markdown]
-# ## Define the program.
-# To define random defects on any Bloqade geometry simply call the `add_defect_density`
+# ## Define the Program.
+# To define random defects on any Bloqade geometry, simply call the `add_defect_density`
 # or `add_defect_count` methods on the geometry object. The `add_defect_density` method
-# takes a float between 0 and 1 and use that as the probability of a site being a
-# defect. The `add_defect_count` method takes an integer and uses that as the number of
-# defects to add to the geometry placed in random locations. Both methods take an
-# optional `rng` argument which is a numpy random number generator. If no `rng` argument
-# is provided, then the default numpy random number generator is used. Using the random
-# number generator allows you to set the seed for reproducibility. After that defining
-# the pulse sequence is the same as in the previous tutorials.
+# takes a float between 0 and 1 and uses that as the probability of a site being a
+# defect. The `add_defect_count` method takes the number of defects to add to the 
+# geometry placed in random locations. Both ways take an  optional `rng` argument, 
+# a numpy random number generator. If no `rng` argument is provided, then the default 
+# numpy random number generator is used. Using the random number generator allows you 
+# to set the seed for reproducibility. After that, defining the pulse sequence is the 
+# same as in the previous tutorials.
 
 # %%
 from bloqade import load, save
@@ -63,7 +63,7 @@ mis_udg_job = mis_udg_program.batch_assign(final_detuning=np.linspace(0, 80, 41)
 
 # %% [markdown]
 # ## Run On Hardware
-# Here we can't run on our emulators because the proglem size is too large. Instead
+# We can't run on our emulators because the program size is too large. Instead
 # we will run on hardware.
 
 filename = os.path.join(os.path.abspath(""), "data", "MIS-UDG-job.json")
@@ -74,10 +74,10 @@ if not os.path.isfile(filename):
 
 # %% [markdown]
 # ## Plot Results
-# Here the total number of Rydberg excitations is plotted as a function of the final
-# detuning. The total number of Rydberg excitations are a proxy for the the largest
-# independent set size because the number of violations to the Rydberg blockade is
-# will not scalr with the size of the independent set. We start by loading the results
+# Here, the total number of Rydberg excitations is plotted as a function of the final
+# detuning. The total number of Rydberg excitations is a proxy for the largest
+# independent set size because the number of violations to the Rydberg blockade is and 
+# will not scale with the size of the independent set. We start by loading the results
 
 # %%
 
@@ -86,9 +86,9 @@ batch = load(filename)
 # save(filename, batch)
 
 # %% [markdown]
-# the report object already has a method to calculate the rydberg densities. We can
-# ise this to calculate the average total rydberg density for each final detuning.
-# then we can plot the results.
+# The report object already has a method to calculate the Rydberg densities. We can
+# use this to calculate the average total Rydberg density for each final detuning.
+# then, we can plot the results.
 
 # %%
 
