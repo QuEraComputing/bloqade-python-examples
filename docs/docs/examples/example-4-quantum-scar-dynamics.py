@@ -107,7 +107,7 @@ if not os.path.isfile(filename):
     hardware_batch = (
         batch.parallelize(24)
         .braket.aquila()
-        .run_async(1000, ignore_submission_error=True)
+        .run_async(100, ignore_submission_error=True)
     )
     save(hardware_batch, filename)
 
@@ -119,6 +119,12 @@ if not os.path.isfile(filename):
 # Below we define a function that will get the probability of the Z2 state for each
 # time step in the experiment.
 
+# %%
+
+emu_batch = load(emu_filename)
+hardware_batch = load(filename)
+# hardware_batch.fetch()
+# save(hardware_batch, filename)
 
 # %%
 def get_z2_probabilities(report):
@@ -135,8 +141,7 @@ def get_z2_probabilities(report):
 
 # %%
 
-emu_batch = load(emu_filename)
-hardware_batch = load(filename)
+
 
 emu_report = emu_batch.report()
 hardware_report = hardware_batch.report()
