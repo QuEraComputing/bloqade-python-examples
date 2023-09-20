@@ -14,7 +14,6 @@
 #     name: python3
 # ---
 
-
 # %% [markdown]
 # # Solving the Maximal Independent Set Problem on defective King Graph
 # ## Introduction
@@ -66,6 +65,7 @@ mis_udg_job = mis_udg_program.batch_assign(final_detuning=np.linspace(0, 80, 41)
 # We can't run on our emulators because the program size is too large. Instead
 # we will run on hardware.
 
+# %%
 filename = os.path.join(os.path.abspath(""), "data", "MIS-UDG-job.json")
 
 if not os.path.isfile(filename):

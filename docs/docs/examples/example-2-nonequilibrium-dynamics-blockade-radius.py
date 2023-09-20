@@ -121,7 +121,7 @@ def rydberg_state_probabilities(shot_counts):
 
 
 # %% [markdown]
-# ## Extracting the counts amd probabilities
+# ## Extracting the counts and probabilities
 # We will now extract the counts and probabilities from the emulator and
 # hardware runs. We will then plot the results. First we load the data
 # from the files.
@@ -160,32 +160,30 @@ figure, axs = plt.subplots(1, 3, figsize=(12, 6), sharey=True)
 emu_run_times = emu_report.list_param("run_time")
 hardware_run_times = hardware_report.list_param("run_time")
 
-fig, ax = plt.subplots()
 emu_colors = ["#55DE79", "#EDFF1A", "#C2477F"]  # Green, Yellow, Red
 
 emu_lines = []
 hw_lines = []
-for rydberg_state, color in zip(
-    emu_rydberg_state_probabilities.hw_rydberg_state_probabilities, emu_colors
-):
-    (emu_line,) = ax.plot(
+for ax, rydberg_state, color in zip(axs,["0", "1", "2"], emu_colors):
+    (hw_line,) = ax.plot(
         emu_run_times,
-        emu_rydberg_state_probabilities[rydberg_state],
-        label=rydberg_state + "Rydberg",
+        hw_rydberg_state_probabilities[rydberg_state],
+        label=rydberg_state + "-Rydberg",
         color=color,
     )
-    (hw_line,) = ax.plot(
+    (emu_line,) = ax.plot(
         hardware_run_times,
-        hw_rydberg_state_probabilities[rydberg_state],
+        emu_rydberg_state_probabilities[rydberg_state],
         color="#878787",
     )
-    hw_lines.set_label("QPU")
+    emu_line.set_label("Emulator")
 
     emu_lines.append(emu_line)
     hw_lines.append(hw_line)
 
+    ax.set_xlabel("time ($\mu s$)")
+    ax.set_ylabel("Probability")
 
-ax.legend(handles=[*emu_lines, hw_lines[-1]])
-ax.set_xlabel("time ($\mu s$)")
-ax.set_ylabel("Probability")
-fig.show()
+ax.legend(handles=[*hw_lines, emu_lines[-1]])
+
+plt.show()
