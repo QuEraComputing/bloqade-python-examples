@@ -86,7 +86,7 @@ if not os.path.isfile(emu_filename):
 
 # %%
 
-filename = os.path.join(os.path.abspath(""), "data", "two-qubit-adiabatic.json")
+filename = os.path.join(os.path.abspath(""), "data", "two-qubit-adiabatic-job.json")
 
 if not os.path.isfile(filename):
     hardware_batch = batch.parallelize(24).braket.aquila().submit(shots=100)

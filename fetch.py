@@ -1,6 +1,7 @@
-from bloqade import load
+from bloqade import load, save
 import sys
 
 
 batch = load(sys.argv[1])
-print(batch.tasks_metric())
+batch.fetch()
+save(batch, sys.argv[1])
