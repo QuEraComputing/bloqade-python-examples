@@ -4,3 +4,4 @@
 - [Tutorial 3: Floqet Drive](examples/example-1-floquet.py)
 - [Tutorial 4: Two Qubit Adiabatic Sweep](examples/example-2-two-qubit-adiabatic.py)
 - [Tutorial 6: Non-Equilibrium Dynamics at the Blockade Radius](examples/example-2-nonequilibrium-dynamics-blockade-radius.py)
+- [Tutorial 11: Quantum Scar Dynamics](examples/example-4-quantum-scar-dynamics.py)
