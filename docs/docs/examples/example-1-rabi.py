@@ -73,11 +73,13 @@ rabi_oscillation_job = rabi_oscillations_program.assign(
 
 # %% [markdown]
 # ## Run Emulator and Hardware
-# To run the program on the emulator we can select the `braket` provider
-# as a property of the `batch` object. Braket has its own emulator that
-# we can use to run the program. To do this select `local_emulator` as
-# the next option followed by the `run` method. Then we dump the results
-# to a file so that we can use them later.
+# To run the program on the emulator we can select the `braket` provider as a property 
+# of the `batch` object. Braket has its own emulator that we can use to run the program.
+# To do this select `local_emulator` as the next option followed by the `run` method. 
+# Then we dump the results to a file so that we can use them later. Note that unline the
+# actual hardware  the shots do not correspond to multiple executions of the emuatlor, 
+# but rather the number of times the final wavefunction is sampled. This is because the
+# emulator does not simulate any noise.
 
 # %%
 
@@ -89,7 +91,7 @@ if not os.path.isfile(emu_filename):
 
 # %% [markdown]
 # When running on the hardware we can use the `braket` provider. However, we will need 
-# to specify the `device` to run on. In this case we will use `Aquila` via the `aquila` 
+# to specify the device to run on. In this case we will use *Aquila* via the `aquila` 
 # method. Before that we must note that because Aquila can support up to 256 atoms in 
 # an area that is $75 \times 76 \mu m^2$. We need to make full use of the capabilities 
 # of the device. Bloqade automatically takes care of this with the `parallelize` method,
