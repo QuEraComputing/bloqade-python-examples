@@ -35,11 +35,10 @@ import os
 # ## Program Definition
 # We will start by defining a program. We set up a chain of two atoms
 # with a parmaeterized distance between them. We then define a Rabi
-# drive that is constant for a certain amount of time and then manually
-# ramp down to 0.0. Given a `rabi_ampl` of 15 rad/µs the blockaded radius
-# is 8.44 µm. We will look at the dynamics of the system for a distance
-# of 8.5 µm to be every so slightly outside of the blockade radius.
-
+# like in the original Rabi oscillation example. Given a `rabi_ampl` of 15 rad/µs 
+# the blockaded radius s 8.44 µm. We will look at the dynamics of the system for a 
+# distance of 8.5 µm to be every so slightly outside of the blockade radius. We then 
+# define a `batch` of programs for different `run_time` values.
 # %%
 
 initial_geometry = Chain(2, "distance")
@@ -53,11 +52,9 @@ program_assigned_vars = program_waveforms.assign(
 batch = program_assigned_vars.batch_assign(run_time=0.05 * np.arange(31))
 # %% [markdown]
 # ## Run Emulator and Hardware
-# To run the program on the emulator we can select the `braket` provider
-# as a property of the `batch` object. Braket has its own emulator that
-# we can use to run the program. To do this select `local_emulator` as
-# the next option followed by the `run` method. Then we dump the results
-# to a file so that we can use them later.
+# Once again we will run the emulator and hardware. We will use the
+# `local_emulator` method to run the emulator locally. We will then
+# save the results to a file so that we can use them later. 
 
 # %%
 emu_filename = os.path.join(
@@ -68,17 +65,7 @@ if not os.path.isfile(emu_filename):
     save(emu_batch, emu_filename)
 
 # %% [markdown]
-# When running on the hardware we can use the `braket` provider as well.
-# However, we will need to specify the `device` to run on. In this case
-# we will use `Aquila` via the `aquila` method. Before that we must note
-# that because Aquila can support up to 256 atoms we need to make full use
-# of the capabilities of the device. As we discussed in the previous examples
-# we can use the `parallelize` which will allow us to run multiple copies of
-# the program in parallel using the full user provided area of Aquila. This
-# has to be put before the `braket` provider. Then we dump the results
-# to a file so that we can use them later.
-
-
+# When running on the hardware we will also parallelize the batch and submit.
 # %%
 filename = os.path.join(
     os.path.abspath(""), "data", "nonequilibrium-dynamics-blockade-job.json"
@@ -90,19 +77,13 @@ if not os.path.isfile(filename):
 
 # %% [markdown]
 # ## Plotting the Results
-# Borrowing from the previous example we will plot the probability of
-# having `0`, `1`, or `2` Rydberg atoms as a function of time. This will
-# show the complex dynamics of the system. We will do this for both the
-# emulator and the hardware. We can use the `rydberg_state_probabilities`
-# function to extract the probabilities from the counts. This function
-# takes a list of counts and returns a dictionary of probabilities for
-# each state. The counts are obtained from the `report` of the `batch`
-# object.
-
-
+# In order to show the complex dynamics we will plot the probability of having `0`, `1`
+# , or `2` Rydberg atoms as a function of time. We will do this for both the emulator 
+# and the hardware. We can use the `rydberg_state_probabilities` function to extract 
+# the probabilities from the counts. This function takes a list of counts and returns a 
+# dictionary of probabilities for each state. The counts are obtained from the `report` 
+# of the `batch` object.
 # %%
-
-
 def rydberg_state_probabilities(shot_counts):
     probabilities_dict = {"0": [], "1": [], "2": []}
 
@@ -118,13 +99,10 @@ def rydberg_state_probabilities(shot_counts):
         probabilities_dict["2"].append(task_result.get("00", 0) / total_shots)
 
     return probabilities_dict
-
-
 # %% [markdown]
 # ## Extracting the counts and probabilities
-# We will now extract the counts and probabilities from the emulator and
-# hardware runs. We will then plot the results. First we load the data
-# from the files.
+# We will now extract the counts and probabilities from the emulator and hardware runs. 
+# We will then plot the results. First we load the data from the files.
 
 # %%
 
@@ -137,9 +115,9 @@ hardware_batch = load(filename)
 # save(filename, hardware_batch)
 
 # %% [markdown]
-# To get the `counts` we need to get a `report` from the `batch` objects.
-# Then with the report we can get the counts. The counts are a dictionary
-# that maps the bitstring to the number of times that bitstring was measured.
+# To get the `counts` we need to get a `report` from the `batch` objects. Then with the 
+# report we can get the counts. The counts are a dictionary that maps the bitstring to 
+# the number of times that bitstring was measured.
 
 
 # %%
