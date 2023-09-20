@@ -67,30 +67,17 @@ ramsey_job = ramsey_program.batch_assign(run_time=run_times)
 
 # %% [markdown]
 # ## Run Emulation and Hardware
-# To run the program on the emulator we can select the `braket` provider
-# as a property of the `batch` object. Braket has its own emulator that
-# we can use to run the program. To do this select `local_emulator` as
-# the next option followed by the `run` method. Then we dump the results
-# to a file so that we can use them later.
-
+# Like in the first tutorial, we will run the program on the emulator and hardware.
+# Note that for the hardware we will use the `parallelize` method to run multiple
+# copies of the program in parallel. For more information about this process, see the 
+# first tutorial. 
 # %%
 emu_filename = os.path.join(os.path.abspath(""), "data", "ramsey-emulation.json")
 
 if not os.path.isfile(emu_filename):
     emu_batch = ramsey_job.braket.local_emulator().run(10000)
     save(emu_batch, emu_filename)
-# %% [markdown]
-# When running on the hardware we can use the `braket` provider as well.
-# However, we will need to specify the `device` to run on. In this case
-# we will use `Aquila` via the `aquila` method. Before that we must note
-# that because Aquila can support up to 256 atoms we need to make full use
-# of the capabilities of the device. As we discussed in the Rabi example
-# we can use the `parallelize` which will allow us to run multiple copies of
-# the program in parallel using the full user provided area of Aquila. This
-# has to be put before the `braket` provider. Then we dump the results
-# to a file so that we can use them later.
 
-# %%
 hardware_filename = os.path.join(os.path.abspath(""), "data", "ramsey-job.json")
 if not os.path.isfile(hardware_filename):
     batch = ramsey_job.parallelize(24).braket.aquila().run_async(shots=100)
