@@ -19,7 +19,7 @@
 # ## Introduction
 # In this example we show how to create the Z2 ordered phase on a 1D chain of atoms and
 # how to perform a scan over the sweep time to understand the behavior of an adiabatic
-# pulse schedule in its formation.
+# sweep and the effect of the Rydberg blockade on a many-body system.
 
 # %% [markdown]
 # Let's import all the tools we'll need.
