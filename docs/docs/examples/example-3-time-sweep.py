@@ -143,8 +143,10 @@ emu_sweep_times = emu_report.list_param("sweep_time")
 hardware_sweep_times = hardware_report.list_param("sweep_time")
 
 
-plt.plot(emu_sweep_times, emu_probabilities, label="Emulator")
-plt.plot(hardware_sweep_times, hardware_probabilities, label="Hardware")
+plt.plot(emu_sweep_times, emu_probabilities, label="Emulator", color="#878787")
+plt.plot(
+    hardware_sweep_times, hardware_probabilities, label="Hardware", color="#6437FF"
+)
 plt.show()
 
 # %% [markdown]

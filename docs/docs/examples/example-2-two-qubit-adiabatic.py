@@ -18,7 +18,7 @@
 # # Two Qubit Adiabatic Sweep
 # ## Introduction
 # In this example, we show how to use Bloqade to program an adiabatic sweep on a pair of
-# atoms, with the distance between atoms gradually increasing per task. This will allow 
+# atoms, with the distance between atoms gradually increasing per task. This will allow
 # us to explore the effect of the Rydberg interaction. We will run the program on both
 # the emulator and the hardware to compare the results.
 # %%
@@ -32,18 +32,18 @@ import os
 
 # %% [markdown]
 # ## Defining the Program
-# Now, we define our program of interest. For an adiabatic protocol, we keep that Rabi 
-# frequency at a considerable value while slowly ramping the detuning from a large 
-# negative to a positive value. The idea is that when the detuning is large and 
-# negative the atoms remain in the ground state. As the detuning is ramped to positive 
-# values, the atoms are able to be excited to the Rydberg state, however if the atoms 
-# are too close together, the Rydberg interactions effectively acts like a negative 
-# etuning to neighboring atoms, preventing them from being excited. This is the 
-# blockade effect. For atoms that are sufficiently far apart, the Rydberg interaction 
-# is negligible and the atoms can be excited to the Rydberg state. As the atoms get 
-# closer together, the Rydberg interaction becomes more significant the probability of 
-# exciting both atoms becomes smaller. The typical length scale for the cross over from 
-# the non-interacting to the blockade regime is the blockade radius. 
+# Now, we define our program of interest. For an adiabatic protocol, we keep that Rabi
+# frequency at a considerable value while slowly ramping the detuning from a large
+# negative to a positive value. The idea is that when the detuning is large and
+# negative the atoms remain in the ground state. As the detuning is ramped to positive
+# values, the atoms are able to be excited to the Rydberg state, however if the atoms
+# are too close together, the Rydberg interactions effectively acts like a negative
+# etuning to neighboring atoms, preventing them from being excited. This is the
+# blockade effect. For atoms that are sufficiently far apart, the Rydberg interaction
+# is negligible and the atoms can be excited to the Rydberg state. As the atoms get
+# closer together, the Rydberg interaction becomes more significant the probability of
+# exciting both atoms becomes smaller. The typical length scale for the cross over from
+# the non-interacting to the blockade regime is the blockade radius.
 #
 # Note that you can perform arithmetic operations directly on variables in the program
 # but this requires the variable to be explicitly declared by passing a string to the

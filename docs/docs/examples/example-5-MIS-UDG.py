@@ -99,7 +99,7 @@ average_rydberg_excitation = report.rydberg_densities(filter_perfect_filling=Fal
 )
 final_detunings = report.list_param("final_detuning")
 
-plt.plot(final_detunings, average_rydberg_excitation)
+plt.plot(final_detunings, average_rydberg_excitation, color="#6437FF")
 plt.xlabel("final detuning (rad/µs)")
 plt.ylabel("total rydberg excitations")
 plt.show()

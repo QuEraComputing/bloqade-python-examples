@@ -21,7 +21,7 @@
 # perform multi-qubit blockaded Rabi oscillations. The Physics here is described in
 # detail in the [whitepaper](https://arxiv.org/abs/2306.11727). But in short, we can
 # use the Rydberg blockade to change the effective Rabi frequency of the entire system
-# by adding more atoms to the cluster. 
+# by adding more atoms to the cluster.
 
 # %%
 from bloqade import start, save, load
@@ -81,7 +81,7 @@ sequence = start.rydberg.rabi.amplitude.uniform.piecewise_linear(
 # ## Defining the Program
 # Now, all that is left to do is to compose the geometry and the Pulse sequence into a
 # fully defined program. We can do this by calling the `apply` method on the geometry
-# and passing in the sequence. This method will return an object that can then be 
+# and passing in the sequence. This method will return an object that can then be
 # assigned parameters.
 # %%
 batch = (
