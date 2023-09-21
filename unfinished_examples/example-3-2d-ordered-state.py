@@ -18,7 +18,7 @@
 # # Whitepaper Example 3: 2D Ordered State
 
 # %%
-from bloqade.ir.location import Square
+from bloqade.atom_arrangement import Square
 import bloqade
 
 from bokeh.plotting import figure, show

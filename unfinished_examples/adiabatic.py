@@ -18,7 +18,7 @@
 # # Adiabatic Evolution of Rydberg Atoms
 
 # %%
-import bloqade.ir.location as location
+import bloqade.atom_arrangement as location
 from bloqade.ir import Linear, Constant
 
 # %% [markdown]

@@ -1,4 +1,4 @@
-from bloqade.ir.location import Square
+from bloqade.atom_arrangement import Square
 import numpy as np
 import bloqade
 

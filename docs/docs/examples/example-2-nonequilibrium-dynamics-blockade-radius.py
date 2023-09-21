@@ -24,7 +24,7 @@
 # %%
 
 from bloqade import save, load
-from bloqade.ir.location import Chain
+from bloqade.atom_arrangement import Chain
 
 import numpy as np
 import matplotlib.pyplot as plt

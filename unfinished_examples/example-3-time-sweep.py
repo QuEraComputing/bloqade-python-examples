@@ -18,7 +18,7 @@
 # # Whitepaper Example 3:
 
 # %%
-from bloqade.ir.location import Chain
+from bloqade.atom_arrangement import Chain
 import bloqade
 import numpy as np
 import os
