@@ -89,6 +89,7 @@ plugins:
           # "example-2-*",
           # "example-3-*",
           # "example-4-*",
+          # "example-5-*",
         ]
       execute: true # always execute
       include_source: True

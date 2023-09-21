@@ -15,7 +15,7 @@
 # ---
 
 # %% [markdown]
-# # Floquet Protocol
+# # Single Qubit Floquet Dynamics
 # ## Introduction
 # Rounding out the single qubit examples we will show how to generate a Floquet
 # protocol. We will define the probotol using a python function and then use the 

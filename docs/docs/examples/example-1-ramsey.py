@@ -15,7 +15,7 @@
 # ---
 
 # %% [markdown]
-# # Ramsey Protocol
+# # Single Qubit Ramsey Protocol
 # ## Introduction
 # In this example we show how to use Bloqade to emulate a Ramsey protocol as well as 
 # run it on hardware. We will define a Ramsey protocol as a sequence of two $\pi/2$ 
