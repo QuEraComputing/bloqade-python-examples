@@ -17,19 +17,17 @@
 # %% [markdown]
 # # Single Qubit Rabi Oscillations
 # ## Introduction
-# In this example we show how to use Bloqade to emulate Rabi oscillations
-# of a Neutral Atom and run it on hardware. We will define a Rabi oscillation
-# as a sequence with a constant detuning and Rabi frequency. In practice, the Rabi
-# frequency has to start and end at 0.0, so we will use a piecewise linear function
-# to ramp up and down the Rabi frequency.
+# In this example we show how to use Bloqade to emulate Rabi oscillations of a Neutral 
+# Atom and run it on hardware. We will define a Rabi oscillation as a sequence with a 
+# constant detuning and Rabi frequency. In practice, the Rabi frequency has to start 
+# and end at 0.0, so we will use a piecewise linear function to ramp up and down the 
+# Rabi frequency.
 
 # %%
 from bloqade import start, cast, load, save
 import os
 import matplotlib.pyplot as plt
 import numpy as np
-
-
 # %% [markdown]
 # ## Define the program.
 # Below we define program with one atom, with constant detuning but variable Rabi 

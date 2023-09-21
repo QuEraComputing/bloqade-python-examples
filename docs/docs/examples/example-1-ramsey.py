@@ -17,12 +17,12 @@
 # %% [markdown]
 # # Ramsey Protocol
 # ## Introduction
-# In this example we show how to use Bloqade to emulate a
-# Ramsey protocol as well as run it on hardware. We will define a Ramsey protocol
-# as a sequence of two $\pi/2$ pulses separated by a variable time gap $\tau$. These
-# procols are used to measure the coherence time of a qubit. In practice, the Rabi
-# frequency has to start and end at 0.0, so we will use a piecewise linear function
-# to ramp up and down the Rabi frequency.
+# In this example we show how to use Bloqade to emulate a Ramsey protocol as well as 
+# run it on hardware. We will define a Ramsey protocol as a sequence of two $\pi/2$ 
+# pulses separated by a variable time gap $\tau$. These procols are used to measure the 
+# coherence time of a qubit. In practice, the Rabi frequency has to start and end at 
+# 0.0, so we will use a piecewise linear function to ramp up and down the Rabi 
+# frequency.
 
 
 # %%
@@ -85,13 +85,11 @@ if not os.path.isfile(hardware_filename):
 
 # %% [markdown]
 # ## Plot the results
-# Exactly like in the Rabi Oscillation example, we can now plot the results
-# from the hardware and emulation together. Again we will use the `report`
-# to calculate the mean Rydberg population for each run, and then plot
-# the results.
+# Exactly like in the Rabi Oscillation example, we can now plot the results from the 
+# hardware and emulation together. Again we will use the `report` to calculate the mean 
+# Rydberg population for each run, and then plot the results.
 #
 # first we load the results from the emulation and hardware.
-
 # %%
 emu_batch = load(emu_filename)
 hardware_batch = load(hardware_filename)
