@@ -137,7 +137,7 @@ hardware_batch = load(filename)
 emu_report = emu_batch.report()
 hardware_report = hardware_batch.report()
 emu_probabilities = get_z2_probabilities(emu_report)
-hardware_probabilities = get_z2_probabilities(emu_report)
+hardware_probabilities = get_z2_probabilities(hardware_report)
 
 emu_sweep_times = emu_report.list_param("sweep_time")
 hardware_sweep_times = hardware_report.list_param("sweep_time")
