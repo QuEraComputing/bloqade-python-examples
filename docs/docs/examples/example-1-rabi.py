@@ -17,27 +17,25 @@
 # %% [markdown]
 # # Single Qubit Rabi Oscillations
 # ## Introduction
-# In this example we show how to use Bloqade to emulate a
-# Rabi oscillation as well as run it on hardware. We will define a Rabi oscillation
-# as a sequence with a constant detuning and Rabi frequency. In practice, the Rabi
-# frequency has to start and end at 0.0, so we will use a piecewise linear function
-# to ramp up and down the Rabi frequency.
+# In this example we show how to use Bloqade to emulate Rabi oscillations of a Neutral 
+# Atom and run it on hardware. We will define a Rabi oscillation as a sequence with a 
+# constant detuning and Rabi frequency. In practice, the Rabi frequency has to start 
+# and end at 0.0, so we will use a piecewise linear function to ramp up and down the 
+# Rabi frequency.
 
 # %%
 from bloqade import start, cast, load, save
 import os
 import matplotlib.pyplot as plt
 import numpy as np
-
-
 # %% [markdown]
 # ## Define the program.
-# define program with one atom, with constant detuning but variable Rabi frequency,
-# ramping up to "rabi_ampl" and then returning to 0.0. Note that the `cast` function
-# can be used to create a variable that can used in multiple places in the program.
-# These variables support basic arithmetic operations, such as addition, subtraction,
-# multiplication, and division. They also have `min` and `max` methods that can be used
-# in place of built-in python `min` and `max` functions, e.g.
+# Below we define program with one atom, with constant detuning but variable Rabi 
+# frequency, ramping up to "rabi_ampl" and then returning to 0.0. Note that the `cast` 
+# function can be used to create a variable that can used in multiple places in the 
+# program. These variables support basic arithmetic operations, such as addition, 
+# subtraction,  multiplication, and division. They also have `min` and `max` methods 
+# that can be used in place of built-in python `min` and `max` functions, e.g.
 # `cast("a").min(cast("b"))`.
 
 # %%
@@ -73,11 +71,13 @@ rabi_oscillation_job = rabi_oscillations_program.assign(
 
 # %% [markdown]
 # ## Run Emulator and Hardware
-# To run the program on the emulator we can select the `braket` provider
-# as a property of the `batch` object. Braket has its own emulator that
-# we can use to run the program. To do this select `local_emulator` as
-# the next option followed by the `run` method. Then we dump the results
-# to a file so that we can use them later.
+# To run the program on the emulator we can select the `braket` provider as a property 
+# of the `batch` object. Braket has its own emulator that we can use to run the program.
+# To do this select `local_emulator` as the next option followed by the `run` method. 
+# Then we dump the results to a file so that we can use them later. Note that unline the
+# actual hardware  the shots do not correspond to multiple executions of the emuatlor, 
+# but rather the number of times the final wavefunction is sampled. This is because the
+# emulator does not simulate any noise.
 
 # %%
 
@@ -88,21 +88,23 @@ if not os.path.isfile(emu_filename):
     save(emu_batch, emu_filename)
 
 # %% [markdown]
-# When running on the hardware we can use the `braket` provider as well.
-# However, we will need to specify the `device` to run on. In this case
-# we will use `Aquila` via the `aquila` method. Before that we must note
-# that because Aquila can support up to 256 atoms we need to make full use
-# of the capabilities of the device. As we discussed in the previous examples
-# we can use the `parallelize` which will allow us to run multiple copies of
-# the program in parallel using the full user provided area of Aquila. The
-# `parallelize` method takes a single argument, which is the distance between
-# each copy of the program on a grid. In this case, we want to make sure that
-# the distance between each atom is at least 24 micrometers, so that the
-# Rydberg interactions between atoms are negligible. To run the program
-# but not wait for the results, we can use the `run_async` method, which
-# will return a `Batch` object that can be used to fetch the results later.
-# After running the program, we dump the results to a file so that we can
-# use them later.
+# When running on the hardware we can use the `braket` provider. However, we will need 
+# to specify the device to run on. In this case we will use *Aquila* via the `aquila` 
+# method. Before that we must note that because Aquila can support up to 256 atoms in 
+# an area that is $75 \times 76 \mu m^2$. We need to make full use of the capabilities 
+# of the device. Bloqade automatically takes care of this with the `parallelize` method,
+# which will allow us to run multiple copies of the program in parallel using the full 
+# user provided area of Aquila. The `parallelize` method takes a single argument, which 
+# is the distance between each copy of the program on a grid. In this case, we want to 
+# make sure that the distance between each atom is at least 24 micrometers, so that the 
+# Rydberg interactions between atoms are negligible. 
+# 
+# To run the program but not wait for the results, we can use the `run_async` method, 
+# which will return a `Batch` object that can be used to fetch the results later. After 
+# running the program, we dump the results to a file so that we can use them later. Note
+# that if you want to wait for the results in the python script just call the `run` 
+# method instead of `run_async`. This will block the script until all results in the 
+# batch are complete. 
 
 # %%
 hardware_filename = os.path.join(os.path.abspath(""), "data", "rabi-job.json")
@@ -139,12 +141,12 @@ emulator_report = emu_batch.report()
 
 times = emulator_report.list_param("run_time")
 density = [1 - ele.mean() for ele in emulator_report.bitstrings()]
-plt.plot(times, density, color="#878787", marker=".", label="emulation")
+plt.plot(times, density, color="#878787", marker=".", label="Emuator")
 
 times = hardware_report.list_param("run_time")
 density = [1 - ele.mean() for ele in hardware_report.bitstrings()]
 
-plt.plot(times, density, color="#6437FF", linewidth=4, label="qpu")
+plt.plot(times, density, color="#6437FF", linewidth=4, label="Hardware")
 plt.xlabel("Time ($\mu s$)")
 plt.ylabel("Rydberg population")
 plt.legend()
