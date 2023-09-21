@@ -27,7 +27,7 @@
 # %% [markdown]
 # ## Defining the Program
 # Now, we define our program of interest. As expected for an adiabatic protocol,
-# we keep that Rabi frequency at a considerable value while slowly ramping the detuning 
+# we keep that Rabi frequency at a considerable value while slowly ramping the detuning
 # from a large negative to a positive value.
 #
 # Note that you can perform arithmetic operations directly on variables in the program

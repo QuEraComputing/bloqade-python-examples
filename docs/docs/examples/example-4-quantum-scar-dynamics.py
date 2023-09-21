@@ -99,9 +99,7 @@ if not os.path.isfile(emu_filename):
     save(emu_batch, emu_filename)
 
 
-filename = os.path.join(
-    os.path.abspath(""), "data", "quantum-scar-dynamics-job.json"
-)
+filename = os.path.join(os.path.abspath(""), "data", "quantum-scar-dynamics-job.json")
 
 if not os.path.isfile(filename):
     hardware_batch = (
@@ -126,6 +124,7 @@ hardware_batch = load(filename)
 # hardware_batch.fetch()
 # save(hardware_batch, filename)
 
+
 # %%
 def get_z2_probabilities(report):
     z2_probabilities = []
@@ -136,11 +135,11 @@ def get_z2_probabilities(report):
 
     return z2_probabilities
 
+
 # %% [markdown]
 # We can now plot the results from the emulator and hardware. We see that the emulator
 
 # %%
-
 
 
 emu_report = emu_batch.report()

@@ -18,14 +18,14 @@
 # # 2D State Preparation
 # ## Introduction
 # In this example we show how to create the Striated Phase
-# on a 2D chain of atoms. 
+# on a 2D chain of atoms.
 
 # %% [markdown]
-# You might notice that the tools we need to import are 
-# a lot shorter than prior instances. This is because 
-# we're taking advantage of bloqade Python's built-in 
-# visualization capabilities instead of crafting 
-# a new plot with matplotlib. 
+# You might notice that the tools we need to import are
+# a lot shorter than prior instances. This is because
+# we're taking advantage of bloqade Python's built-in
+# visualization capabilities instead of crafting
+# a new plot with matplotlib.
 
 # %%
 from bloqade.atom_arrangement import Square
@@ -33,15 +33,16 @@ from bloqade import save, load
 from bokeh.io import output_notebook
 
 import os
+
 # This tells Bokeh to display output in the notebook
 # versus opening a browser window
 output_notebook()
 
 # %% [markdown]
 # ## Program Definition
-# We define a program where our geometry is a square lattice of 3x3 atoms. Notice that 
+# We define a program where our geometry is a square lattice of 3x3 atoms. Notice that
 # unlke the 1D Z2 state preparation example the detuning now ramps to a higher value
-# and the atoms are closer together. 
+# and the atoms are closer together.
 # %%
 # Have atoms separated by 5.9 micrometers
 L = 3
@@ -61,16 +62,18 @@ batch = prog.assign(delta_end=42.66, sweep_time=2.4)
 
 # %% [markdown]
 # ## Submitting to Emulator and Hardware
-# Just as in prior examples, we submit our program to both hardware and the emulator and 
-# save the intermediate data in files for convenient fetching when the results are ready from hardware, 
+# Just as in prior examples, we submit our program to both hardware and the emulator and
+# save the intermediate data in files for convenient fetching when the results are ready from hardware,
 # as well as avoiding having to repeat emulation runs for the purposes of analysis.
 
 # Considering how small a 3 x 3 lattice of atoms is relative to machine capabilities,
-# we also take advantage of parallelization to duplicate the geometry and get more 
+# we also take advantage of parallelization to duplicate the geometry and get more
 # data per shot when submitting to Hardware.
 
 # %%
-emu_filename = os.path.join(os.path.abspath(""), "data", "striated-phase-emulation.json")
+emu_filename = os.path.join(
+    os.path.abspath(""), "data", "striated-phase-emulation.json"
+)
 if not os.path.isfile(emu_filename):
     emu_future = batch.braket.local_emulator().run(shots=10000)
     save(emu_future, emu_filename)
@@ -99,7 +102,7 @@ hardware_batch = load(hw_filename)
 # hardware and emulation results into the formats we need to make analysis easier.
 #
 # Now we'll go one step further by letting Bloqade Python do the visualization for us.
-# In this case we'll visualize the Rydberg Densities of our system overlaid on the original 
+# In this case we'll visualize the Rydberg Densities of our system overlaid on the original
 # geometry with just the following:
 
 # %%
@@ -107,7 +110,7 @@ emu_batch.report().show()
 
 # %% [markdown]
 # Just as before, we let Bloqade generate a `report` which contains all the results in
-# easy to digest format but we invoke the `.show()` method of our report which us 
+# easy to digest format but we invoke the `.show()` method of our report which us
 # easily get an idea of the results of our experiment with interactive plots.
 
 # The plot that mos interests us is the one on the right under the "Rydberg Density" section.
@@ -117,5 +120,5 @@ hardware_batch.report().show()
 
 # %% [markdown]
 # Considering Bloqade's goal of a uniform visualization pipeline, we can get the same
-# ability for results from hardware. Note that we can confirm the program does what it's 
+# ability for results from hardware. Note that we can confirm the program does what it's
 # supposed to as results from emulation agree with those from hardware quite well.

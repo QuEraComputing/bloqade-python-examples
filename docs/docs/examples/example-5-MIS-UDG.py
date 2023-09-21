@@ -30,11 +30,11 @@
 # To define random defects on any Bloqade geometry, simply call the `add_defect_density`
 # or `add_defect_count` methods on the geometry object. The `add_defect_density` method
 # takes a float between 0 and 1 and uses that as the probability of a site being a
-# defect. The `add_defect_count` method takes the number of defects to add to the 
-# geometry placed in random locations. Both ways take an  optional `rng` argument, 
-# a numpy random number generator. If no `rng` argument is provided, then the default 
-# numpy random number generator is used. Using the random number generator allows you 
-# to set the seed for reproducibility. After that, defining the pulse sequence is the 
+# defect. The `add_defect_count` method takes the number of defects to add to the
+# geometry placed in random locations. Both ways take an  optional `rng` argument,
+# a numpy random number generator. If no `rng` argument is provided, then the default
+# numpy random number generator is used. Using the random number generator allows you
+# to set the seed for reproducibility. After that, defining the pulse sequence is the
 # same as in the previous tutorials.
 
 # %%
@@ -76,7 +76,7 @@ if not os.path.isfile(filename):
 # ## Plot Results
 # Here, the total number of Rydberg excitations is plotted as a function of the final
 # detuning. The total number of Rydberg excitations is a proxy for the largest
-# independent set size because the number of violations to the Rydberg blockade is and 
+# independent set size because the number of violations to the Rydberg blockade is and
 # will not scale with the size of the independent set. We start by loading the results
 
 # %%

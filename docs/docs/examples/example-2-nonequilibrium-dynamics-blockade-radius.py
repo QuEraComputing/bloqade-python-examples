@@ -17,9 +17,9 @@
 # %% [markdown]
 # # Nonequilibrium Dynamics of nearly Blockaded Rydberg Atoms
 # ## Introduction
-# In this example we will show how to generate multi-atom programs
-# looking specifically at the dynamics of two atoms that are right
-# on the blockade radius. First lsets start with the imports.
+# In this example we will show how to generate multi-atom programs looking specifically
+# at the dynamics of two atoms that are right on the blockade radius. First lsets start
+# with the imports.
 
 # %%
 
@@ -35,9 +35,9 @@ import os
 # ## Program Definition
 # We will start by defining a program. We set up a chain of two atoms
 # with a parmaeterized distance between them. We then define a Rabi
-# like in the original Rabi oscillation example. Given a `rabi_ampl` of 15 rad/µs 
-# the blockaded radius s 8.44 µm. We will look at the dynamics of the system for a 
-# distance of 8.5 µm to be every so slightly outside of the blockade radius. We then 
+# like in the original Rabi oscillation example. Given a `rabi_ampl` of 15 rad/µs
+# the blockaded radius s 8.44 µm. We will look at the dynamics of the system for a
+# distance of 8.5 µm to be every so slightly outside of the blockade radius. We then
 # define a `batch` of programs for different `run_time` values.
 # %%
 
@@ -54,7 +54,7 @@ batch = program_assigned_vars.batch_assign(run_time=0.05 * np.arange(31))
 # ## Run Emulator and Hardware
 # Once again we will run the emulator and hardware. We will use the
 # `local_emulator` method to run the emulator locally. We will then
-# save the results to a file so that we can use them later. 
+# save the results to a file so that we can use them later.
 
 # %%
 emu_filename = os.path.join(
@@ -75,13 +75,14 @@ if not os.path.isfile(filename):
     hardware_batch = batch.parallelize(24).braket.aquila().run_async(shots=100)
     save(hardware_batch, filename)
 
+
 # %% [markdown]
 # ## Plotting the Results
 # In order to show the complex dynamics we will plot the probability of having `0`, `1`
-# , or `2` Rydberg atoms as a function of time. We will do this for both the emulator 
-# and the hardware. We can use the `rydberg_state_probabilities` function to extract 
-# the probabilities from the counts. This function takes a list of counts and returns a 
-# dictionary of probabilities for each state. The counts are obtained from the `report` 
+# , or `2` Rydberg atoms as a function of time. We will do this for both the emulator
+# and the hardware. We can use the `rydberg_state_probabilities` function to extract
+# the probabilities from the counts. This function takes a list of counts and returns a
+# dictionary of probabilities for each state. The counts are obtained from the `report`
 # of the `batch` object.
 # %%
 def rydberg_state_probabilities(shot_counts):
@@ -99,9 +100,11 @@ def rydberg_state_probabilities(shot_counts):
         probabilities_dict["2"].append(task_result.get("00", 0) / total_shots)
 
     return probabilities_dict
+
+
 # %% [markdown]
 # ## Extracting the counts and probabilities
-# We will now extract the counts and probabilities from the emulator and hardware runs. 
+# We will now extract the counts and probabilities from the emulator and hardware runs.
 # We will then plot the results. First we load the data from the files.
 
 # %%
@@ -115,8 +118,8 @@ hardware_batch = load(filename)
 # save(filename, hardware_batch)
 
 # %% [markdown]
-# To get the `counts` we need to get a `report` from the `batch` objects. Then with the 
-# report we can get the counts. The counts are a dictionary that maps the bitstring to 
+# To get the `counts` we need to get a `report` from the `batch` objects. Then with the
+# report we can get the counts. The counts are a dictionary that maps the bitstring to
 # the number of times that bitstring was measured.
 
 
@@ -142,7 +145,7 @@ emu_colors = ["#55DE79", "#EDFF1A", "#C2477F"]  # Green, Yellow, Red
 
 emu_lines = []
 hw_lines = []
-for ax, rydberg_state, color in zip(axs,["0", "1", "2"], emu_colors):
+for ax, rydberg_state, color in zip(axs, ["0", "1", "2"], emu_colors):
     (hw_line,) = ax.plot(
         emu_run_times,
         hw_rydberg_state_probabilities[rydberg_state],
