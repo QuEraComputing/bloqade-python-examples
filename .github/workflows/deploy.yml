@@ -47,5 +47,5 @@ jobs:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           GOOGLE_ANALYTICS_KEY: ${{ secrets.GOOGLE_ANALYTICS_KEY }}
         run: |
-          pdm run mike deploy --force --push --update-aliases latest -F ${GITHUB_WORKSPACE}/docs/mkdocs.yml
-          pdm run mike set-default --push latest -F ${GITHUB_WORKSPACE}/docs/mkdocs.yml
+          pdm run mike deploy --force --push -F ${GITHUB_WORKSPACE}/docs/mkdocs.yml latest
+          pdm run mike set-default --push -F ${GITHUB_WORKSPACE}/docs/mkdocs.yml latest
