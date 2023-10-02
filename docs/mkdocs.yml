@@ -100,6 +100,7 @@ plugins:
   - mike
 
 extra:
+  homepage: https://queracomputing.github.io/bloqade-python/latest/
   version:
     provider: mike
   annotate:
