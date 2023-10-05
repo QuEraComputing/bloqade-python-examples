@@ -67,12 +67,12 @@ quantum_scar_program = (
     .amplitude.uniform.piecewise_linear([0.3, 1.6, 0.3], [0.0, 15.7, 15.7, 0.0])
     .piecewise_linear([0.2, 1.4, 0.2], [0, 15.7, 15.7, 0])
     # slice waveform, add padding for the linear segment
-    .slice(start=0, stop=run_time - 0.06)
+    .slice(start=0, stop=run_time - 0.065)
     # record the value of the waveform at the end of the slice to "rabi_value"
     .record("rabi_value")
     # append segment to waveform that fixes the value of the waveform to 0
     # at the end of the waveform
-    .linear("rabi_value", 0, 0.06)
+    .linear("rabi_value", 0, 0.065)
 )
 
 # get run times via the following:
