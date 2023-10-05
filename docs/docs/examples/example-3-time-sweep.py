@@ -31,6 +31,9 @@ import numpy as np
 import os
 import matplotlib.pyplot as plt
 
+if not os.path.isdir("data"):
+    os.mkdir("data")
+
 # %% [markdown]
 # ## Program Definition We define a program where our geometry is a chain of 11 atoms
 # with a distance of 6.1 micrometers between atoms.

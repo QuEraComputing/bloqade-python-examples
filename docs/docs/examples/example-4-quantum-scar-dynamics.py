@@ -49,6 +49,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 
+if not os.path.isdir("data"):
+    os.mkdir("data")
 
 n_atoms = 11
 atom_spacing = 6.1
