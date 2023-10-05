@@ -34,6 +34,9 @@ from bokeh.io import output_notebook
 
 import os
 
+if not os.path.isdir("data"):
+    os.mkdir("data")
+
 # This tells Bokeh to display output in the notebook
 # versus opening a browser window
 output_notebook()

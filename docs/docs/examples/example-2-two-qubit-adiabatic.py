@@ -29,6 +29,8 @@ import matplotlib.pyplot as plt
 
 import os
 
+if not os.path.isdir("data"):
+    os.mkdir("data")
 
 # %% [markdown]
 # ## Defining the Program

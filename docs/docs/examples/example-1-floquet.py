@@ -29,6 +29,9 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 
+if not os.path.isdir("data"):
+    os.mkdir("data")
+
 # %% [markdown]
 # ## Define the program.
 # For the floquet protocol we keep We do the same Rabi drive but allow the detuning to

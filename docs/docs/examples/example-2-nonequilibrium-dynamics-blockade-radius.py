@@ -31,6 +31,9 @@ import matplotlib.pyplot as plt
 
 import os
 
+if not os.path.isdir("data"):
+    os.mkdir("data")
+
 # %% [markdown]
 # ## Program Definition
 # We will start by defining a program. We set up a chain of two atoms

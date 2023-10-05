@@ -44,6 +44,9 @@ import numpy as np
 import os
 import matplotlib.pyplot as plt
 
+if not os.path.isdir("data"):
+    os.mkdir("data")
+
 # setting the seed
 rng = np.random.default_rng(1234)
 

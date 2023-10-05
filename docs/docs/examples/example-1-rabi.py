@@ -29,6 +29,9 @@ import os
 import matplotlib.pyplot as plt
 import numpy as np
 
+if not os.path.isdir("data"):
+    os.mkdir("data")
+
 # %% [markdown]
 # ## Define the program.
 # Below we define program with one atom, with constant detuning but variable Rabi

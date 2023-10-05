@@ -31,6 +31,9 @@ import matplotlib.pyplot as plt
 
 import os
 
+if not os.path.isdir("data"):
+    os.mkdir("data")
+
 # %% [markdown]
 # ## Defining the Geometry
 # We will start by defining the geometry of the atoms. The idea here is to cluster
