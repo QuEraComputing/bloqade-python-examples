@@ -15,6 +15,9 @@
 # ---
 
 # %% [markdown]
+# <a class=md-button href="example-3-time-sweep.py" download> Download Script </a>
+
+# %% [markdown]
 # # 1D Z2 State Preparation
 # ## Introduction
 # In this example we show how to create the Z2 ordered phase on a 1D chain of atoms and

@@ -15,6 +15,9 @@
 # ---
 
 # %% [markdown]
+# <a class=md-button href="example-2-multi-qubit-blockaded.py" download> Download Script </a>
+
+# %% [markdown]
 # # Multi-qubit Blockaded Rabi Oscillations
 # ## Introduction
 # In this tutorial we will show you how to compose geometries with pulse sequences to

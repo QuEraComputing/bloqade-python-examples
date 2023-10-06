@@ -15,6 +15,10 @@
 # ---
 
 # %% [markdown]
+# <a class=md-button href="example-3-2d-ordered-state.py" download> Download Script </a>
+
+
+# %% [markdown]
 # # 2D State Preparation
 # ## Introduction
 # In this example we show how to create the Striated Phase

@@ -15,6 +15,9 @@
 # ---
 
 # %% [markdown]
+# <a class=md-button href="example-4-quantum-scar-dynamics.py" download> Download Script </a>
+
+# %% [markdown]
 # # Quantum Scar Dynamics
 # ## Introduction
 # In this example we show how to use Bloqade to run a quantum scar dynamics experiment.

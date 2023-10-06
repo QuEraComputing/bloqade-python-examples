@@ -15,6 +15,9 @@
 # ---
 
 # %% [markdown]
+# <a class=md-button href="example-1-floquet.py" download> Download Script </a>
+
+# %% [markdown]
 # # Single Qubit Floquet Dynamics
 # ## Introduction
 # Rounding out the single qubit examples we will show how to generate a Floquet

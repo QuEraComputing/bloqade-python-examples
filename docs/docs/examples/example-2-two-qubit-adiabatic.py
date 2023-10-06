@@ -15,6 +15,9 @@
 # ---
 
 # %% [markdown]
+# <a class=md-button href="example-2-two-qubit-adiabatic.py" download> Download Script </a>
+
+# %% [markdown]
 # # Two Qubit Adiabatic Sweep
 # ## Introduction
 # In this example, we show how to use Bloqade to program an adiabatic sweep on a pair of
