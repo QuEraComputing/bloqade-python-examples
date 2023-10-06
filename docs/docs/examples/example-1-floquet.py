@@ -15,7 +15,7 @@
 # ---
 
 # %% [markdown]
-# <a class=md-button href="example-1-floquet.py" download> Download Notebook </a>
+# <a class=md-button href="example-1-floquet.py" download> Download Script </a>
 
 # %% [markdown]
 # # Single Qubit Floquet Dynamics

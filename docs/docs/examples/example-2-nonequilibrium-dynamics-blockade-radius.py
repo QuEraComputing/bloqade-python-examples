@@ -15,6 +15,9 @@
 # ---
 
 # %% [markdown]
+# <a class=md-button href="example-2-nonequilibrium-dynamics-blockade-radius.py" download> Download Script </a>
+
+# %% [markdown]
 # # Nonequilibrium Dynamics of nearly Blockaded Rydberg Atoms
 # ## Introduction
 # In this example we will show how to generate multi-atom programs looking specifically

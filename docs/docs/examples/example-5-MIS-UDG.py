@@ -15,6 +15,9 @@
 # ---
 
 # %% [markdown]
+# <a class=md-button href="example-5-MIS-UDG.py" download> Download Script </a>
+
+# %% [markdown]
 # # Solving the Maximal Independent Set Problem on defective King Graph
 # ## Introduction
 # In this tutorial, we show how to use some of Bloqade's built-in tools to generate a

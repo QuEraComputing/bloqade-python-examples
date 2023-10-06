@@ -15,6 +15,9 @@
 # ---
 
 # %% [markdown]
+# <a class=md-button href="example-1-ramsey.py" download> Download Script </a>
+
+# %% [markdown]
 # # Single Qubit Ramsey Protocol
 # ## Introduction
 # In this example we show how to use Bloqade to emulate a Ramsey protocol as well as

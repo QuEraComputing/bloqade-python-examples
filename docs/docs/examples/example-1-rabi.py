@@ -15,6 +15,9 @@
 # ---
 
 # %% [markdown]
+# <a class=md-button href="example-1-rabi.py" download> Download Script </a>
+
+# %% [markdown]
 # # Single Qubit Rabi Oscillations
 # ## Introduction
 # In this example we show how to use Bloqade to emulate Rabi oscillations of a Neutral
