@@ -16,6 +16,21 @@
 
 # %% [markdown]
 # <a class=md-button href="example-3-time-sweep.py" download> Download Script </a>
+# <a class=md-button href="../../assets/data/time-sweep-job.json" download> Download Job </a>
+#
+# <div class="admonition warning"> 
+# <p class="admonition-title">Job Files for Complete Examples</p>
+# <p>
+# To be able to run the complete examples without having to submit your program to hardware and wait, you'll
+# need to download the associated job files. These files contain the results of running the program on 
+# the quantum hardware. 
+#
+# You can download the job files by clicking the "Download Job" button above. You'll then need to place
+# the job file in the `data` directory that was created for you when you ran the `import` part of the script 
+# (alternatively you can make the directory yourself, it should live at the same level as wherever you put this script).
+# </p> 
+# </div>
+#
 
 # %% [markdown]
 # # 1D Z2 State Preparation
