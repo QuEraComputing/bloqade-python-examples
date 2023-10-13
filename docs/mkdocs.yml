@@ -96,7 +96,11 @@ plugins:
           # "example-5-*",
         ]
       execute: true # always execute
+<<<<<<< HEAD
       include_source: true
+=======
+      include_source: True
+>>>>>>> main
   - mike
 
 
