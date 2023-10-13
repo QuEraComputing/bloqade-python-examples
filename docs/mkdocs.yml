@@ -96,8 +96,9 @@ plugins:
           # "example-5-*",
         ]
       execute: true # always execute
-      include_source: True
+      include_source: true
   - mike
+
 
 extra:
   homepage: https://queracomputing.github.io/bloqade-python/latest/
