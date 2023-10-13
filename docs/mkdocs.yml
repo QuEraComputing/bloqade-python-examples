@@ -95,8 +95,8 @@ plugins:
           # "example-4-*",
           # "example-5-*",
         ]
-      execute: false # always execute
-      include_source: True
+      execute: true # always execute
+      include_source: true
   - mike
 
 extra:
