@@ -107,7 +107,7 @@ extra:
     json: [.s2]
   analytics:
     provider: google
-    property: !ENV GOOGLE_ANALYTICS_KEY
+    property: G-SF6JCCYR56
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/QuEraComputing/bloqade-python
