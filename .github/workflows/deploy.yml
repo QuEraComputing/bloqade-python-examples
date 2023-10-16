@@ -18,6 +18,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
         with:
@@ -47,5 +49,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           GOOGLE_ANALYTICS_KEY: ${{ secrets.GOOGLE_ANALYTICS_KEY }}
         run: |
-          pdm run mike deploy --force --push -F ${GITHUB_WORKSPACE}/docs/mkdocs.yml latest
-          pdm run mike set-default --push -F ${GITHUB_WORKSPACE}/docs/mkdocs.yml latest
+          python3 -m ensurepip
+          version=$(python3 -m pip freeze | grep -n "bloqade" | cut -d "=" -f3-)
+          git fetch origin gh-pages --depth=1
+          pdm run mike deploy --push --update-alias $version latest
