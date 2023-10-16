@@ -3,33 +3,25 @@ site_url: https://bloqade.quera.com
 site_description: >-
   The neutral atom computing software development kit.
 
-repo_name: bloqade-python-examples
-repo_url: https://github.com/QuEraComputing/bloqade-python-examples
+repo_name: bloqade-python
+repo_url: https://github.com/QuEraComputing/bloqade-python
 
 # Page tree
 nav:
-  - Tutorials:
-    - examples/adiabatic.py
-    - examples/multi-qubit-blockaded-rabi.py
-    - examples/rabi.py
-    - examples/ramsey.py
-    - examples/floquet.py
-    - examples/example-2-lp-gate.py
-    - examples/example-3-2d-ordered-state.py
-    - examples/example-3-time-sweep.py
-    - examples/example-4-quantum-scar-dynamics.py
-    - examples/example-5-MIS-UDG.py
-    
-  - bloqade-python Github:
-    - https://github.com/QuEraComputing/bloqade-python
+  - Home: 'https://queracomputing.github.io/bloqade-python/latest/'
+  - Getting Started: 'https://queracomputing.github.io/bloqade-python/latest/getting_started/'
+  - Contributing: 'https://queracomputing.github.io/bloqade-python/latest/contributing/'
+  - Tutorials: index.md
+  - Reference: 'https://queracomputing.github.io/bloqade-python/latest/tree/builder/'
+  - Blog: 'https://queracomputing.github.io/bloqade-python/latest/blog/2023/'
+  - License: 'https://queracomputing.github.io/bloqade-python/latest/license/'
 
-  - Home:
-    - https://literate-guacamole-35n48l9.pages.github.io/dev/
+  
 
-copyright: Copyright &copy; 2022 - QuEra Computing Inc.
+copyright: Copyright &copy; 2023 - QuEra Computing Inc.
 theme:
   name: material
-  custom_dir: overrides
+  custom_dir: docs/overrides
   features:
     - announce.dismiss
     - content.action.edit
@@ -76,38 +68,47 @@ extra_css:
 plugins:
   - search:
       separator: '[\s\-,:!=\[\]()"`/]+|\.(?!\d)|&[lg]t;|(?!\b)(?=[A-Z][a-z])'
-  #- gen-files:
-  #    scripts:
-  #    - scripts/gen_ref_nav.py
+  - gen-files:
+      scripts:
+      - docs/scripts/gen_ref_nav.py
   - literate-nav:
       nav_file: SUMMARY.txt
-  #- mkdocstrings:
-  #    handlers:
-  #      python:
-  #        paths: [../src]
-  #        options:
-  #          show_if_no_docstring: false
-  #          separate_signature: true
-  #          merge_init_into_class: true
-  #          docstring_options:
-  #            ignore_init_summary: true
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [src]
+          options:
+            show_if_no_docstring: false
+            separate_signature: true
+            merge_init_into_class: true
+            docstring_options:
+              ignore_init_summary: true
   - minify:
       minify_html: true
   - mkdocs-jupyter:
       include: ["*.py"] # only include scripts
-      ignore: ["*.ipynb"]
-      execute: true # always execute
-      include_source: True
+      ignore: [
+          "*.ipynb",
+          # "example-1-*",
+          # "example-2-*",
+          # "example-3-*",
+          # "example-4-*",
+          # "example-5-*",
+        ]
+      execute: false # always execute
+      include_source: true
   - mike
 
+
 extra:
+  homepage: https://queracomputing.github.io/bloqade-python/latest/
   version:
     provider: mike
   annotate:
     json: [.s2]
   analytics:
     provider: google
-    property: !ENV GOOGLE_ANALYTICS_KEY
+    property: G-SF6JCCYR56
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/QuEraComputing/bloqade-python

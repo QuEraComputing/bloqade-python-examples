@@ -77,7 +77,7 @@ publish = {composite = ["build", "upload"]}
 test = {shell = "git clean -f && pytest tests docs/examples/*.py"}
 coverage = {shell = "git clean -f && coverage run -m pytest tests/ docs/examples/*.py && coverage report"}
 coverage-html = {shell = "git clean -f && coverage run -m pytest tests/ docs/examples/*.py && coverage html"}
-doc = {cmd = "mkdocs serve -f docs/mkdocs.yml"}
+doc = {cmd = "mkdocs serve"}
 doc_build = {cmd = "mkdocs build"}
 doc_deploy = {cmd = "pdm mike deploy --push --update-aliases dev"}
 jupytext = {cmd = "jupytext --sync docs/examples/*.py"}
