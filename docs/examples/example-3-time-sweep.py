@@ -165,9 +165,9 @@ hardware_sweep_times = hardware_report.list_param("sweep_time")
 
 
 plt.plot(emu_sweep_times, emu_probabilities, label="Emulator", color="#878787")
-plt.plot(
-    hardware_sweep_times, hardware_probabilities, label="Hardware", color="#6437FF"
-)
+plt.plot(hardware_sweep_times, hardware_probabilities, label="QPU", color="#6437FF")
+
+plt.legend()
 plt.show()
 
 # %% [markdown]
