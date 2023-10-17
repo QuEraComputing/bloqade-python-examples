@@ -53,7 +53,8 @@ if not os.path.isdir("data"):
     os.mkdir("data")
 
 # %% [markdown]
-# ## Program Definition We define a program where our geometry is a chain of 11 atoms
+# ## Program Definition 
+# We define a program where our geometry is a chain of 11 atoms
 # with a distance of 6.1 micrometers between atoms.
 
 # The pulse schedule presented here should be reminiscent of the Two Qubit Adiabatic
@@ -117,7 +118,8 @@ if not os.path.isfile(filename):
     save(future, filename)
 
 # %% [markdown]
-# ## Plotting the Results To make our lives easier we define a trivial function to
+# ## Plotting the Results 
+# To make our lives easier we define a trivial function to
 # extract the probability of the Z2 phase from each of the tasks generated from the
 # parameter sweep. The counts are obtained from the `report`of the batch object.
 
@@ -135,7 +137,8 @@ def get_z2_probabilities(report):
 
 
 # %% [markdown]
-# ## Extracting Counts And ProbabilitiesWe will now extract the counts and probabilities
+# ## Extracting Counts And Probabilities
+# We will now extract the counts and probabilities
 # from the emulator and hardware runs. We will then plot the results. First we load the
 # data from the files:
 
@@ -165,9 +168,8 @@ hardware_sweep_times = hardware_report.list_param("sweep_time")
 
 
 plt.plot(emu_sweep_times, emu_probabilities, label="Emulator", color="#878787")
-plt.plot(
-    hardware_sweep_times, hardware_probabilities, label="Hardware", color="#6437FF"
-)
+plt.plot(hardware_sweep_times, hardware_probabilities, label="QPU", color="#6437FF")
+
 plt.show()
 
 # %% [markdown]

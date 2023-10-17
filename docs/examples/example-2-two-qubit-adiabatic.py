@@ -195,7 +195,7 @@ for rydberg_state, color in zip(["0", "1", "2"], emu_colors):
     (hw_line,) = ax.plot(
         emu_distances,
         hw_rydberg_state_probabilities[rydberg_state],
-        label=rydberg_state + "-Rydberg",
+        label=rydberg_state + "-Rydberg QPU",
         color=color,
     )
     (emu_line,) = ax.plot(
