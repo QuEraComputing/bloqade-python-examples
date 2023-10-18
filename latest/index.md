@@ -1,11 +1,14 @@
+# Tutorials
 
-- [Tutorial 1: Rabi Oscillations](examples/example-1-rabi.py)
-- [Tutorial 2: Ramsey Sequence](examples/example-1-ramsey.py)
-- [Tutorial 3: Floquet Drive](examples/example-1-floquet.py)
-- [Tutorial 4: Two Qubit Adiabatic Sweep](examples/example-2-two-qubit-adiabatic.py)
-- [Tutorial 5: Multi-Qubit Blockade](examples/example-2-multi-qubit-blockaded.py)
-- [Tutorial 6: Non-Equilibrium Dynamics at the Blockade Radius](examples/example-2-nonequilibrium-dynamics-blockade-radius.py)
-- [Tutorial 7: 1D Z2 State Preparation](examples/example-3-time-sweep.py)
-- [Tutorial 8: 2D Ordered Phases](examples/example-3-2d-ordered-state.py)
-- [Tutorial 9: 1D Quantum Scar Dynamics](examples/example-4-quantum-scar-dynamics.py)
-- [Tutorial 10: MIS on Unit Disk Graphs](examples/example-5-MIS-UDG.py)
+Below you will find many tutorials on how to use Bloqade. We begin with single qubit examples and work our way up to complex dynamics of any qubits. We also show how to use Bloqade to solve the Maximal Independent Set problem on a defective King Graph.
+
+1. [Single Qubit Rabi Oscillations](examples/example-1-rabi.py)
+2. [Single Qubit Ramsey Protocol](examples/example-1-ramsey.py)
+3. [Single Qubit Floquet Dynamics](examples/example-1-floquet.py)
+4. [Two Qubit Adiabatic Sweep](examples/example-2-two-qubit-adiabatic.py)
+5. [Multi-qubit Blockaded Rabi Oscillations](examples/example-2-multi-qubit-blockaded.py)
+6. [Nonequilibrium Dynamics of nearly Blockaded Rydberg Atoms](examples/example-2-nonequilibrium-dynamics-blockade-radius.py)
+7. [1D Z2 State Preparation](examples/example-3-time-sweep.py)
+8. [2D State Preparation](examples/example-3-2d-ordered-state.py)
+9. [Quantum Scar Dynamics](examples/example-4-quantum-scar-dynamics.py)
+10. [Solving the Maximal Independent Set Problem on defective King Graph](examples/example-5-MIS-UDG.py)
