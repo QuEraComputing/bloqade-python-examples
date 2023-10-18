@@ -168,9 +168,9 @@ fig, ax = plt.subplots()
 ax.set_xlabel("Time")
 ax.set_ylabel("Sum of Rydberg Densities")
 # emulation
-ax.plot(emu_run_times, emu_densities_summed, label="Emulation", color="#878787")
+ax.plot(emu_run_times, emu_densities_summed, label="Emulator", color="#878787")
 # hardware
-ax.plot(hw_run_times, hardware_densities_summed, label="Hardware", color="#6437FF")
+ax.plot(hw_run_times, hardware_densities_summed, label="QPU", color="#6437FF")
 ax.legend()
 ax.set_xlabel("Time ($\mu s$)")
 ax.set_ylabel("Sum of Rydberg Densities")

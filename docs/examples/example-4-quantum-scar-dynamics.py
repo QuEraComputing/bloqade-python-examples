@@ -171,7 +171,7 @@ hw_run_times = hardware_report.list_param("run_time")
 hw_z2_prob = get_z2_probabilities(hardware_report)
 
 plt.plot(emu_run_times, emu_z2_prob, label="Emulator", color="#878787")
-plt.plot(hw_run_times, hw_z2_prob, label="Hardware", color="#6437FF")
+plt.plot(hw_run_times, hw_z2_prob, label="QPU", color="#6437FF")
 
 plt.legend()
 plt.xlabel("Time ($\mu s$)")
