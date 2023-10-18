@@ -170,7 +170,7 @@ for ax, rydberg_state, color in zip(axs, ["0", "1", "2"], emu_colors):
     (hw_line,) = ax.plot(
         emu_run_times,
         hw_rydberg_state_probabilities[rydberg_state],
-        label=rydberg_state + "-Rydberg",
+        label=rydberg_state + "-Rydberg QPU",
         color=color,
     )
     (emu_line,) = ax.plot(
