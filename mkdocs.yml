@@ -9,8 +9,6 @@ repo_url: https://github.com/QuEraComputing/bloqade-python
 # Page tree
 nav:
   - Home: 'https://queracomputing.github.io/bloqade-python/latest/'
-  - Getting Started: 'https://queracomputing.github.io/bloqade-python/latest/getting_started/'
-  - Contributing: 'https://queracomputing.github.io/bloqade-python/latest/contributing/'
   - Tutorials: 
     - index.md
     - Tutorial 1: examples/example-1-rabi.py
@@ -26,6 +24,7 @@ nav:
   - Reference: 'https://queracomputing.github.io/bloqade-python/latest/builder-workflow/overview/'
   - Blog: 'https://queracomputing.github.io/bloqade-python/latest/blog/2023/'
   - License: 'https://github.com/QuEraComputing/bloqade-python/blob/main/LICENSE'
+  - Contributing: 'https://queracomputing.github.io/bloqade-python/latest/contributing/'
 
   
 
@@ -106,7 +105,7 @@ plugins:
           # "example-4-*",
           # "example-5-*",
         ]
-      execute: true # always execute
+      execute: false # always execute
       include_source: true
   - mike
 
