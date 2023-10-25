@@ -6,10 +6,13 @@ Below you will find many tutorials on how to use Bloqade. We begin with single q
 
 
 - title: Single Qubit Rabi Oscillation
+  image: assets/tutorial-icons/rabi.png
   url: examples/example-1-rabi.py
 - title: Single Qubit Ramsey Protocol
+  image: assets/tutorial-icons/ramsey.png
   url: examples/example-1-ramsey.py
 - title: Single Qubit Floquet Dynamics
+  image: assets/tutorial-icons/floquet.png
   url: examples/example-1-floquet.py
 - title: Two Qubit Adiabatic Sweep
   image: assets/tutorial-icons/two_qubit_adiabatic.png
@@ -27,6 +30,7 @@ Below you will find many tutorials on how to use Bloqade. We begin with single q
   image: assets/tutorial-icons/2d_striated.png
   url: examples/example-3-2d-ordered-state.py
 - title: Quantum Scar Dynamics
+  image: assets/tutorial-icons/scar.png
   url: examples/example-4-quantum-scar-dynamics.py
 - title: Solving the Maximal Independent Set Problem on defective King Graph
   image: assets/tutorial-icons/kings_graph.png
