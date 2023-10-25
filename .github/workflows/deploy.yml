@@ -51,5 +51,6 @@ jobs:
         run: |
           python3 -m ensurepip
           version=$(python3 -m pip freeze | grep -n "bloqade" | cut -d "=" -f3-)
+          echo $version
           git fetch origin gh-pages --depth=1
           pdm run mike deploy --push --update-alias $version latest
