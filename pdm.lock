@@ -6,7 +6,7 @@ groups = ["default", "dev"]
 cross_platform = true
 static_urls = false
 lock_version = "4.3"
-content_hash = "sha256:6ad0b2bfd437dc6de6a09e54fa45b4fb8e26a68e95278c7c1065f198d31ce6bc"
+content_hash = "sha256:c03fb7515df038137c6ddc6b35f42367c75d60d48fdd6ef0fe025b7dc68818f0"
 
 [[package]]
 name = "amazon-braket-default-simulator"
@@ -677,6 +677,29 @@ files = [
 ]
 
 [[package]]
+name = "essentials"
+version = "1.1.5"
+summary = "General purpose classes and functions, reusable in any kind of Python application"
+files = [
+    {file = "essentials-1.1.5-py3-none-any.whl", hash = "sha256:905fa4a69fcd2b2cf41ecc6cc65827e30c87ef91f3f5c71540bcc5e984fa8360"},
+    {file = "essentials-1.1.5.tar.gz", hash = "sha256:8736f738bb2c51d5069b2de2cf9146f7d402f25f9f95636781e59a422c908c46"},
+]
+
+[[package]]
+name = "essentials-openapi"
+version = "1.0.8"
+requires_python = ">=3.7"
+summary = "Classes to generate OpenAPI Documentation v3 and v2, in JSON and YAML."
+dependencies = [
+    "essentials>=1.1.5",
+    "pyyaml>=6",
+]
+files = [
+    {file = "essentials_openapi-1.0.8-py3-none-any.whl", hash = "sha256:1d3afc67cefc952aade7d406c2ffac81634e54ce7e597ddd8ceb1bfe1fe62e46"},
+    {file = "essentials_openapi-1.0.8.tar.gz", hash = "sha256:37832b7b422939bdcf9cc6f52d2317e0ee19907ac8aba2c77a8cff49a2c0b26a"},
+]
+
+[[package]]
 name = "exceptiongroup"
 version = "1.1.3"
 requires_python = ">=3.7"
@@ -779,11 +802,53 @@ files = [
 ]
 
 [[package]]
+name = "h11"
+version = "0.14.0"
+requires_python = ">=3.7"
+summary = "A pure-Python, bring-your-own-I/O implementation of HTTP/1.1"
+files = [
+    {file = "h11-0.14.0-py3-none-any.whl", hash = "sha256:e3fe4ac4b851c468cc8363d500db52c2ead036020723024a109d37346efaa761"},
+    {file = "h11-0.14.0.tar.gz", hash = "sha256:8f19fbbe99e72420ff35c00b27a34cb9937e902a8b810e2c88300c6f0a3b699d"},
+]
+
+[[package]]
 name = "htmlmin2"
 version = "0.1.13"
 summary = "An HTML Minifier"
 files = [
     {file = "htmlmin2-0.1.13-py3-none-any.whl", hash = "sha256:75609f2a42e64f7ce57dbff28a39890363bde9e7e5885db633317efbdf8c79a2"},
+]
+
+[[package]]
+name = "httpcore"
+version = "0.18.0"
+requires_python = ">=3.8"
+summary = "A minimal low-level HTTP client."
+dependencies = [
+    "anyio<5.0,>=3.0",
+    "certifi",
+    "h11<0.15,>=0.13",
+    "sniffio==1.*",
+]
+files = [
+    {file = "httpcore-0.18.0-py3-none-any.whl", hash = "sha256:adc5398ee0a476567bf87467063ee63584a8bce86078bf748e48754f60202ced"},
+    {file = "httpcore-0.18.0.tar.gz", hash = "sha256:13b5e5cd1dca1a6636a6aaea212b19f4f85cd88c366a2b82304181b769aab3c9"},
+]
+
+[[package]]
+name = "httpx"
+version = "0.25.0"
+requires_python = ">=3.8"
+summary = "The next generation HTTP client."
+dependencies = [
+    "certifi",
+    "httpcore<0.19.0,>=0.18.0",
+    "idna",
+    "sniffio",
+]
+files = [
+    {file = "httpx-0.25.0-py3-none-any.whl", hash = "sha256:181ea7f8ba3a82578be86ef4171554dd45fec26a02556a744db029a0a27b7100"},
+    {file = "httpx-0.25.0.tar.gz", hash = "sha256:47ecda285389cb32bb2691cc6e069e3ab0205956f681c5b2ad2325719751d875"},
 ]
 
 [[package]]
@@ -1911,6 +1976,24 @@ dependencies = [
 files = [
     {file = "nbformat-5.9.2-py3-none-any.whl", hash = "sha256:1c5172d786a41b82bcfd0c23f9e6b6f072e8fb49c39250219e4acfff1efe89e9"},
     {file = "nbformat-5.9.2.tar.gz", hash = "sha256:5f98b5ba1997dff175e77e0c17d5c10a96eaed2cbd1de3533d1fc35d5e111192"},
+]
+
+[[package]]
+name = "neoteroi-mkdocs"
+version = "1.0.4"
+requires_python = ">=3.7"
+summary = "Plugins for MkDocs and Python Markdown"
+dependencies = [
+    "click",
+    "essentials-openapi",
+    "httpx",
+    "jinja2",
+    "mkdocs",
+    "rich",
+]
+files = [
+    {file = "neoteroi_mkdocs-1.0.4-py3-none-any.whl", hash = "sha256:ed2b93a206173b10cd5635e050ce0d8e83df0e51cfd5ee6d41751bfcaa4fe197"},
+    {file = "neoteroi_mkdocs-1.0.4.tar.gz", hash = "sha256:3825bcecc4b2c7755ef6adbf96d754762dafd76db508fdd3a23533c88e744228"},
 ]
 
 [[package]]
