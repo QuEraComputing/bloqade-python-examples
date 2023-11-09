@@ -21,7 +21,7 @@ nav:
     - Tutorial 8: examples/example-3-2d-ordered-state.py
     - Tutorial 9: examples/example-4-quantum-scar-dynamics.py
     - Tutorial 10: examples/example-5-MIS-UDG.py
-  - Reference: 'https://queracomputing.github.io/bloqade-python/latest/builder-workflow/overview/'
+  - Reference: 'https://bloqade.quera.com/latest/reference/overview/'
   - Blog: 'https://queracomputing.github.io/bloqade-python/latest/blog/2023/'
   - License: 'https://github.com/QuEraComputing/bloqade-python/blob/main/LICENSE'
   - Contributing: 'https://queracomputing.github.io/bloqade-python/latest/contributing/'
