@@ -279,7 +279,7 @@ files = [
 
 [[package]]
 name = "bloqade"
-version = "0.12.0"
+version = "0.13.0"
 requires_python = "<3.12,>=3.9"
 summary = "Neutral atom software development kit"
 dependencies = [
@@ -299,8 +299,8 @@ dependencies = [
     "tabulate>=0.9.0",
 ]
 files = [
-    {file = "bloqade-0.12.0-py3-none-any.whl", hash = "sha256:4ceadacb39dcdafac47e98e89c2509ec5c7cdf0e16089e2d4738035a545702fa"},
-    {file = "bloqade-0.12.0.tar.gz", hash = "sha256:4b5934a5ff526ee9d6b7acead57c19f9ad79886c1b0e40c8848aa46505bbe170"},
+    {file = "bloqade-0.13.0-py3-none-any.whl", hash = "sha256:237e1ef1057d96d6bab148e709ef0d140187778a701629a607bfc663ecf7c5d4"},
+    {file = "bloqade-0.13.0.tar.gz", hash = "sha256:0c7fa1318eb651efe572d5ec485a071a3fd958b8a5f3cf6bc04fbad44316d572"},
 ]
 
 [[package]]
