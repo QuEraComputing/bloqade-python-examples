@@ -68,11 +68,11 @@ inv_sqrt_2_rounded = 2.6
 
 geometries = {
     1: Chain(1),
-    2: Chain(2, distance),
+    2: Chain(2, lattice_spacing=distance),
     3: start.add_position(
         [(-inv_sqrt_2_rounded, 0.0), (inv_sqrt_2_rounded, 0.0), (0, distance)]
     ),
-    4: Square(2, distance),
+    4: Square(2, lattice_spacing=distance),
     7: start.add_position(
         [
             (0, 0),

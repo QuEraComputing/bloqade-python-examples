@@ -71,7 +71,7 @@ rng = np.random.default_rng(1234)
 durations = [0.3, 1.6, 0.3]
 
 mis_udg_program = (
-    Square(15, 5.0)
+    Square(15, lattice_spacing=5.0)
     .apply_defect_density(0.3, rng=rng)
     .rydberg.rabi.amplitude.uniform.piecewise_linear(durations, [0.0, 15.0, 15.0, 0.0])
     .detuning.uniform.piecewise_linear(

@@ -67,14 +67,14 @@ output_notebook()
 # %%
 # Have atoms separated by 5.9 micrometers
 L = 3
-lattice_const = 5.9
+lattice_spacing = 5.9
 
 rabi_amplitude_values = [0.0, 15.8, 15.8, 0.0]
 rabi_detuning_values = [-16.33, -16.33, "delta_end", "delta_end"]
 durations = [0.8, "sweep_time", 0.8]
 
 prog = (
-    Square(L, lattice_const)
+    Square(L, lattice_spacing=lattice_spacing)
     .rydberg.rabi.amplitude.uniform.piecewise_linear(durations, rabi_amplitude_values)
     .detuning.uniform.piecewise_linear(durations, rabi_detuning_values)
 )

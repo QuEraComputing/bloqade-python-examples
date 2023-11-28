@@ -70,11 +70,11 @@ if not os.path.isdir("data"):
     os.mkdir("data")
 
 n_atoms = 11
-atom_spacing = 6.1
+lattice_spacing = 6.1
 run_time = var("run_time")
 
 quantum_scar_program = (
-    Chain(n_atoms, lattice_spacing=atom_spacing)
+    Chain(n_atoms, lattice_spacing=lattice_spacing)
     # define detuning waveform
     .rydberg.detuning.uniform.piecewise_linear(
         [0.3, 1.6, 0.3], [-18.8, -18.8, 16.3, 16.3]

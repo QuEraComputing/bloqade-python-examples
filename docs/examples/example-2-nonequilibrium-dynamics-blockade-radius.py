@@ -62,7 +62,7 @@ if not os.path.isdir("data"):
 # define a `batch` of programs for different `run_time` values.
 # %%
 
-initial_geometry = Chain(2, "distance")
+initial_geometry = Chain(2, lattice_spacing="distance")
 program_waveforms = initial_geometry.rydberg.rabi.amplitude.uniform.piecewise_linear(
     durations=["ramp_time", "run_time", "ramp_time"],
     values=[0.0, "rabi_ampl", "rabi_ampl", 0.0],
