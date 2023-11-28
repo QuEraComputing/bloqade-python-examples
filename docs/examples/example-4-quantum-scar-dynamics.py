@@ -148,7 +148,7 @@ hardware_batch = load(filename)
 def get_z2_probabilities(report):
     z2_probabilities = []
 
-    for count in report.counts:
+    for count in report.counts():
         z2_probability = count.get("01010101010", 0) / sum(list(count.values()))
         z2_probabilities.append(z2_probability)
 

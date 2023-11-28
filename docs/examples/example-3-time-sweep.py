@@ -129,7 +129,7 @@ if not os.path.isfile(filename):
 def get_z2_probabilities(report):
     z2_probabilities = []
 
-    for count in report.counts:
+    for count in report.counts():
         z2_probability = count["01010101010"] / sum(list(count.values()))
         z2_probabilities.append(z2_probability)
 

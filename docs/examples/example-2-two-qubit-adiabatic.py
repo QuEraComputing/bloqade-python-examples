@@ -180,8 +180,8 @@ hardware_batch = load(filename)
 emu_report = emu_batch.report()
 hardware_report = hardware_batch.report()
 
-emu_rydberg_state_probabilities = rydberg_state_probabilities(emu_report.counts)
-hw_rydberg_state_probabilities = rydberg_state_probabilities(hardware_report.counts)
+emu_rydberg_state_probabilities = rydberg_state_probabilities(emu_report.counts())
+hw_rydberg_state_probabilities = rydberg_state_probabilities(hardware_report.counts())
 
 emu_distances = emu_report.list_param("atom_distance")
 hw_distances = hardware_report.list_param("atom_distance")

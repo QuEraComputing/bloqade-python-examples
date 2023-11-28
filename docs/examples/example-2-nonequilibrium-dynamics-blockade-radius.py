@@ -132,7 +132,7 @@ def rydberg_state_probabilities(shot_counts):
 
 emu_batch = load(emu_filename)
 emu_report = emu_batch.report()
-emu_counts = emu_report.counts
+emu_counts = emu_report.counts()
 
 hardware_batch = load(filename)
 # hardware_batch.fetch() # uncomment to fetch results from Braket
@@ -150,8 +150,8 @@ emu_report = emu_batch.report()
 hardware_report = hardware_batch.report()
 
 
-emu_rydberg_state_probabilities = rydberg_state_probabilities(emu_report.counts)
-hw_rydberg_state_probabilities = rydberg_state_probabilities(hardware_report.counts)
+emu_rydberg_state_probabilities = rydberg_state_probabilities(emu_report.counts())
+hw_rydberg_state_probabilities = rydberg_state_probabilities(hardware_report.counts())
 
 # %% [markdown]
 #  plot 0, 1, and 2 Rydberg state probabilities but in separate plots
