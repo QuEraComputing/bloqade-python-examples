@@ -52,6 +52,6 @@ jobs:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           GOOGLE_ANALYTICS_KEY: ${{ secrets.GOOGLE_ANALYTICS_KEY }}
         run: |
-          version=$(python -c "import bloqade; print(bloqade.__version__)")
+          version=$(pdm run python3 -c "import bloqade; print(bloqade.__version__)")
           git fetch origin gh-pages --depth=1
           pdm run mike deploy --push --update-alias $version latest
