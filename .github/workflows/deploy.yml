@@ -3,6 +3,9 @@ on:
   push:
     branches:
       - main
+
+  schedule: # run every day
+    - cron: '0 0 * * *'
  
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
@@ -49,6 +52,6 @@ jobs:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           GOOGLE_ANALYTICS_KEY: ${{ secrets.GOOGLE_ANALYTICS_KEY }}
         run: |
-          version=$(pdm list --freeze | grep -n "bloqade" | cut -d "=" -f3-)
+          version=$(python -c "import bloqade; print(bloqade.__version__)")
           git fetch origin gh-pages --depth=1
           pdm run mike deploy --push --update-alias $version latest
