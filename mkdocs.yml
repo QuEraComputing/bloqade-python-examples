@@ -108,6 +108,7 @@ plugins:
         ]
       execute: true # always execute
       include_source: true
+      allow_errors: false
   - mike
 
 
