@@ -129,7 +129,7 @@ if not os.path.isfile(emu_filename):
 filename = os.path.join(os.path.abspath(""), "data", "multi-qubit-blockaded-job.json")
 
 if not os.path.isfile(filename):
-    hardware_batch = batch.parallelize(24).braket.aquila().submit(shots=100)
+    hardware_batch = batch.parallelize(24).braket.aquila().run_async(shots=100)
     save(hardware_batch, filename)
 
 # %% [markdown]
