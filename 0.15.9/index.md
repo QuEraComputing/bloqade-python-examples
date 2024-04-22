@@ -35,5 +35,8 @@ Below you will find many tutorials on how to use Bloqade. We begin with single q
 - title: Solving the Maximal Independent Set Problem on defective King Graph
   image: assets/tutorial-icons/kings_graph.png
   url: examples/example-5-MIS-UDG.py
+- title: Lattice Gauge Theory Simulation
+  image: assets/tutorial-icons/lattice_gauge_theory.png
+  url: examples/example-6-lattice-gauge-theory.py
 
 ::/cards::
