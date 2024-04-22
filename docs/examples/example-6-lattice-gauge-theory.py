@@ -155,15 +155,16 @@ plt.show()
 # Additionally, we can plot the correlation between nearest-neighbor sites to illustrate the propagation of the defect across the chain.
 
 # %%
-def rydberg_correlation(bits, i, j, t):
-    return np.mean(bits[t,:,i]*bits[t,:,j])
+def rydberg_correlation(task_bits: np.ndarray, i: int, j: int) -> np.ndarray:
+    return np.mean(task_bits[:,i]*task_bits[:,j])
 
 emu_bitstrings = emu_report.bitstrings()
-bits=np.array(emu_bitstrings)
-corrs=np.zeros((len(bits), N_atom-1))
-for t in range(0,len(bits)):
-    for i in range(0,N_atom-1):
-        corrs[t, i]=rydberg_correlation(bits, i, i+1,  t)
+bits = np.array(emu_bitstrings)
+num_tasks = len(bits)
+corrs= np.zeros((num_tasks, N_atom-1), dtype=np.float64)
+for task_index, task_bits in enumerate(bits):
+    for i in range(N_atom-1):
+        corrs[task_index, i] = rydberg_correlation(task_bits, i, i+1)
 
 plt.imshow(corrs.T, vmin=0, vmax=1)
 plt.xticks(ticks=np.arange(0,20, 2), labels=np.round(np.arange(0.,1.0, 0.1), 1), minor=False)
