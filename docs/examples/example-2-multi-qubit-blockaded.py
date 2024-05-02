@@ -115,7 +115,17 @@ batch = (
 # %% [markdown]
 # ## Run Emulator and Hardware
 # Again, we run the program on the emulator and save the results to a file. for the
-# emyulator and Aquila. Save the results to a file so that we can use them later.
+# emulator and Aquila. Save the results to a file so that we can use them later.
+#
+# <div class="admonition danger"> 
+# <p class="admonition-title">Hardware Execution Cost</p>
+# <p>
+#
+# For this particular program, 21 tasks are generated with each task having 100 shots, amounting to 
+#  __USD \\$27.30__ on AWS Braket.
+# 
+# </p> 
+# </div>
 # %%
 
 emu_filename = os.path.join(
@@ -123,7 +133,7 @@ emu_filename = os.path.join(
 )
 
 if not os.path.isfile(emu_filename):
-    emu_batch = batch.braket.local_emulator().run(10000)
+    emu_batch = batch.bloqade.python().run(10000)
     save(emu_batch, emu_filename)
 
 filename = os.path.join(os.path.abspath(""), "data", "multi-qubit-blockaded-job.json")

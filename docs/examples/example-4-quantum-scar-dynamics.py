@@ -55,7 +55,7 @@
 # the waveform. To do this, we use the `record` method to record the value of the Rabi
 # drive at the end of the waveform. We then use the `linear` method to append a segment
 # to the waveform that fixes the value of the Rabi drive to 0 at the end of the
-# waveform. Now any value of `run_time` will be a valid waveform that is compatcible
+# waveform. Now any value of `run_time` will be a valid waveform that is compatible
 # with the hardware constraints.
 
 # %%
@@ -107,6 +107,16 @@ batch = quantum_scar_program.batch_assign(run_time=run_times)
 # so that we can plot them later. for more details on where these lines of code come
 # from, see the first few tutorials.
 
+#
+# <div class="admonition danger"> 
+# <p class="admonition-title">Hardware Execution Cost</p>
+# <p>
+#
+# For this particular program, 191 tasks are generated with each task having 100 shots, amounting to 
+#  __USD \\$248.30__ on AWS Braket.
+# 
+# </p> 
+# </div>
 # %%
 
 emu_filename = os.path.join(
@@ -114,7 +124,7 @@ emu_filename = os.path.join(
 )
 
 if not os.path.isfile(emu_filename):
-    emu_batch = batch.braket.local_emulator().run(1000)
+    emu_batch = batch.bloqade.python().run(1000)
     save(emu_batch, emu_filename)
 
 

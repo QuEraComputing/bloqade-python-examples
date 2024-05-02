@@ -37,7 +37,7 @@
 # ## Introduction
 # In this tutorial, we show how to use some of Bloqade's built-in tools to generate a
 # defects in a graph and then use Bloqade to solve the Maximal Independent Set (MIS)
-# problem on a Unit Disk Graph (UDG), which is easily expressable on Neutral Atom
+# problem on a Unit Disk Graph (UDG), which is easily expressible on Neutral Atom
 # Hardware via the Rydberg blockade mechanism. We will not cover hybrid quantum-
 # classical algorithms in this tutorial, but instead, we will use a simple parameter
 # scan to find the optimal detuning value for an adiabatic ramp. We will cover hybrid
@@ -85,6 +85,16 @@ mis_udg_job = mis_udg_program.batch_assign(final_detuning=np.linspace(0, 80, 41)
 # ## Run On Hardware
 # We can't run on our emulators because the program size is too large. Instead
 # we will run on hardware.
+#
+# <div class="admonition danger"> 
+# <p class="admonition-title">Hardware Execution Cost</p>
+# <p>
+#
+# For this particular program, 41 tasks are generated with each task having 100 shots, amounting to 
+#  __USD \\$53.30__ on AWS Braket.
+# 
+# </p> 
+# </div>
 
 # %%
 filename = os.path.join(os.path.abspath(""), "data", "MIS-UDG-job.json")

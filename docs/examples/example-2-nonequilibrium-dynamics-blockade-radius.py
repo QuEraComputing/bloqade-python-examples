@@ -36,7 +36,7 @@
 # # Nonequilibrium Dynamics of nearly Blockaded Rydberg Atoms
 # ## Introduction
 # In this example we will show how to generate multi-atom programs looking specifically
-# at the dynamics of two atoms that are right on the blockade radius. First lsets start
+# at the dynamics of two atoms that are right on the blockade radius. First let's start
 # with the imports.
 
 # %%
@@ -55,7 +55,7 @@ if not os.path.isdir("data"):
 # %% [markdown]
 # ## Program Definition
 # We will start by defining a program. We set up a chain of two atoms
-# with a parmaeterized distance between them. We then define a Rabi
+# with a parameterized distance between them. We then define a Rabi
 # like in the original Rabi oscillation example. Given a `rabi_ampl` of 15 rad/µs
 # the blockaded radius s 8.44 µm. We will look at the dynamics of the system for a
 # distance of 8.5 µm to be every so slightly outside of the blockade radius. We then
@@ -82,11 +82,22 @@ emu_filename = os.path.join(
     os.path.abspath(""), "data", "nonequilibrium-dynamics-blockade-emulation.json"
 )
 if not os.path.isfile(emu_filename):
-    emu_batch = batch.braket.local_emulator().run(10000)
+    emu_batch = batch.bloqade.python().run(10000)
     save(emu_batch, emu_filename)
 
 # %% [markdown]
 # When running on the hardware we will also parallelize the batch and submit.
+#
+# <div class="admonition danger"> 
+# <p class="admonition-title">Hardware Execution Cost</p>
+# <p>
+#
+# For this particular program, 31 tasks are generated with each task having 100 shots, amounting to 
+#  __USD \\$40.30__ on AWS Braket.
+# 
+# </p> 
+# </div>
+
 # %%
 filename = os.path.join(
     os.path.abspath(""), "data", "nonequilibrium-dynamics-blockade-job.json"

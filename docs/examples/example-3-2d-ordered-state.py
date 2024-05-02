@@ -62,7 +62,7 @@ output_notebook()
 # %% [markdown]
 # ## Program Definition
 # We define a program where our geometry is a square lattice of 3x3 atoms. Notice that
-# unlke the 1D Z2 state preparation example the detuning now ramps to a higher value
+# unlike the 1D Z2 state preparation example the detuning now ramps to a higher value
 # and the atoms are closer together.
 # %%
 # Have atoms separated by 5.9 micrometers
@@ -90,6 +90,17 @@ batch = prog.assign(delta_end=42.66, sweep_time=2.4)
 # Considering how small a 3 x 3 lattice of atoms is relative to machine capabilities,
 # we also take advantage of parallelization to duplicate the geometry and get more
 # data per shot when submitting to Hardware.
+
+#
+# <div class="admonition danger"> 
+# <p class="admonition-title">Hardware Execution Cost</p>
+# <p>
+#
+# For this particular program, 1 task is generated with 100 shots, amounting to 
+#  __USD \\$1.30__ on AWS Braket.
+# 
+# </p> 
+# </div>
 
 # %%
 emu_filename = os.path.join(

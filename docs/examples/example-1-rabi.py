@@ -76,7 +76,7 @@ rabi_oscillations_program = (
 # variables in the program. These values must be numeric, and can be either `int`,
 # `float`, or `Decimal` (from the `decimal` module). Note that the `Decimal` type
 # is used to represent real numbers exactly, whereas `float` is a 64-bit floating
-# point numberthat is only accurate to about 15 decimal places. The `Decimal`
+# point number that is only accurate to about 15 decimal places. The `Decimal`
 # type is recommended for Bloqade programs, as it will ensure that your program
 # is simulated and run with the highest possible precision. We can also do a parameter
 # scan using the  `batch_assign` method, which will create a different program for each
@@ -92,11 +92,11 @@ rabi_oscillation_job = rabi_oscillations_program.assign(
 
 # %% [markdown]
 # ## Run Emulator and Hardware
-# To run the program on the emulator we can select the `braket` provider as a property
-# of the `batch` object. Braket has its own emulator that we can use to run the program.
-# To do this select `local_emulator` as the next option followed by the `run` method.
-# Then we dump the results to a file so that we can use them later. Note that unline the
-# actual hardware  the shots do not correspond to multiple executions of the emuatlor,
+# To run the program on the emulator we can select the `bloqade` provider as a property
+# of the `batch` object. Bloqade has its own emulator that we can use to run the program.
+# To do this select `python()` as the next option followed by the `run` method.
+# Then we dump the results to a file so that we can use them later. Note that unlike the
+# actual hardware  the shots do not correspond to multiple executions of the emulator,
 # but rather the number of times the final wavefunction is sampled. This is because the
 # emulator does not simulate any noise.
 
@@ -105,7 +105,7 @@ rabi_oscillation_job = rabi_oscillations_program.assign(
 emu_filename = os.path.join(os.path.abspath(""), "data", "rabi-emulation.json")
 
 if not os.path.isfile(emu_filename):
-    emu_batch = rabi_oscillation_job.braket.local_emulator().run(10000)
+    emu_batch = rabi_oscillation_job.bloqade.python().run(10000)
     save(emu_batch, emu_filename)
 
 # %% [markdown]
