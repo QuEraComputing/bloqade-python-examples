@@ -95,7 +95,7 @@ plugins:
             docstring_options:
               ignore_init_summary: true
   - minify:
-      minify_html: true
+      minify_html: false
   - mkdocs-jupyter:
       include: ["*.py"] # only include scripts
       ignore: [
