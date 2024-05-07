@@ -127,6 +127,16 @@ if not os.path.isfile(emu_filename):
 # method instead of `run_async`. This will block the script until all results in the
 # batch are complete.
 
+# <div class="admonition danger"> 
+# <p class="admonition-title">Hardware Execution Cost</p>
+# <p>
+#
+# For this particular program, 101 tasks are generated with each task having 1000 shots, amounting to 
+#  __USD \\$1040.30__ on AWS Braket.
+# 
+# </p> 
+# </div>
+
 # %%
 hardware_filename = os.path.join(os.path.abspath(""), "data", "rabi-job.json")
 
