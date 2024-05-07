@@ -114,8 +114,8 @@ batch = (
 
 # %% [markdown]
 # ## Run Emulator and Hardware
-# Again, we run the program on the emulator and save the results to a file. for the
-# emulator and Aquila. Save the results to a file so that we can use them later.
+# Again, we run the program on the emulator and Aquila and save the results to a file
+# so we can use them later.
 #
 # <div class="admonition danger"> 
 # <p class="admonition-title">Hardware Execution Cost</p>
@@ -133,7 +133,7 @@ emu_filename = os.path.join(
 )
 
 if not os.path.isfile(emu_filename):
-    emu_batch = batch.bloqade.python().run(10000)
+    emu_batch = batch.bloqade.python().run(10000, interaction_picture=True)
     save(emu_batch, emu_filename)
 
 filename = os.path.join(os.path.abspath(""), "data", "multi-qubit-blockaded-job.json")
