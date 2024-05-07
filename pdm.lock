@@ -5,7 +5,7 @@
 groups = ["default", "dev"]
 strategy = ["cross_platform"]
 lock_version = "4.4.1"
-content_hash = "sha256:0a1a579ec352c285d6183684e152f6f72cc4b77a4d59d9587604803e3e720ad0"
+content_hash = "sha256:ae9491a355d6f09f5a62e99ebd119088246d8f33155b12fd8886600db34e7826"
 
 [[package]]
 name = "amazon-braket-default-simulator"
@@ -41,27 +41,28 @@ files = [
 
 [[package]]
 name = "amazon-braket-sdk"
-version = "1.55.1"
-requires_python = ">= 3.8.2"
+version = "1.79.0"
+requires_python = ">=3.9"
 summary = "An open source library for interacting with quantum computing devices on Amazon Braket"
 dependencies = [
-    "amazon-braket-default-simulator>=1.19.1",
-    "amazon-braket-schemas>=1.19.1",
+    "amazon-braket-default-simulator>=1.21.4",
+    "amazon-braket-schemas>=1.21.3",
     "backoff",
+    "backports-entry-points-selectable",
     "boltons",
-    "boto3>=1.22.3",
+    "boto3>=1.28.53",
+    "cloudpickle==2.2.1",
     "nest-asyncio",
     "networkx",
-    "numpy",
+    "numpy<2",
     "openpulse",
     "openqasm3",
-    "oqpy~=0.2.1",
-    "setuptools",
+    "oqpy~=0.3.5",
     "sympy",
 ]
 files = [
-    {file = "amazon-braket-sdk-1.55.1.tar.gz", hash = "sha256:daeedec7d6c4f319eeaabce8d66d06f4157de934c90e1d12c3b1bdc47c919f0f"},
-    {file = "amazon_braket_sdk-1.55.1-py3-none-any.whl", hash = "sha256:1041d3347e541195aac17918451422b7d3e9d9c58a05d257cdf758c3b2f6912e"},
+    {file = "amazon_braket_sdk-1.79.0-py3-none-any.whl", hash = "sha256:5a941a9410319a2cefeda4e3bb9fa135c81c5e3a4b2e06b9a927d2f334217bfd"},
+    {file = "amazon_braket_sdk-1.79.0.tar.gz", hash = "sha256:49ad1562ac6bc2f19a25d12fd5a7dede2365c122fef912185c9f0898714c733a"},
 ]
 
 [[package]]
@@ -220,6 +221,16 @@ files = [
 ]
 
 [[package]]
+name = "backports-entry-points-selectable"
+version = "1.3.0"
+requires_python = ">=3.8"
+summary = "Compatibility shim providing selectable entry points for older implementations"
+files = [
+    {file = "backports.entry_points_selectable-1.3.0-py3-none-any.whl", hash = "sha256:66f5da003eb4b283c7b60581bc8bb0baf0d810eb3e3068da786d3821b4d5746a"},
+    {file = "backports.entry_points_selectable-1.3.0.tar.gz", hash = "sha256:17a8b44ae700fba548686dd274ddc91c060371565cd63806c20a1d33911746e6"},
+]
+
+[[package]]
 name = "beartype"
 version = "0.16.2"
 requires_python = ">=3.8.0"
@@ -289,11 +300,11 @@ files = [
 
 [[package]]
 name = "bloqade"
-version = "0.15.9"
+version = "0.15.12"
 requires_python = "<3.13,>=3.9"
 summary = "Neutral atom software development kit"
 dependencies = [
-    "amazon-braket-sdk>=1.55.0",
+    "amazon-braket-sdk>=1.78.0",
     "beartype>=0.15.0",
     "bokeh>=3.2.2",
     "juliacall>=0.9.14",
@@ -309,8 +320,8 @@ dependencies = [
     "tabulate>=0.9.0",
 ]
 files = [
-    {file = "bloqade-0.15.9-py3-none-any.whl", hash = "sha256:b0c6055943b7a20fa44c8d679356b75ec64ce17470af1585424d205cf9607079"},
-    {file = "bloqade-0.15.9.tar.gz", hash = "sha256:f96b39e3fad513aceba7ee969ee5bb6fa34f22089406623231f7a9fde5a81b5b"},
+    {file = "bloqade-0.15.12-py3-none-any.whl", hash = "sha256:52ea7aa6106e018b5fc6aed6f225276fed271719b8c9288683fb827bede2ec7d"},
+    {file = "bloqade-0.15.12.tar.gz", hash = "sha256:8edb6bf00cbe1b9a358113effa969fece1b399d5bdeb6e45734eadc009c6bfb7"},
 ]
 
 [[package]]
@@ -345,32 +356,33 @@ files = [
 
 [[package]]
 name = "boto3"
-version = "1.28.40"
-requires_python = ">= 3.7"
+version = "1.34.99"
+requires_python = ">=3.8"
 summary = "The AWS SDK for Python"
 dependencies = [
-    "botocore<1.32.0,>=1.31.40",
+    "botocore<1.35.0,>=1.34.99",
     "jmespath<2.0.0,>=0.7.1",
-    "s3transfer<0.7.0,>=0.6.0",
+    "s3transfer<0.11.0,>=0.10.0",
 ]
 files = [
-    {file = "boto3-1.28.40-py3-none-any.whl", hash = "sha256:bd7c760afb195eaeaab907dc6b2c21fa64ddbba3fed4a869e80d820ddbd6cc70"},
-    {file = "boto3-1.28.40.tar.gz", hash = "sha256:6ff9a5b815e106656596064d51c9b6ba97a307807baa5f89634384b7d3f7ecc6"},
+    {file = "boto3-1.34.99-py3-none-any.whl", hash = "sha256:b54084d000483b578757df03ce39a819fbba47071c9aa98611beb8806bcecd45"},
+    {file = "boto3-1.34.99.tar.gz", hash = "sha256:6f600b3fe0bda53476395c902d9af5a47294c93ec52a9cdc2b926a9dc705ce79"},
 ]
 
 [[package]]
 name = "botocore"
-version = "1.31.40"
-requires_python = ">= 3.7"
+version = "1.34.99"
+requires_python = ">=3.8"
 summary = "Low-level, data-driven core of boto 3."
 dependencies = [
     "jmespath<2.0.0,>=0.7.1",
     "python-dateutil<3.0.0,>=2.1",
-    "urllib3<1.27,>=1.25.4",
+    "urllib3!=2.2.0,<3,>=1.25.4; python_version >= \"3.10\"",
+    "urllib3<1.27,>=1.25.4; python_version < \"3.10\"",
 ]
 files = [
-    {file = "botocore-1.31.40-py3-none-any.whl", hash = "sha256:df766969f0d9ef9eda1a9c9946e0e173c10199f37a9e4c92861f11ddb5c9e702"},
-    {file = "botocore-1.31.40.tar.gz", hash = "sha256:ce22a82ef8674f49691477d09558992cc87e7331f65c6a5b0da897ab192240ca"},
+    {file = "botocore-1.34.99-py3-none-any.whl", hash = "sha256:18c68bdeb0ffb73290912b0c96204fc36d3128f00a00b5cdc35ac34d66225f1c"},
+    {file = "botocore-1.34.99.tar.gz", hash = "sha256:cafe569e2136cb33cb0e5dd32fb1c0e1503ddc1413d3be215df8ddf05e69137a"},
 ]
 
 [[package]]
@@ -476,6 +488,16 @@ dependencies = [
 files = [
     {file = "click-8.1.7-py3-none-any.whl", hash = "sha256:ae74fb96c20a0277a1d615f1e4d73c8414f5a98db8b799a7931d1582f3390c28"},
     {file = "click-8.1.7.tar.gz", hash = "sha256:ca9853ad459e787e2192211578cc907e7594e294c7ccc834310722b41b9ca6de"},
+]
+
+[[package]]
+name = "cloudpickle"
+version = "2.2.1"
+requires_python = ">=3.6"
+summary = "Extended pickling support for Python objects"
+files = [
+    {file = "cloudpickle-2.2.1-py3-none-any.whl", hash = "sha256:61f594d1f4c295fa5cd9014ceb3a1fc4a70b0de1164b94fbc2d854ccba056f9f"},
+    {file = "cloudpickle-2.2.1.tar.gz", hash = "sha256:d89684b8de9e34a2a43b3460fbca07d09d6e25ce858df4d5a44240403b6178f5"},
 ]
 
 [[package]]
@@ -2149,40 +2171,40 @@ files = [
 
 [[package]]
 name = "openpulse"
-version = "0.4.2"
+version = "0.5.0"
 summary = "Reference OpenPulse AST in Python"
 dependencies = [
     "antlr4-python3-runtime<4.12,>=4.7",
     "importlib-metadata; python_version < \"3.10\"",
-    "openqasm3[parser]==0.4.0",
+    "openqasm3[parser]>=0.5.0",
 ]
 files = [
-    {file = "openpulse-0.4.2-py3-none-any.whl", hash = "sha256:16634b102f3f1783292d24e5e13f6d430021edabba173993e08e9ca1e12009b1"},
-    {file = "openpulse-0.4.2.tar.gz", hash = "sha256:77b8724216abdbe47e086f64bea15c8c6369f62f954d90e9f4e88f065d2ab36e"},
+    {file = "openpulse-0.5.0-py3-none-any.whl", hash = "sha256:c91b69633366381f3fdbc0c9be8c37c114b2d8e469f667ff9b0f78632e00c395"},
+    {file = "openpulse-0.5.0.tar.gz", hash = "sha256:d7b1d940c0e081975f5ebdad2b378d24e4a612b73fce1bc2e26948d907f5db1c"},
 ]
 
 [[package]]
 name = "openqasm3"
-version = "0.4.0"
+version = "0.5.0"
 summary = "Reference OpenQASM AST in Python"
 files = [
-    {file = "openqasm3-0.4.0-py3-none-any.whl", hash = "sha256:a61428b64d53b7acc51e4f23c30722268ce5dfafaf70666721ef6c1e94f9dd2f"},
-    {file = "openqasm3-0.4.0.tar.gz", hash = "sha256:34f137790389bd9bdee32c2906cfdcca34afbc249a21ade5d09c44c4429e4a4c"},
+    {file = "openqasm3-0.5.0-py3-none-any.whl", hash = "sha256:40991ac057b9e3c208d1b34242b0aad8a3b9840df0335a652b1e4e4248937b1c"},
+    {file = "openqasm3-0.5.0.tar.gz", hash = "sha256:bf8bf4ed098393447e552eaea18b0a34a2429d228477683d6b579348bc17bfc8"},
 ]
 
 [[package]]
 name = "openqasm3"
-version = "0.4.0"
+version = "0.5.0"
 extras = ["parser"]
 summary = "Reference OpenQASM AST in Python"
 dependencies = [
-    "antlr4-python3-runtime<4.12,>=4.7",
+    "antlr4-python3-runtime<4.14,>=4.7",
     "importlib-metadata; python_version < \"3.10\"",
-    "openqasm3==0.4.0",
+    "openqasm3==0.5.0",
 ]
 files = [
-    {file = "openqasm3-0.4.0-py3-none-any.whl", hash = "sha256:a61428b64d53b7acc51e4f23c30722268ce5dfafaf70666721ef6c1e94f9dd2f"},
-    {file = "openqasm3-0.4.0.tar.gz", hash = "sha256:34f137790389bd9bdee32c2906cfdcca34afbc249a21ade5d09c44c4429e4a4c"},
+    {file = "openqasm3-0.5.0-py3-none-any.whl", hash = "sha256:40991ac057b9e3c208d1b34242b0aad8a3b9840df0335a652b1e4e4248937b1c"},
+    {file = "openqasm3-0.5.0.tar.gz", hash = "sha256:bf8bf4ed098393447e552eaea18b0a34a2429d228477683d6b579348bc17bfc8"},
 ]
 
 [[package]]
@@ -2200,19 +2222,19 @@ files = [
 
 [[package]]
 name = "oqpy"
-version = "0.2.1"
-requires_python = ">=3.7,<4.0"
+version = "0.3.5"
+requires_python = ">=3.8,<4.0"
 summary = "Generating OpenQASM 3 + OpenPulse in Python"
 dependencies = [
     "mypy-extensions>=0.2.0",
     "numpy>=1.19.3; python_version >= \"3.9\" and python_version < \"3.10\"",
     "numpy>=1.21.6; python_version >= \"3.10\" and python_version < \"3.11\"",
     "numpy>=1.22.0; python_version >= \"3.11\"",
-    "openpulse<0.5.0,>=0.4.1",
+    "openpulse>=0.5.0",
 ]
 files = [
-    {file = "oqpy-0.2.1-py3-none-any.whl", hash = "sha256:0907822f0cfdae3e22f50464c66d20af9b8a1212353a2b9cac881ac22fbc3f4b"},
-    {file = "oqpy-0.2.1.tar.gz", hash = "sha256:83a0d98ad95edffe74fbf843ea0825599eff7941e7b2cd5d0f23e9eab5a91853"},
+    {file = "oqpy-0.3.5-py3-none-any.whl", hash = "sha256:46869b4486b1bf876a6c2648d278b80647d8522e7b7c0168e1120fe88f785af7"},
+    {file = "oqpy-0.3.5.tar.gz", hash = "sha256:52ad1b55787c259578c278b304ca7306b21790276d6b66915d32c9e915d3b15d"},
 ]
 
 [[package]]
@@ -3130,15 +3152,15 @@ files = [
 
 [[package]]
 name = "s3transfer"
-version = "0.6.2"
-requires_python = ">= 3.7"
+version = "0.10.1"
+requires_python = ">= 3.8"
 summary = "An Amazon S3 Transfer Manager"
 dependencies = [
-    "botocore<2.0a.0,>=1.12.36",
+    "botocore<2.0a.0,>=1.33.2",
 ]
 files = [
-    {file = "s3transfer-0.6.2-py3-none-any.whl", hash = "sha256:b014be3a8a2aab98cfe1abc7229cc5a9a0cf05eb9c1f2b86b230fd8df3f78084"},
-    {file = "s3transfer-0.6.2.tar.gz", hash = "sha256:cab66d3380cca3e70939ef2255d01cd8aece6a4907a9528740f668c4b0611861"},
+    {file = "s3transfer-0.10.1-py3-none-any.whl", hash = "sha256:ceb252b11bcf87080fb7850a224fb6e05c8a776bab8f2b64b7f25b969464839d"},
+    {file = "s3transfer-0.10.1.tar.gz", hash = "sha256:5683916b4c724f799e600f41dd9e10a9ff19871bf87623cc8f491cb4f5fa0a19"},
 ]
 
 [[package]]
