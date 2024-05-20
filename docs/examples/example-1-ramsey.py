@@ -37,7 +37,7 @@
 # ## Introduction
 # In this example we show how to use Bloqade to emulate a Ramsey protocol as well as
 # run it on hardware. We will define a Ramsey protocol as a sequence of two $\pi/2$
-# pulses separated by a variable time gap $\tau$. These procols are used to measure the
+# pulses separated by a variable time gap $\tau$. These protocols are used to measure the
 # coherence time of a qubit. In practice, the Rabi frequency has to start and end at
 # 0.0, so we will use a piecewise linear function to ramp up and down the Rabi
 # frequency.
@@ -91,11 +91,22 @@ ramsey_job = ramsey_program.batch_assign(run_time=run_times)
 # Note that for the hardware we will use the `parallelize` method to run multiple
 # copies of the program in parallel. For more information about this process, see the
 # first tutorial.
+#
+# <div class="admonition danger"> 
+# <p class="admonition-title">Hardware Execution Cost</p>
+# <p>
+#
+# For this particular program, 101 tasks are generated with each task having 100 shots, amounting to 
+#  __USD \\$131.30__ on AWS Braket.
+# 
+# </p> 
+# </div>
+
 # %%
 emu_filename = os.path.join(os.path.abspath(""), "data", "ramsey-emulation.json")
 
 if not os.path.isfile(emu_filename):
-    emu_batch = ramsey_job.braket.local_emulator().run(10000)
+    emu_batch = ramsey_job.bloqade.python().run(10000)
     save(emu_batch, emu_filename)
 
 hardware_filename = os.path.join(os.path.abspath(""), "data", "ramsey-job.json")

@@ -111,6 +111,16 @@ batch = program.batch_assign(run_time = run_times)
 # ## Run on Emulator and Hardware
 #
 # We now run the program on both the emulator and quantum hardware.
+#
+# <div class="admonition danger"> 
+# <p class="admonition-title">Hardware Execution Cost</p>
+# <p>
+#
+# For this particular program, 21 tasks are generated with each task having 200 shots, amounting to 
+#  __USD \\$48.30__ on AWS Braket.
+# 
+# </p> 
+# </div>
 
 # %%
 emu_filename = os.path.join(

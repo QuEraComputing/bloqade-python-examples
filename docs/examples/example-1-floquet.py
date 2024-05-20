@@ -36,7 +36,7 @@
 # # Single Qubit Floquet Dynamics
 # ## Introduction
 # Rounding out the single qubit examples we will show how to generate a Floquet
-# protocol. We will define the probotol using a python function and then use the
+# protocol. We will define the protocol using a python function and then use the
 # Bloqade API to sample the function at certain intervals to make it compatible with
 # the hardware, which only supports piecewise linear/constant functions. First let us
 # start with the imports.
@@ -52,7 +52,7 @@ if not os.path.isdir("data"):
 
 # %% [markdown]
 # ## Define the program.
-# For the floquet protocol we keep We do the same Rabi drive but allow the detuning to
+# For the Floquet protocol we keep We do the same Rabi drive but allow the detuning to
 # vary sinusoidally. We do this by defining a smooth function for the detuning and then
 # sampling it at certain intervals (in this case, the minimum hardware-supported time
 # step). Note that the `sample` method will always sample at equal to or greater than
@@ -107,12 +107,22 @@ floquet_job = floquet_program.assign(
 # Note that for the hardware we will use the `parallelize` method to run multiple
 # copies of the program in parallel. For more information about this process, see the
 # first tutorial.
+#
+# <div class="admonition danger"> 
+# <p class="admonition-title">Hardware Execution Cost</p>
+# <p>
+#
+# For this particular program, 101 tasks are generated with each task having 50 shots, amounting to 
+#  __USD \\$80.80__ on AWS Braket.
+# 
+# </p> 
+# </div>
 
 # %%
 emu_filename = os.path.join(os.path.abspath(""), "data", "floquet-emulation.json")
 
 if not os.path.isfile(emu_filename):
-    emu_batch = floquet_job.braket.local_emulator().run(10000)
+    emu_batch = floquet_job.bloqade.python().run(10000)
     save(emu_batch, emu_filename)
 
 hardware_filename = os.path.join(os.path.abspath(""), "data", "floquet-job.json")

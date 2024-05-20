@@ -58,7 +58,7 @@ if not os.path.isdir("data"):
 # negative the atoms remain in the ground state. As the detuning is ramped to positive
 # values, the atoms are able to be excited to the Rydberg state, however if the atoms
 # are too close together, the Rydberg interactions effectively acts like a negative
-# etuning to neighboring atoms, preventing them from being excited. This is the
+# detuning to neighboring atoms, preventing them from being excited. This is the
 # blockade effect. For atoms that are sufficiently far apart, the Rydberg interaction
 # is negligible and the atoms can be excited to the Rydberg state. As the atoms get
 # closer together, the Rydberg interaction becomes more significant the probability of
@@ -106,12 +106,23 @@ emu_filename = os.path.join(
 )
 
 if not os.path.isfile(emu_filename):
-    emu_batch = batch.braket.local_emulator().run(1000)
+    emu_batch = batch.bloqade.python().run(1000)
     save(emu_batch, emu_filename)
 
 # %% [markdown]
 # Then, we can run the program on the hardware after parallelizing the tasks.
 # We can then save the results to a file.
+
+#
+# <div class="admonition danger"> 
+# <p class="admonition-title">Hardware Execution Cost</p>
+# <p>
+#
+# For this particular program, 7 tasks are generated with each task having 100 shots, amounting to 
+#  __USD \\$9.10__ on AWS Braket.
+# 
+# </p> 
+# </div>
 
 # %%
 

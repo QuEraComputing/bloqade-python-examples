@@ -105,11 +105,22 @@ time_sweep_z2_job = time_sweep_z2_prog.batch_assign(
 # restrictions), we save the necessary metadata to a file that can then be reloaded
 # later and results fetched when they are available.
 
+#
+# <div class="admonition danger"> 
+# <p class="admonition-title">Hardware Execution Cost</p>
+# <p>
+#
+# For this particular program, 20 tasks are generated with each task having 100 shots, amounting to 
+#  __USD \\$26.00__ on AWS Braket.
+# 
+# </p> 
+# </div>
+
 # %%
 
 emu_filename = os.path.join(os.path.abspath(""), "data", "time-sweep-emulation.json")
 if not os.path.isfile(emu_filename):
-    emu_future = time_sweep_z2_job.braket.local_emulator().run(shots=10000)
+    emu_future = time_sweep_z2_job.bloqade.python().run(shots=10000)
     save(emu_future, emu_filename)
 
 filename = os.path.join(os.path.abspath(""), "data", "time-sweep-job.json")
