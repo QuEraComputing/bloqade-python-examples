@@ -16,6 +16,8 @@
         <link rel="prev" href="../example-4-quantum-scar-dynamics/">
       
       
+        <link rel="next" href="../example-6-lattice-gauge-theory/">
+      
       
       <link rel="icon" href="../../assets/favicon.ico">
       <meta name="generator" content="mkdocs-1.6.0, mkdocs-material-9.5.25">
@@ -442,6 +444,8 @@
       
         
       
+        
+      
     
     
       
@@ -769,6 +773,27 @@
   
 </nav>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../example-6-lattice-gauge-theory/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Lattice Gauge Theory Simulation
+  </span>
+  
+
+      </a>
     </li>
   
 
@@ -1355,7 +1380,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </style>
 <!-- End of mermaid configuration --><div class="jupyter-wrapper">
 <div class="jp-Notebook" data-jp-theme-light="true" data-jp-theme-name="JupyterLab Light">
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=646bd131">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=900b750e">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -1379,7 +1404,7 @@ the job file in the <code>data</code> directory that was created for you when yo
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=47e4fb1b">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=7beacab0">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -1396,7 +1421,7 @@ quantum-classical algorithms in a future tutorial.</p>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=43f4b080">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=cda2d2d1">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -1415,7 +1440,7 @@ same as in the previous tutorials.</p>
 </div>
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=6d8d8da8">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=f21e6bd2">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -1488,7 +1513,7 @@ mis_udg_job = mis_udg_program.batch_assign(final_detuning=np.linspace(0, 80, 41)
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=5f715781">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=e4778a86">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -1507,7 +1532,7 @@ we will run on hardware.</p>
 </div>
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=b4bc2dbd">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=60f65785">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -1542,7 +1567,7 @@ if not os.path.isfile(filename):
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=1e5efc7b">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=2ed9e037">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -1556,7 +1581,7 @@ will not scale with the size of the independent set. We start by loading the res
 </div>
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=9d05a1ce">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=5fb0fbb4">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -1588,7 +1613,7 @@ batch = load(filename)
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=5c12be7d">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=89d87961">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -1601,7 +1626,7 @@ then, we can plot the results.</p>
 </div>
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=05960bb3">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=56336e43">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -1716,6 +1741,22 @@ plt.show()</div>
             </div>
           </a>
         
+        
+          
+          <a href="../example-6-lattice-gauge-theory/" class="md-footer__link md-footer__link--next" aria-label="Next: Lattice Gauge Theory Simulation">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Lattice Gauge Theory Simulation
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+            </div>
+          </a>
         
       </nav>
     
