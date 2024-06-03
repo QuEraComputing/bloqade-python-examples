@@ -36,7 +36,7 @@ jobs:
         with:
           python-version: 3.12
       - name: Install dependencies
-        run: pdm install -G doc
+        run: pdm install 
       - name: Set up build cache
         uses: actions/cache@v4
         id: cache
