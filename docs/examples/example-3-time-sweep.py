@@ -62,18 +62,55 @@ if not os.path.isdir("data"):
 # actually have their parameters swept.
 
 # %%
-
 # Define relevant parameters for the lattice geometry and pulse schedule
 n_atoms = 11
 lattice_spacing = 6.1
 min_time_step = 0.05
 
-# Define Rabi amplitude and detuning values.
+# %% [markdown]
+# We choose a maximum Rabi amplitude of 15.8 MHz.
+# Pushing the Rabi amplitude as high as we can minimizes the protocol duration, 
+# but maintains the same pulse area, $\Omega t$. For this reason, in many cases, 
+# maximizing the Rabi frequency is considered good practice for minimizing decoherence effects.
+
+# %%
+rabi_amplitude_values = [0.0, 15.8, 15.8, 0.0]
+
+# %% [markdown]
+# The lattice spacing and Rabi amplitudes give us a nearest neighbor interaction strength:
+# $$V_{{i},{i+1}} = \frac{C_6}{a^6} \approx 105.21 \, \text{MHz} \gg \Omega = 15.8 \, \text{MHz}$$
+# where $C_6 = 2\pi \times 862690 \, \text{MHz} \, \mu \text{m}^6$ is our van der Waals coefficient 
+# for Aquila hardware and $a$ is the lattice spacing we defined earlier.
+# Our interaction strength for next-nearest neighbors is quite low comparatively:
+# $$V_{{i},{i+2}} = \frac{C_6}{(2a)^6} \approx 1.64 \, \text{MHz} \ll \Omega = 15.8 \, \text{MHz}$$
+# The Rydberg interaction term dominates for nearest neighbor spacing, while the Rabi coupling dominates
+# for next-nearest neighbors.
+# This increases the probability of realizing a Rydberg blockade for nearest neighbors,
+# but decreases the probability of Rydberg interaction between next-nearest neighbors. 
+# So far, we're in a good position for creating a Z2 phase.
+
+# Next, we define our detuning values.
+
+# %%
+rabi_detuning_values = [-16.33, -16.33, 16.33, 16.33]
+
+# %% [markdown]
+# We start at large negative detuning values where all atoms are in the ground state.
+# Then, we transition to large positive detuning values where the Rydberg state 
+# becomes energetically favorable and inter-atomic interactions become more important.
+
+# The maximum absolute detuning value of $16.33 \, \text{MHz}$ gives us a Rydberg blockade radius 
+# $$R_b = \Bigl(\frac{C_6}{\sqrt{\Delta^2+\Omega^2}}\Bigr)^{1/6} \approx 7.88 \mu \text{m}$$
+# Typically, we define the lattice spacing such that $a < R_b < 2a$ for a good blockade approximation
+# and Z2 state probability.
+
+# Lastly, we define a set of test durations over which to execute our pulses
+# and write the instructions for our program.
+
+# %%
+durations = [0.8, "sweep_time", 0.8]
 # Note the addition of a "sweep_time" variable
 # for performing sweeps of time values.
-rabi_amplitude_values = [0.0, 15.8, 15.8, 0.0]
-rabi_detuning_values = [-16.33, -16.33, 16.33, 16.33]
-durations = [0.8, "sweep_time", 0.8]
 
 time_sweep_z2_prog = (
     Chain(n_atoms, lattice_spacing=lattice_spacing)
@@ -117,7 +154,6 @@ time_sweep_z2_job = time_sweep_z2_prog.batch_assign(
 # </div>
 
 # %%
-
 emu_filename = os.path.join(os.path.abspath(""), "data", "time-sweep-emulation.json")
 if not os.path.isfile(emu_filename):
     emu_future = time_sweep_z2_job.bloqade.python().run(shots=10000)
@@ -135,8 +171,6 @@ if not os.path.isfile(filename):
 # parameter sweep. The counts are obtained from the `report`of the batch object.
 
 # %%
-
-
 def get_z2_probabilities(report):
     z2_probabilities = []
 
@@ -182,6 +216,42 @@ plt.plot(emu_sweep_times, emu_probabilities, label="Emulator", color="#878787")
 plt.plot(hardware_sweep_times, hardware_probabilities, label="QPU", color="#6437FF")
 
 plt.legend()
+plt.show()
+
+# %% [markdown]
+
+# We can also plot the emulated Z2 ordered phase for a specific sweep time.
+# Here, we extract data for a sweep time of $0.67\mu s$ or a total pulse duration of $2.27\mu s$.
+
+# %%
+densities = emu_report.rydberg_densities()
+site_indices = densities.loc[0].index.values
+rydberg_densities_67_sweep = densities.loc[5,0:10].values
+
+plt.bar(site_indices, rydberg_densities_67_sweep, color="#C8447C")
+plt.xticks(site_indices)
+plt.title("Z2 Phase Rydberg Densities for 2.27$\mu$s Total Pulse Duration")
+plt.xlabel("Atom Site Index")
+plt.ylabel("Rydberg Density")
+
+plt.show()
+
+# %% [markdown]
+
+# Similarly, we can visualize the emulated Rydberg densities of each site index as
+# the sweep time increases and we approach adiabatic evolution.
+
+# %%
+rydberg_densities = densities.values.transpose()
+
+im = plt.imshow(rydberg_densities)
+plt.xticks(rotation=90)
+plt.xticks([x for x in range(len(emu_sweep_times))], [round(dur,2) for dur in emu_sweep_times])
+plt.yticks(site_indices)
+plt.xlabel("Sweep Time ($\mu$s)")
+plt.ylabel("Atom Site Index")
+plt.colorbar(im, shrink=0.6)
+
 plt.show()
 
 # %% [markdown]
