@@ -2,72 +2,72 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://bloqade.quera.com/0.15.13/</loc>
-         <lastmod>2024-09-22</lastmod>
+         <lastmod>2024-09-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://bloqade.quera.com/0.15.13/examples/example-1-floquet/</loc>
-         <lastmod>2024-09-22</lastmod>
+         <lastmod>2024-09-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://bloqade.quera.com/0.15.13/examples/example-1-rabi/</loc>
-         <lastmod>2024-09-22</lastmod>
+         <lastmod>2024-09-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://bloqade.quera.com/0.15.13/examples/example-1-ramsey/</loc>
-         <lastmod>2024-09-22</lastmod>
+         <lastmod>2024-09-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://bloqade.quera.com/0.15.13/examples/example-2-multi-qubit-blockaded/</loc>
-         <lastmod>2024-09-22</lastmod>
+         <lastmod>2024-09-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://bloqade.quera.com/0.15.13/examples/example-2-nonequilibrium-dynamics-blockade-radius/</loc>
-         <lastmod>2024-09-22</lastmod>
+         <lastmod>2024-09-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://bloqade.quera.com/0.15.13/examples/example-2-two-qubit-adiabatic/</loc>
-         <lastmod>2024-09-22</lastmod>
+         <lastmod>2024-09-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://bloqade.quera.com/0.15.13/examples/example-3-2d-ordered-state/</loc>
-         <lastmod>2024-09-22</lastmod>
+         <lastmod>2024-09-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://bloqade.quera.com/0.15.13/examples/example-3-time-sweep/</loc>
-         <lastmod>2024-09-22</lastmod>
+         <lastmod>2024-09-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://bloqade.quera.com/0.15.13/examples/example-4-quantum-scar-dynamics/</loc>
-         <lastmod>2024-09-22</lastmod>
+         <lastmod>2024-09-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://bloqade.quera.com/0.15.13/examples/example-5-MIS-UDG/</loc>
-         <lastmod>2024-09-22</lastmod>
+         <lastmod>2024-09-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://bloqade.quera.com/0.15.13/examples/example-6-lattice-gauge-theory/</loc>
-         <lastmod>2024-09-22</lastmod>
+         <lastmod>2024-09-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://bloqade.quera.com/0.15.13/reference/example_package/</loc>
-         <lastmod>2024-09-22</lastmod>
+         <lastmod>2024-09-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://bloqade.quera.com/0.15.13/scripts/gen_ref_nav/</loc>
-         <lastmod>2024-09-22</lastmod>
+         <lastmod>2024-09-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
 </urlset>
