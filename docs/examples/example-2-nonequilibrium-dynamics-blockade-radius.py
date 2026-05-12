@@ -55,11 +55,17 @@ if not os.path.isdir("data"):
 # ## Program Definition
 # We will start by defining a program. We set up a chain of two atoms
 # with a parameterized distance between them. We then define a Rabi
-# like in the original Rabi oscillation example. Given a `rabi_ampl` of 15 rad/µs
-# the blockaded radius s 8.44 µm. We will look at the dynamics of the system for a
-# distance of 8.5 µm to be every so slightly outside of the blockade radius. We then
-# define a `batch` of programs for different `run_time` values.
+# like in the original Rabi oscillation example. Given a Rabi amplitude of 15 rad/µs,
+# the blockade radius is 8.44 µm. We choose an atom distance of 8.5 µm so the pair is
+# just outside that radius. This puts the interaction strength on the same scale as the
+# Rabi drive, making it a useful regime for seeing the crossover between independent
+# Rabi oscillations and blockade-limited dynamics.
 # %%
+
+ramp_time = 0.06
+rabi_amplitude = 15
+atom_distance = 8.5
+run_times = 0.05 * np.arange(31)
 
 initial_geometry = Chain(2, lattice_spacing="distance")
 program_waveforms = initial_geometry.rydberg.rabi.amplitude.uniform.piecewise_linear(
@@ -67,9 +73,60 @@ program_waveforms = initial_geometry.rydberg.rabi.amplitude.uniform.piecewise_li
     values=[0.0, "rabi_ampl", "rabi_ampl", 0.0],
 )
 program_assigned_vars = program_waveforms.assign(
-    ramp_time=0.06, rabi_ampl=15, distance=8.5
+    ramp_time=ramp_time, rabi_ampl=rabi_amplitude, distance=atom_distance
 )
-batch = program_assigned_vars.batch_assign(run_time=0.05 * np.arange(31))
+batch = program_assigned_vars.batch_assign(run_time=run_times)
+
+# %% [markdown]
+# The blockade radius is defined by the length scale where the van der Waals
+# interaction $V(R)=C_6/R^6$ matches the Rabi drive $\Omega$. For Aquila's Rydberg
+# state, $C_6 = 2\pi \times 862690$ rad/µs µm$^6$. Setting $V(R_b)=\Omega$ gives
+# $R_b = (C_6 / \Omega)^{1/6}$, so this program places the atoms just beyond the
+# nominal blockade boundary.
+
+# %%
+aquila_c6 = 2 * np.pi * 862690
+blockade_radius = (aquila_c6 / rabi_amplitude) ** (1 / 6)
+interaction_strength = aquila_c6 / atom_distance**6
+
+distance_values = np.linspace(6.5, 11.0, 200)
+interaction_values = aquila_c6 / distance_values**6
+
+fig, ax = plt.subplots(figsize=(7, 4))
+ax.plot(distance_values, interaction_values, color="#6437FF", label="$V(R)$")
+ax.axhline(rabi_amplitude, color="#878787", linestyle="--", label="$\\Omega$")
+ax.axvline(blockade_radius, color="#C2477F", linestyle=":", label="$R_b$")
+ax.scatter(
+    [atom_distance],
+    [interaction_strength],
+    color="#C2477F",
+    zorder=3,
+    label="Program distance",
+)
+ax.set_xlabel("Atom distance (µm)")
+ax.set_ylabel("Angular frequency (rad/µs)")
+ax.set_title("Interaction Strength Near the Blockade Radius")
+ax.legend()
+plt.show()
+
+# %% [markdown]
+# The drive pulse ramps the Rabi amplitude up over 0.06 µs, holds it constant for the
+# scanned run time, and then ramps back down to satisfy hardware constraints. The plot
+# below shows the longest pulse in this sweep.
+
+# %%
+pulse_times = np.array(
+    [0.0, ramp_time, ramp_time + run_times[-1], 2 * ramp_time + run_times[-1]]
+)
+pulse_amplitudes = np.array([0.0, rabi_amplitude, rabi_amplitude, 0.0])
+
+fig, ax = plt.subplots(figsize=(7, 4))
+ax.plot(pulse_times, pulse_amplitudes, color="#6437FF")
+ax.fill_between(pulse_times, pulse_amplitudes, color="#6437FF", alpha=0.15)
+ax.set_xlabel("Time (µs)")
+ax.set_ylabel("Rabi amplitude (rad/µs)")
+ax.set_title("Rabi Pulse Schedule for the Longest Evolution")
+plt.show()
 # %% [markdown]
 # ## Run Emulator and Hardware
 # Once again we will run the emulator and hardware. We will use the
@@ -178,13 +235,13 @@ emu_lines = []
 hw_lines = []
 for ax, rydberg_state, color in zip(axs, ["0", "1", "2"], emu_colors):
     (hw_line,) = ax.plot(
-        emu_run_times,
+        hardware_run_times,
         hw_rydberg_state_probabilities[rydberg_state],
         label=rydberg_state + "-Rydberg QPU",
         color=color,
     )
     (emu_line,) = ax.plot(
-        hardware_run_times,
+        emu_run_times,
         emu_rydberg_state_probabilities[rydberg_state],
         color="#878787",
     )
@@ -198,4 +255,40 @@ for ax, rydberg_state, color in zip(axs, ["0", "1", "2"], emu_colors):
 
 ax.legend(handles=[*hw_lines, emu_lines[-1]])
 
+plt.show()
+
+# %% [markdown]
+# We can compress the same data into the mean Rydberg density,
+# $\langle n_r \rangle = (P_1 + 2P_2)/2$, which gives the average excited-state
+# population per atom. Near the blockade radius, the two-atom state is suppressed, so
+# the density does not simply follow the single-atom Rabi oscillation curve.
+
+# %%
+emu_mean_rydberg_density = (
+    np.array(emu_rydberg_state_probabilities["1"])
+    + 2 * np.array(emu_rydberg_state_probabilities["2"])
+) / 2
+hw_mean_rydberg_density = (
+    np.array(hw_rydberg_state_probabilities["1"])
+    + 2 * np.array(hw_rydberg_state_probabilities["2"])
+) / 2
+
+fig, ax = plt.subplots(figsize=(7, 4))
+ax.plot(
+    emu_run_times,
+    emu_mean_rydberg_density,
+    color="#878787",
+    marker=".",
+    label="Emulator",
+)
+ax.plot(
+    hardware_run_times,
+    hw_mean_rydberg_density,
+    color="#6437FF",
+    marker=".",
+    label="QPU",
+)
+ax.set_xlabel("time ($\\mu s$)")
+ax.set_ylabel("Mean Rydberg density")
+ax.legend()
 plt.show()
