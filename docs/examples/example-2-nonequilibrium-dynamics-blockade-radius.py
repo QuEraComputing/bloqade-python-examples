@@ -55,10 +55,11 @@ if not os.path.isdir("data"):
 # ## Program Definition
 # We will start by defining a program. We set up a chain of two atoms
 # with a parameterized distance between them. We then define a Rabi
-# like in the original Rabi oscillation example. Given a `rabi_ampl` of 15 rad/µs
-# the blockaded radius s 8.44 µm. We will look at the dynamics of the system for a
-# distance of 8.5 µm to be every so slightly outside of the blockade radius. We then
-# define a `batch` of programs for different `run_time` values.
+# like in the original Rabi oscillation example. Given a `rabi_ampl` of 15 rad/microsecond,
+# the blockade radius is about 8.44 micrometers. We place the atoms at 8.5 micrometers,
+# just outside that radius, so the pair can partially leave the fully blockaded regime.
+# Sweeping `run_time` then shows the crossover between collective blockade dynamics and
+# independent two-atom Rabi oscillations.
 # %%
 
 initial_geometry = Chain(2, lattice_spacing="distance")
@@ -69,7 +70,71 @@ program_waveforms = initial_geometry.rydberg.rabi.amplitude.uniform.piecewise_li
 program_assigned_vars = program_waveforms.assign(
     ramp_time=0.06, rabi_ampl=15, distance=8.5
 )
-batch = program_assigned_vars.batch_assign(run_time=0.05 * np.arange(31))
+run_times = 0.05 * np.arange(31)
+batch = program_assigned_vars.batch_assign(run_time=run_times)
+
+# %% [markdown]
+# Before running the program, it is useful to compare the chosen atom separation with
+# the blockade radius. Inside the blockade radius, the `|rr>` state is strongly shifted
+# and double excitation is suppressed. Here the atoms sit slightly beyond the estimate,
+# so the two-Rydberg probability is small at early times but can grow during the sweep.
+
+# %%
+atom_distance = 8.5
+blockade_radius = 8.44
+
+fig, ax = plt.subplots(figsize=(6, 2.5))
+atom_positions = np.array([0.0, atom_distance])
+ax.scatter(atom_positions, np.zeros_like(atom_positions), s=180, color="#6437FF")
+for position in atom_positions:
+    ax.axvspan(
+        position - blockade_radius,
+        position + blockade_radius,
+        color="#6437FF",
+        alpha=0.08,
+    )
+
+ax.plot(atom_positions, np.zeros_like(atom_positions), color="#878787", linewidth=2)
+ax.annotate(
+    f"{atom_distance:.2f} micrometers",
+    xy=(atom_distance / 2, 0),
+    xytext=(atom_distance / 2, 0.18),
+    ha="center",
+    arrowprops={"arrowstyle": "<->", "color": "#333333"},
+)
+ax.set_xlim(-1.0, atom_distance + 1.0)
+ax.set_ylim(-0.3, 0.35)
+ax.set_yticks([])
+ax.set_xlabel("Position (micrometers)")
+ax.set_title("Two atoms placed just outside the blockade radius")
+plt.show()
+
+# %% [markdown]
+# The Rabi drive ramps on, stays flat for the selected `run_time`, and ramps off. The
+# sweep repeats the same shape with different plateau durations. The plot below shows
+# the longest pulse in the batch, which is the largest `run_time` used in the results.
+
+# %%
+ramp_time = 0.06
+rabi_ampl = 15
+longest_run_time = max(run_times)
+times = np.array(
+    [
+        0.0,
+        ramp_time,
+        ramp_time + longest_run_time,
+        2 * ramp_time + longest_run_time,
+    ]
+)
+amplitudes = np.array([0.0, rabi_ampl, rabi_ampl, 0.0])
+
+fig, ax = plt.subplots(figsize=(6, 3))
+ax.plot(times, amplitudes, color="#6437FF", linewidth=3)
+ax.fill_between(times, amplitudes, color="#6437FF", alpha=0.12)
+ax.set_xlabel("Time ($\\mu s$)")
+ax.set_ylabel("Rabi amplitude (rad/$\\mu s$)")
+ax.set_title("Representative pulse schedule")
+plt.show()
 # %% [markdown]
 # ## Run Emulator and Hardware
 # Once again we will run the emulator and hardware. We will use the
@@ -164,7 +229,9 @@ emu_rydberg_state_probabilities = rydberg_state_probabilities(emu_report.counts(
 hw_rydberg_state_probabilities = rydberg_state_probabilities(hardware_report.counts())
 
 # %% [markdown]
-#  plot 0, 1, and 2 Rydberg state probabilities but in separate plots
+#  Plot 0, 1, and 2 Rydberg state probabilities but in separate plots. Comparing these
+#  traces shows how much of the population stays in the ground-state manifold, how much
+#  reaches one Rydberg excitation, and when the double-excitation channel becomes visible.
 
 # %%
 figure, axs = plt.subplots(1, 3, figsize=(12, 6), sharey=True)
@@ -178,13 +245,13 @@ emu_lines = []
 hw_lines = []
 for ax, rydberg_state, color in zip(axs, ["0", "1", "2"], emu_colors):
     (hw_line,) = ax.plot(
-        emu_run_times,
+        hardware_run_times,
         hw_rydberg_state_probabilities[rydberg_state],
         label=rydberg_state + "-Rydberg QPU",
         color=color,
     )
     (emu_line,) = ax.plot(
-        hardware_run_times,
+        emu_run_times,
         emu_rydberg_state_probabilities[rydberg_state],
         color="#878787",
     )
@@ -193,9 +260,46 @@ for ax, rydberg_state, color in zip(axs, ["0", "1", "2"], emu_colors):
     emu_lines.append(emu_line)
     hw_lines.append(hw_line)
 
-    ax.set_xlabel("time ($\mu s$)")
+    ax.set_xlabel("time ($\\mu s$)")
     ax.set_ylabel("Probability")
 
 ax.legend(handles=[*hw_lines, emu_lines[-1]])
 
+plt.show()
+
+# %% [markdown]
+# A complementary view is the site-resolved Rydberg density. Since the two atoms are
+# separated by almost one blockade radius, the density remains nearly symmetric between
+# sites, while differences between the emulator and hardware make the finite-shot and
+# device effects easier to see than in the summed probabilities alone.
+
+# %%
+def rydberg_site_densities(report):
+    return np.array([1 - bitstrings.mean(axis=0) for bitstrings in report.bitstrings()])
+
+
+emu_density = rydberg_site_densities(emu_report)
+hw_density = rydberg_site_densities(hardware_report)
+
+fig, axs = plt.subplots(1, 2, figsize=(10, 4), sharey=True)
+for ax, density, sweep_times, title in [
+    (axs[0], emu_density, emu_run_times, "Emulator"),
+    (axs[1], hw_density, hardware_run_times, "QPU"),
+]:
+    image = ax.imshow(
+        density.T,
+        aspect="auto",
+        origin="lower",
+        extent=[min(sweep_times), max(sweep_times), 0.5, 2.5],
+        vmin=0,
+        vmax=1,
+        cmap="viridis",
+    )
+    ax.set_title(title)
+    ax.set_xlabel("Run time ($\\mu s$)")
+    ax.set_yticks([1, 2])
+    ax.set_yticklabels(["Atom 1", "Atom 2"])
+
+axs[0].set_ylabel("Site")
+fig.colorbar(image, ax=axs, label="Rydberg density")
 plt.show()
