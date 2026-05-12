@@ -40,6 +40,12 @@
 # Bloqade API to sample the function at certain intervals to make it compatible with
 # the hardware, which only supports piecewise linear/constant functions. First let us
 # start with the imports.
+#
+# A Floquet protocol uses periodic driving to probe how a quantum system responds to
+# repeated modulation. In this example the atom is continuously driven by the Rabi
+# amplitude while the detuning is sinusoidally modulated. The final Rydberg population
+# therefore depends on both the total drive time and the phase accumulated under the
+# periodic detuning waveform.
 # %%
 import os
 
@@ -65,6 +71,10 @@ if not os.path.isdir("data"):
 # %%
 
 min_time_step = 0.05
+ramp_time = 0.06
+rabi_max = 15
+drive_amplitude = 15
+drive_frequency = 15
 
 durations = cast(["ramp_time", "run_time", "ramp_time"])
 
@@ -83,22 +93,63 @@ floquet_program = (
 )
 
 # %% [markdown]
-# We assign values to the necessary variables and then run_async the program to both
-# the emulator and actual hardware.
+# We assign values to the necessary variables and then build a batch over different
+# run times. The waveform preview below uses the longest member of the sweep so that
+# the flat Rabi drive and oscillating detuning are visible before any emulator or
+# hardware jobs are submitted.
 
 # %%
 run_times = np.linspace(0.05, 3.0, 101)
 
 floquet_job = floquet_program.assign(
-    ramp_time=0.06,
-    min_time_step=0.05,
-    rabi_max=15,
-    drive_amplitude=15,
-    drive_frequency=15,
+    ramp_time=ramp_time,
+    min_time_step=min_time_step,
+    rabi_max=rabi_max,
+    drive_amplitude=drive_amplitude,
+    drive_frequency=drive_frequency,
 ).batch_assign(run_time=run_times)
 
+# %%
+preview_run_time = run_times[-1]
+preview_total_time = 2 * ramp_time + preview_run_time
+preview_times = np.arange(0, preview_total_time + min_time_step, min_time_step)
+preview_rabi = np.interp(
+    preview_times,
+    [0, ramp_time, ramp_time + preview_run_time, preview_total_time],
+    [0, rabi_max, rabi_max, 0],
+)
+preview_detuning = detuning_wf(preview_times, drive_amplitude, drive_frequency)
+
+fig, ax = plt.subplots(figsize=(8, 3.5))
+ax.plot(
+    preview_times,
+    preview_rabi,
+    color="#C8447C",
+    linewidth=2,
+    label="Rabi amplitude",
+)
+ax.plot(
+    preview_times,
+    preview_detuning,
+    color="#6437FF",
+    linewidth=1.6,
+    label="Sinusoidal detuning",
+)
+ax.axvspan(
+    ramp_time,
+    ramp_time + preview_run_time,
+    color="#E9E1FF",
+    alpha=0.35,
+    label="Driven evolution",
+)
+ax.set_xlabel("Time ($\mu s$)")
+ax.set_ylabel("Angular frequency (rad/$\mu s$)")
+ax.set_title("Single-qubit Floquet drive preview")
+ax.legend()
+plt.show()
+
 # %% [markdown]
-# have to start the time at 0.05 because the hardware does not support anything less
+# We have to start the time at 0.05 because the hardware does not support anything less
 # than that time step. We can now run_async the job to the emulator and hardware.
 
 # %% [markdown]
@@ -150,22 +201,26 @@ assert not isinstance(hardware_batch, dict)
 
 # %% [markdown]
 # Next we extract the run times and the Rydberg population from the report. We can then
-# plot the results.
+# plot the results. Each point corresponds to a different total time under the periodic
+# detuning drive. The oscillations are not just simple resonant Rabi flopping: changing
+# the run time changes how many cycles of the detuning modulation the atom experiences.
 
 # %%
 
 hardware_report = hardware_batch.report()
 emulator_report = emu_batch.report()
 
-times = emulator_report.list_param("run_time")
-density = [1 - ele.mean() for ele in emulator_report.bitstrings()]
-plt.plot(times, density, color="#878787", marker=".", label="Emulator")
+emu_times = np.array(emulator_report.list_param("run_time"), dtype=float)
+emu_density = [1 - ele.mean() for ele in emulator_report.bitstrings()]
 
-times = hardware_report.list_param("run_time")
-density = [1 - ele.mean() for ele in hardware_report.bitstrings()]
+hardware_times = np.array(hardware_report.list_param("run_time"), dtype=float)
+hardware_density = [1 - ele.mean() for ele in hardware_report.bitstrings()]
 
-plt.plot(times, density, color="#6437FF", linewidth=4, label="QPU")
-plt.xlabel("Time ($\mu s$)")
-plt.ylabel("Rydberg population")
-plt.legend()
+fig, ax = plt.subplots(figsize=(8, 4))
+ax.plot(emu_times, emu_density, color="#878787", marker=".", label="Emulator")
+ax.plot(hardware_times, hardware_density, color="#6437FF", linewidth=4, label="QPU")
+ax.set_xlabel("Drive time ($\mu s$)")
+ax.set_ylabel("Rydberg population")
+ax.set_title("Rydberg response under sinusoidal Floquet detuning")
+ax.legend()
 plt.show()
