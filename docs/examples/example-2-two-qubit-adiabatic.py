@@ -88,10 +88,55 @@ prog = (
     )
 )
 
+assigned_ramp_time = 1.0
+assigned_run_time = 2.0
+assigned_rabi_value = 15.0
+assigned_detuning_value = 15.0
 distances = np.arange(4, 11, 1)
 batch = prog.assign(
-    ramp_time=1.0, run_time=2.0, rabi_value=15.0, detuning_value=15.0
+    ramp_time=assigned_ramp_time,
+    run_time=assigned_run_time,
+    rabi_value=assigned_rabi_value,
+    detuning_value=assigned_detuning_value,
 ).batch_assign(atom_distance=distances)
+
+# %% [markdown]
+# Before running the program, it is useful to visualize the pulse schedule that is
+# applied for each atom distance. The Rabi amplitude ramps up, remains constant during
+# the sweep, and ramps back down so the atoms are not abruptly driven at the beginning
+# or end of the protocol. The detuning starts negative, where the ground state is
+# energetically favored, and sweeps positive, where Rydberg excitations become
+# favorable unless the van der Waals interaction blocks nearby atoms from exciting
+# together.
+
+# %%
+pulse_times = np.array(
+    [
+        0.0,
+        assigned_ramp_time,
+        assigned_ramp_time + assigned_run_time,
+        2 * assigned_ramp_time + assigned_run_time,
+    ]
+)
+rabi_amplitudes = np.array([0.0, assigned_rabi_value, assigned_rabi_value, 0.0])
+detunings = np.array(
+    [
+        -assigned_detuning_value,
+        -assigned_detuning_value,
+        assigned_detuning_value,
+        assigned_detuning_value,
+    ]
+)
+
+fig, ax = plt.subplots()
+ax.plot(pulse_times, rabi_amplitudes, color="#6437FF", label="Rabi amplitude")
+ax.plot(pulse_times, detunings, color="#C2477F", label="Detuning")
+ax.axhline(0, color="#878787", linewidth=1, linestyle="--")
+ax.set_xlabel(r"time ($\mu s$)")
+ax.set_ylabel(r"frequency (rad/$\mu s$)")
+ax.set_title("Two-qubit adiabatic pulse schedule")
+ax.legend()
+fig.show()
 
 # %% [markdown]
 # ## Run on Emulator and Hardware
@@ -135,7 +180,8 @@ if not os.path.isfile(filename):
 # %% [markdown]
 # ## Plot the Results
 # To show the blockade effect on the system, we will plot the
-# probability of having `0`, `1`, or `2` Rydberg atoms as a function of time.
+# probability of having `0`, `1`, or `2` Rydberg atoms as a function of atom
+# distance.
 # We will do this for both the emulator and the hardware. We can use the
 # following function to get the probabilities from the shot counts of each
 # of the different configurations of the two Rydberg atoms: `00`, `10`, `01`, and `11`.
@@ -203,13 +249,13 @@ emu_lines = []
 hw_lines = []
 for rydberg_state, color in zip(["0", "1", "2"], emu_colors):
     (hw_line,) = ax.plot(
-        emu_distances,
+        hw_distances,
         hw_rydberg_state_probabilities[rydberg_state],
         label=rydberg_state + "-Rydberg QPU",
         color=color,
     )
     (emu_line,) = ax.plot(
-        hw_distances,
+        emu_distances,
         emu_rydberg_state_probabilities[rydberg_state],
         color="#878787",
         label="Emulator",
@@ -220,6 +266,40 @@ for rydberg_state, color in zip(["0", "1", "2"], emu_colors):
 
 
 ax.legend(handles=[*hw_lines, emu_lines[-1]])
-ax.set_xlabel("time ($\mu s$)")
+ax.set_xlabel(r"atom distance ($\mu m$)")
 ax.set_ylabel("Probability")
+fig.show()
+
+# %% [markdown]
+# The same data can be summarized as a mean Rydberg density per atom,
+# $\langle n_R \rangle / 2$. This view makes the blockade crossover easier to read:
+# for small separations, the two atoms share at most one excitation, while at larger
+# separations the interaction is weaker and the two-Rydberg contribution grows.
+
+# %%
+def mean_rydberg_density(probabilities):
+    return (
+        np.array(probabilities["1"]) + 2 * np.array(probabilities["2"])
+    ) / 2
+
+
+fig, ax = plt.subplots()
+ax.plot(
+    emu_distances,
+    mean_rydberg_density(emu_rydberg_state_probabilities),
+    color="#878787",
+    marker=".",
+    label="Emulator",
+)
+ax.plot(
+    hw_distances,
+    mean_rydberg_density(hw_rydberg_state_probabilities),
+    color="#6437FF",
+    marker=".",
+    label="QPU",
+)
+ax.set_xlabel(r"atom distance ($\mu m$)")
+ax.set_ylabel("mean Rydberg density per atom")
+ax.set_title("Blockade crossover versus atom spacing")
+ax.legend()
 fig.show()
