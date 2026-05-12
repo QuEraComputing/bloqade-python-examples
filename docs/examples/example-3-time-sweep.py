@@ -128,6 +128,28 @@ time_sweep_z2_job = time_sweep_z2_prog.batch_assign(
 )
 
 # %% [markdown]
+# Before submitting the sweep, it helps to inspect one representative pulse. The Rabi
+# amplitude turns on and off smoothly while the detuning crosses from negative to
+# positive values. Short sweep times drive the system too quickly to stay near the
+# instantaneous ground state, while longer sweep times give the chain more time to
+# approach the blockaded Z2 pattern.
+
+# %%
+preview_sweep_time = 1.2
+preview_durations = [durations[0], preview_sweep_time, durations[2]]
+preview_times = np.concatenate([[0.0], np.cumsum(preview_durations)])
+
+fig, ax = plt.subplots(figsize=(7, 4))
+ax.plot(preview_times, rabi_amplitude_values, color="#6437FF", label="Rabi amplitude")
+ax.plot(preview_times, rabi_detuning_values, color="#C2477F", label="Detuning")
+ax.axhline(0, color="#878787", linestyle="--", linewidth=1)
+ax.set_xlabel("time ($\\mu s$)")
+ax.set_ylabel("angular frequency (rad/$\\mu s$)")
+ax.set_title("Representative Z2 sweep pulse")
+ax.legend()
+plt.show()
+
+# %% [markdown]
 # ## Running on the Emulator and Hardware
 # With our program properly composed we can now easily send it off to both the emulator
 # and hardware.
@@ -213,11 +235,36 @@ hardware_probabilities = get_z2_probabilities(hardware_report)
 emu_sweep_times = emu_report.list_param("sweep_time")
 hardware_sweep_times = hardware_report.list_param("sweep_time")
 
+fig, ax = plt.subplots(figsize=(7, 4))
+ax.plot(
+    emu_sweep_times,
+    emu_probabilities,
+    marker=".",
+    label="Emulator",
+    color="#878787",
+)
+ax.plot(
+    hardware_sweep_times,
+    hardware_probabilities,
+    marker=".",
+    label="QPU",
+    color="#6437FF",
+)
 
-plt.plot(emu_sweep_times, emu_probabilities, label="Emulator", color="#878787")
-plt.plot(hardware_sweep_times, hardware_probabilities, label="QPU", color="#6437FF")
+best_emu_index = int(np.argmax(emu_probabilities))
+best_emu_sweep_time = float(emu_sweep_times[best_emu_index])
+ax.axvline(best_emu_sweep_time, color="#C2477F", linestyle=":", linewidth=1)
+ax.annotate(
+    "highest emulator Z2 probability",
+    xy=(best_emu_sweep_time, emu_probabilities[best_emu_index]),
+    xytext=(best_emu_sweep_time + 0.15, emu_probabilities[best_emu_index]),
+    arrowprops={"arrowstyle": "->", "color": "#C2477F"},
+)
 
-plt.legend()
+ax.set_xlabel("sweep time ($\\mu s$)")
+ax.set_ylabel("Z2 bitstring probability")
+ax.set_title("Z2 preparation versus sweep duration")
+ax.legend()
 plt.show()
 
 # %% [markdown]
@@ -232,7 +279,7 @@ rydberg_densities_67_sweep = densities.loc[5, 0:10].values
 
 plt.bar(site_indices, rydberg_densities_67_sweep, color="#C8447C")
 plt.xticks(site_indices)
-plt.title("Z2 Phase Rydberg Densities for 2.27$\mu$s Total Pulse Duration")
+plt.title("Z2 Phase Rydberg Densities for 2.27$\\mu$s Total Pulse Duration")
 plt.xlabel("Atom Site Index")
 plt.ylabel("Rydberg Density")
 
@@ -240,22 +287,53 @@ plt.show()
 
 # %% [markdown]
 
-# Similarly, we can visualize the emulated Rydberg densities of each site index as
-# the sweep time increases and we approach adiabatic evolution.
+# Similarly, we can visualize the Rydberg densities of each site index as the sweep
+# time increases and we approach adiabatic evolution. Plotting the emulator and QPU
+# side by side shows whether the alternating high-low density pattern survives on
+# hardware across the same sweep-time range.
 
 # %%
-rydberg_densities = densities.values.transpose()
+hardware_densities = hardware_report.rydberg_densities()
 
-im = plt.imshow(rydberg_densities)
-plt.xticks(rotation=90)
-plt.xticks(
-    [x for x in range(len(emu_sweep_times))], [round(dur, 2) for dur in emu_sweep_times]
-)
-plt.yticks(site_indices)
-plt.xlabel("Sweep Time ($\mu$s)")
-plt.ylabel("Atom Site Index")
-plt.colorbar(im, shrink=0.6)
 
+def plot_rydberg_density_map(ax, density_frame, sweep_times, title):
+    sweep_times = np.asarray(sweep_times, dtype=float)
+    if density_frame.empty or len(sweep_times) == 0:
+        ax.text(0.5, 0.5, "No loaded results", ha="center", va="center")
+        ax.set_title(title)
+        ax.set_axis_off()
+        return None
+
+    time_step = sweep_times[1] - sweep_times[0] if len(sweep_times) > 1 else 1.0
+    extent = [
+        sweep_times[0] - time_step / 2,
+        sweep_times[-1] + time_step / 2,
+        -0.5,
+        density_frame.shape[1] - 0.5,
+    ]
+
+    image = ax.imshow(
+        density_frame.values.transpose(),
+        aspect="auto",
+        origin="lower",
+        vmin=0,
+        vmax=1,
+        extent=extent,
+        cmap="magma",
+    )
+    ax.set_title(title)
+    ax.set_xlabel("Sweep Time ($\\mu s$)")
+    ax.set_yticks(np.arange(density_frame.shape[1]))
+    ax.set_yticklabels([str(site) for site in density_frame.columns])
+    return image
+
+
+fig, axes = plt.subplots(1, 2, figsize=(12, 4), sharey=True)
+image = plot_rydberg_density_map(axes[0], densities, emu_sweep_times, "Emulator")
+plot_rydberg_density_map(axes[1], hardware_densities, hardware_sweep_times, "QPU")
+axes[0].set_ylabel("Atom Site Index")
+if image is not None:
+    fig.colorbar(image, ax=axes, shrink=0.8, label="Rydberg Density")
 plt.show()
 
 # %% [markdown]
