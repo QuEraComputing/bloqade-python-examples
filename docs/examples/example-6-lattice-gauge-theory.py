@@ -38,6 +38,10 @@
 # In the realm of gauge theories, it has been discovered that the Z2 ground state and the quantum scar of the Rydberg chain correspond to the 'string' state and the string-inversion mechanism of the studied LGT, respectively.
 # More intriguingly, by selectively addressing certain atoms, we can induce defects in the chain and simulate the propagation of particle-antiparticle pairs.
 # This notebook is inspired by the paper by F. M. Surace et al. (DOI: 10.1103/PhysRevX.10.021041).
+#
+# The key idea in the example is that the local detuning mask prepares an alternating
+# Z2-like pattern but deliberately changes the center of the chain. That local change
+# acts as the defect whose propagation we follow in the density and correlation plots.
 # %% [markdown]
 # ## Define the Program
 # %%
@@ -84,6 +88,23 @@ detuning_ratio[(N_atom - 1) // 2] = 1
 # middle introduce a defect.
 detuning_ratio
 
+# %% [markdown]
+# The mask below shows which atom sites receive the local detuning waveform. Alternating
+# addressed sites prepare the Z2 string background, while the addressed center site
+# creates the local defect in the middle of the chain.
+
+# %%
+site_indices = np.arange(N_atom)
+
+fig, ax = plt.subplots(figsize=(8, 2.8))
+ax.bar(site_indices, detuning_ratio, color="#6437FF")
+ax.set_xticks(site_indices)
+ax.set_ylim(0, 1.15)
+ax.set_xlabel("Atom site index")
+ax.set_ylabel("Local detuning scale")
+ax.set_title("Local detuning mask for the LGT defect")
+plt.show()
+
 # %%
 run_time = cast("run_time")
 
@@ -112,6 +133,60 @@ program = (
 
 run_times = np.arange(0.0, 1.05, 0.05)
 batch = program.batch_assign(run_time=run_times)
+
+# %% [markdown]
+# We can also preview the three waveforms for the longest evolution time in the sweep.
+# The Rabi drive turns on the dynamics, the uniform detuning prepares and releases the
+# chain, and the scaled local detuning imprints the defect pattern shown above.
+
+# %%
+preview_run_time = run_times[-1]
+
+rabi_times = np.array(
+    [0.0, 0.1, 2.1, 2.15, 2.15 + preview_run_time, 2.2 + preview_run_time]
+)
+rabi_values = np.array([0, 5 * np.pi, 5 * np.pi, 4 * np.pi, 4 * np.pi, 0])
+
+uniform_detuning_times = np.array([0.0, 2.1, 2.15, 2.2 + preview_run_time])
+uniform_detuning_values = np.array([-6 * np.pi, 8 * np.pi, 0, 0])
+
+local_detuning_times = np.array([0.0, 0.1, 2.1, 2.15, 2.2 + preview_run_time])
+local_detuning_values = np.array([0, -8 * 2 * np.pi, -8 * 2 * np.pi, 0, 0])
+
+fig, ax = plt.subplots(figsize=(8, 3.5))
+ax.plot(
+    rabi_times,
+    rabi_values,
+    color="#C8447C",
+    linewidth=2,
+    label="Rabi amplitude",
+)
+ax.plot(
+    uniform_detuning_times,
+    uniform_detuning_values,
+    color="#878787",
+    linewidth=2,
+    label="Uniform detuning",
+)
+ax.plot(
+    local_detuning_times,
+    local_detuning_values,
+    color="#6437FF",
+    linewidth=2,
+    label="Local detuning",
+)
+ax.axvspan(
+    2.15,
+    2.15 + preview_run_time,
+    color="#E9E1FF",
+    alpha=0.35,
+    label="LGT evolution",
+)
+ax.set_xlabel("Time ($\mu s$)")
+ax.set_ylabel("Angular frequency (rad/$\mu s$)")
+ax.set_title("LGT waveform preview for the longest evolution time")
+ax.legend()
+plt.show()
 
 # %% [markdown]
 # ## Run on Emulator and Hardware
@@ -161,9 +236,9 @@ plt.imshow(np.array(emu_rydberg_densities).T, vmin=0, vmax=1)
 plt.xticks(
     ticks=np.arange(0, 20, 2), labels=np.round(np.arange(0.0, 1.0, 0.1), 1), minor=False
 )
-plt.xlabel("t[us]", fontsize=14)
-plt.ylabel("atom", fontsize=14)
-plt.title("simulation", fontsize=14)
+plt.xlabel("Evolution time ($\mu s$)", fontsize=14)
+plt.ylabel("Atom site index", fontsize=14)
+plt.title("Emulated defect propagation", fontsize=14)
 plt.colorbar(shrink=0.68)
 plt.show()
 
@@ -188,9 +263,9 @@ plt.imshow(corrs.T, vmin=0, vmax=1)
 plt.xticks(
     ticks=np.arange(0, 20, 2), labels=np.round(np.arange(0.0, 1.0, 0.1), 1), minor=False
 )
-plt.xlabel("t[us]")
-plt.ylabel("atom")
-plt.title("simulation")
+plt.xlabel("Evolution time ($\mu s$)")
+plt.ylabel("Nearest-neighbor bond index")
+plt.title("Emulated nearest-neighbor Rydberg correlation")
 plt.colorbar(shrink=0.68)
 plt.show()
 
@@ -205,8 +280,8 @@ plt.imshow(np.array(aquila_rydberg_densities).T, vmin=0, vmax=0.8)
 plt.xticks(
     ticks=np.arange(0, 20, 2), labels=np.round(np.arange(0.0, 1.0, 0.1), 1), minor=False
 )
-plt.xlabel("t[us]", fontsize=14)
-plt.ylabel("atom", fontsize=14)
-plt.title("Aquila", fontsize=14)
+plt.xlabel("Evolution time ($\mu s$)", fontsize=14)
+plt.ylabel("Atom site index", fontsize=14)
+plt.title("Aquila defect propagation", fontsize=14)
 plt.colorbar(shrink=0.68)
 plt.show()
