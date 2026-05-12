@@ -41,6 +41,11 @@
 # coherence time of a qubit. In practice, the Rabi frequency has to start and end at
 # 0.0, so we will use a piecewise linear function to ramp up and down the Rabi
 # frequency.
+#
+# The first pulse prepares a coherent superposition between the ground and Rydberg
+# states. During the variable gap, the state accumulates phase relative to the drive.
+# The second pulse maps that phase back into a population difference, which produces
+# the Ramsey fringe plotted at the end of the example.
 
 # %%
 import os
@@ -62,14 +67,27 @@ if not os.path.isdir("data"):
 # allowed time step.
 
 # %%
-plateau_time = (np.pi / 2 - 0.625) / 12.5
-wf_durations = cast([0.05, plateau_time, 0.05, "run_time", 0.05, plateau_time, 0.05])
-rabi_wf_values = [0.0, 12.5, 12.5, 0.0] * 2  # repeat values twice
+ramp_time = 0.05
+rabi_ampl = 12.5
+detuning_value = 10.5
+plateau_time = (np.pi / 2 - 0.625) / rabi_ampl
+wf_durations = cast(
+    [
+        ramp_time,
+        plateau_time,
+        ramp_time,
+        "run_time",
+        ramp_time,
+        plateau_time,
+        ramp_time,
+    ]
+)
+rabi_wf_values = [0.0, rabi_ampl, rabi_ampl, 0.0] * 2  # repeat values twice
 
 ramsey_program = (
     start.add_position((0, 0))
     .rydberg.rabi.amplitude.uniform.piecewise_linear(wf_durations, rabi_wf_values)
-    .detuning.uniform.constant(10.5, sum(wf_durations))
+    .detuning.uniform.constant(detuning_value, sum(wf_durations))
 )
 
 # %% [markdown]
@@ -84,6 +102,63 @@ dt = (max_time - Decimal("0.05")) / n_steps
 run_times = [Decimal("0.05") + dt * i for i in range(101)]
 
 ramsey_job = ramsey_program.batch_assign(run_time=run_times)
+
+# %% [markdown]
+# The plot below shows the pulse schedule for the longest wait time in the sweep. The
+# two short Rabi pulses are the Ramsey $\pi/2$ rotations, while the shaded middle region
+# is the free-evolution interval whose duration is scanned. The detuning stays constant
+# throughout the sequence and controls the phase accumulation during that interval.
+
+# %%
+example_gap = float(run_times[-1])
+pulse_durations = np.array(
+    [
+        ramp_time,
+        plateau_time,
+        ramp_time,
+        example_gap,
+        ramp_time,
+        plateau_time,
+        ramp_time,
+    ],
+    dtype=float,
+)
+pulse_times = np.concatenate(([0.0], np.cumsum(pulse_durations)))
+pulse_amplitudes = np.array(
+    [0.0, rabi_ampl, rabi_ampl, 0.0, 0.0, rabi_ampl, rabi_ampl, 0.0]
+)
+detuning_values = np.full_like(pulse_times, detuning_value, dtype=float)
+
+first_pulse_end = 2 * ramp_time + plateau_time
+second_pulse_start = first_pulse_end + example_gap
+
+fig, ax = plt.subplots(figsize=(8, 3.5))
+ax.plot(
+    pulse_times,
+    pulse_amplitudes,
+    color="#C8447C",
+    linewidth=2,
+    label="Rabi amplitude",
+)
+ax.plot(
+    pulse_times,
+    detuning_values,
+    color="#878787",
+    linestyle="--",
+    label="Detuning",
+)
+ax.axvspan(
+    first_pulse_end,
+    second_pulse_start,
+    color="#E9E1FF",
+    alpha=0.45,
+    label="Free evolution",
+)
+ax.set_xlabel("Time ($\mu s$)")
+ax.set_ylabel("Angular frequency (rad/$\mu s$)")
+ax.set_title("Single-qubit Ramsey pulse schedule")
+ax.legend()
+plt.show()
 
 # %% [markdown]
 # ## Run Emulation and Hardware
@@ -120,6 +195,10 @@ if not os.path.isfile(hardware_filename):
 # hardware and emulation together. Again we will use the `report` to calculate the mean
 # Rydberg population for each run, and then plot the results.
 #
+# The horizontal axis is the free-evolution gap between the two pulses. Oscillations in
+# the Rydberg population are Ramsey fringes: changing the gap changes the phase that the
+# second pulse converts back into a measurable Rydberg-state probability.
+#
 # first we load the results from the emulation and hardware.
 # %%
 emu_batch = load(emu_filename)
@@ -135,15 +214,17 @@ hardware_batch = load(hardware_filename)
 hardware_report = hardware_batch.report()
 emulator_report = emu_batch.report()
 
-times = emulator_report.list_param("run_time")
-density = [1 - ele.mean() for ele in emulator_report.bitstrings()]
-plt.plot(times, density, color="#878787", marker=".", label="Emulator")
+emu_times = np.array(emulator_report.list_param("run_time"), dtype=float)
+emu_density = [1 - ele.mean() for ele in emulator_report.bitstrings()]
 
-times = hardware_report.list_param("run_time")
-density = [1 - ele.mean() for ele in hardware_report.bitstrings()]
+hardware_times = np.array(hardware_report.list_param("run_time"), dtype=float)
+hardware_density = [1 - ele.mean() for ele in hardware_report.bitstrings()]
 
-plt.plot(times, density, color="#6437FF", linewidth=4, label="QPU")
-plt.xlabel("Time ($\mu s$)")
-plt.ylabel("Rydberg population")
-plt.legend()
+fig, ax = plt.subplots(figsize=(8, 4))
+ax.plot(emu_times, emu_density, color="#878787", marker=".", label="Emulator")
+ax.plot(hardware_times, hardware_density, color="#6437FF", linewidth=4, label="QPU")
+ax.set_xlabel("Free-evolution time ($\mu s$)")
+ax.set_ylabel("Rydberg population")
+ax.set_title("Ramsey fringes from variable phase accumulation")
+ax.legend()
 plt.show()
