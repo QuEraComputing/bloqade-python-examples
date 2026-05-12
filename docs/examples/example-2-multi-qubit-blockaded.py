@@ -45,11 +45,16 @@ import os
 
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib.patches import Circle
 from bloqade.analog import load, save, start
 from bloqade.analog.atom_arrangement import Chain, Square
 
 if not os.path.isdir("data"):
     os.mkdir("data")
+
+ramp_time = 0.06
+rabi_drive = 5.0
+run_times = 0.05 * np.arange(21)
 
 # %% [markdown]
 # ## Defining the Geometry
@@ -64,6 +69,15 @@ if not os.path.isdir("data"):
 
 distance = 4.0
 inv_sqrt_2_rounded = 2.6
+seven_atom_positions = [
+    (0, 0),
+    (distance, 0),
+    (-0.5 * distance, distance),
+    (0.5 * distance, distance),
+    (1.5 * distance, distance),
+    (0, 2 * distance),
+    (distance, 2 * distance),
+]
 
 geometries = {
     1: Chain(1),
@@ -72,18 +86,51 @@ geometries = {
         [(-inv_sqrt_2_rounded, 0.0), (inv_sqrt_2_rounded, 0.0), (0, distance)]
     ),
     4: Square(2, lattice_spacing=distance),
-    7: start.add_position(
-        [
-            (0, 0),
-            (distance, 0),
-            (-0.5 * distance, distance),
-            (0.5 * distance, distance),
-            (1.5 * distance, distance),
-            (0, 2 * distance),
-            (distance, 2 * distance),
-        ]
-    ),
+    7: start.add_position(seven_atom_positions),
 }
+
+# %% [markdown]
+# The seven-atom cluster is intentionally compact. For resonant driving, the blockade
+# radius is approximately $(C_6 / \Omega)^{1/6}$, so the $5$ MHz drive used below gives
+# a blockade radius larger than the maximum pair distance in this geometry. This keeps
+# the whole cluster in the collective blockade regime.
+
+# %%
+aquila_c6 = 2 * np.pi * 862690
+blockade_radius = (aquila_c6 / rabi_drive) ** (1 / 6)
+cluster_positions = np.array(seven_atom_positions)
+pairwise_distances = np.linalg.norm(
+    cluster_positions[:, None, :] - cluster_positions[None, :, :], axis=-1
+)
+
+fig, ax = plt.subplots(figsize=(5, 5))
+ax.scatter(cluster_positions[:, 0], cluster_positions[:, 1], color="#6437FF", zorder=3)
+for atom_index, (x_position, y_position) in enumerate(cluster_positions):
+    ax.annotate(
+        str(atom_index),
+        (x_position, y_position),
+        xytext=(5, 5),
+        textcoords="offset points",
+    )
+
+blockade_disk = Circle(
+    cluster_positions[0],
+    blockade_radius,
+    color="#C8447C",
+    alpha=0.12,
+    label=f"Blockade radius {blockade_radius:.1f} $\\mu$m",
+)
+ax.add_patch(blockade_disk)
+ax.set_aspect("equal", adjustable="box")
+ax.set_xlabel(r"x position ($\mu m$)")
+ax.set_ylabel(r"y position ($\mu m$)")
+ax.set_title("Seven-atom blockaded cluster")
+ax.legend(loc="upper right")
+ax.set_xlim(-blockade_radius - 1, blockade_radius + 1)
+ax.set_ylim(-blockade_radius - 1, blockade_radius + 1)
+plt.show()
+
+print(f"Maximum atom-pair distance: {pairwise_distances.max():.2f} micrometers")
 
 # %% [markdown]
 # ## Defining the Pulse Sequence
@@ -97,6 +144,38 @@ sequence = start.rydberg.rabi.amplitude.uniform.piecewise_linear(
     values=[0.0, "rabi_drive", "rabi_drive", 0.0],
 ).parse_sequence()
 # %% [markdown]
+# The drive has a flat-top profile: a short turn-on ramp, a variable hold time, and a
+# matching turn-off ramp. Since every atom in the cluster is inside the blockade radius,
+# the pulse couples the collective ground state to the symmetric one-excitation state
+# instead of driving each atom independently. Increasing the hold time lets us resolve
+# that collective Rabi oscillation.
+#
+# The preview below shows one member of the sweep. Only the hold time changes from task
+# to task; the ramp time and peak Rabi frequency stay fixed.
+
+# %%
+pulse_preview_run_time = run_times[10]
+
+pulse_times = np.array(
+    [
+        0.0,
+        ramp_time,
+        ramp_time + pulse_preview_run_time,
+        2 * ramp_time + pulse_preview_run_time,
+    ]
+)
+pulse_values = np.array([0.0, rabi_drive, rabi_drive, 0.0])
+
+fig, ax = plt.subplots(figsize=(6, 3))
+ax.plot(pulse_times, pulse_values, color="#6437FF", marker="o")
+ax.fill_between(pulse_times, pulse_values, color="#6437FF", alpha=0.15)
+ax.set_xlabel(r"Time ($\mu s$)")
+ax.set_ylabel("Rabi amplitude (MHz)")
+ax.set_title("Example blockaded Rabi pulse")
+ax.set_ylim(bottom=0)
+plt.show()
+
+# %% [markdown]
 
 # ## Defining the Program
 # Now, all that is left to do is to compose the geometry and the Pulse sequence into a
@@ -107,8 +186,8 @@ sequence = start.rydberg.rabi.amplitude.uniform.piecewise_linear(
 batch = (
     geometries[7]
     .apply(sequence)
-    .assign(ramp_time=0.06, rabi_drive=5)
-    .batch_assign(run_time=0.05 * np.arange(21))
+    .assign(ramp_time=ramp_time, rabi_drive=rabi_drive)
+    .batch_assign(run_time=run_times)
 )
 
 # %% [markdown]
@@ -180,7 +259,55 @@ ax.set_ylabel("Sum of Rydberg Densities")
 ax.plot(emu_run_times, emu_densities_summed, label="Emulator", color="#878787")
 # hardware
 ax.plot(hw_run_times, hardware_densities_summed, label="QPU", color="#6437FF")
+ax.axhline(
+    1.0,
+    color="#C8447C",
+    linestyle="--",
+    linewidth=1,
+    label="One-excitation blockade limit",
+)
 ax.legend()
-ax.set_xlabel("Time ($\mu s$)")
+ax.set_xlabel(r"Time ($\mu s$)")
 ax.set_ylabel("Sum of Rydberg Densities")
+plt.show()
+
+# %% [markdown]
+# A summed density makes the collective oscillation easy to see, but it hides how that
+# density is shared across the atoms. In the blockaded regime, simultaneous neighboring
+# excitations are suppressed and the one-excitation component should be spread over the
+# cluster rather than localized on one atom. A per-site heatmap gives a quick check that
+# the response remains spatially symmetric while the total excitation oscillates.
+
+# %%
+fig, axes = plt.subplots(1, 2, figsize=(12, 4), sharey=True)
+
+for ax, density_frame, run_time_values, title in [
+    (axes[0], emu_densities, emu_run_times, "Emulator"),
+    (axes[1], hardware_densities, hw_run_times, "QPU"),
+]:
+    run_time_values = np.asarray(run_time_values, dtype=float)
+    time_step = run_time_values[1] - run_time_values[0]
+    extent = [
+        run_time_values[0] - time_step / 2,
+        run_time_values[-1] + time_step / 2,
+        -0.5,
+        density_frame.shape[1] - 0.5,
+    ]
+
+    image = ax.imshow(
+        density_frame.values.T,
+        aspect="auto",
+        origin="lower",
+        vmin=0,
+        vmax=1,
+        extent=extent,
+        cmap="magma",
+    )
+    ax.set_title(title)
+    ax.set_xlabel(r"Run time ($\mu s$)")
+    ax.set_yticks(np.arange(density_frame.shape[1]))
+    ax.set_yticklabels([str(atom) for atom in density_frame.columns])
+
+axes[0].set_ylabel("Atom index")
+fig.colorbar(image, ax=axes, shrink=0.8, label="Rydberg density")
 plt.show()
