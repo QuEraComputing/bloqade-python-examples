@@ -61,6 +61,9 @@ if not os.path.isdir("data"):
 
 # %%
 durations = cast(["ramp_time", "run_time", "ramp_time"])
+ramp_time = 0.06
+rabi_amplitude = 15.0
+detuning_value = 0.0
 
 rabi_oscillations_program = (
     start.add_position((0, 0))
@@ -87,8 +90,31 @@ rabi_oscillations_program = (
 run_times = np.linspace(0, 3, 101)
 
 rabi_oscillation_job = rabi_oscillations_program.assign(
-    ramp_time=0.06, rabi_ampl=15, detuning_value=0.0
+    ramp_time=ramp_time, rabi_ampl=rabi_amplitude, detuning_value=detuning_value
 ).batch_assign(run_time=run_times)
+
+# %% [markdown]
+# Because the drive is resonant in this tutorial, the pulse area
+# $\int \Omega(t)\,dt$ sets the ideal single-atom Rabi population. The two linear
+# ramps contribute the same area as one extra `ramp_time` of flat drive, so the
+# ideal guide curve below uses
+# $P_{r}(t)=\sin^2\left[\Omega(t_\mathrm{run}+t_\mathrm{ramp})/2\right]$.
+# First, here is the longest pulse in the scan.
+
+# %%
+longest_run_time = run_times[-1]
+pulse_times = np.array(
+    [0.0, ramp_time, ramp_time + longest_run_time, 2 * ramp_time + longest_run_time]
+)
+pulse_values = np.array([0.0, rabi_amplitude, rabi_amplitude, 0.0])
+
+fig, ax = plt.subplots(figsize=(7, 4))
+ax.plot(pulse_times, pulse_values, color="#6437FF", linewidth=2)
+ax.fill_between(pulse_times, pulse_values, color="#6437FF", alpha=0.15)
+ax.set_xlabel("Time ($\mu s$)")
+ax.set_ylabel("Rabi amplitude")
+ax.set_title("Longest Rabi Pulse in the Run-Time Sweep")
+plt.show()
 
 # %% [markdown]
 # ## Run Emulator and Hardware
@@ -173,6 +199,14 @@ emulator_report = emu_batch.report()
 times = emulator_report.list_param("run_time")
 density = [1 - ele.mean() for ele in emulator_report.bitstrings()]
 plt.plot(times, density, color="#878787", marker=".", label="Emulator")
+ideal_population = np.sin(0.5 * rabi_amplitude * (np.array(times) + ramp_time)) ** 2
+plt.plot(
+    times,
+    ideal_population,
+    color="#C8447C",
+    linestyle="--",
+    label="Ideal resonant guide",
+)
 
 times = hardware_report.list_param("run_time")
 density = [1 - ele.mean() for ele in hardware_report.bitstrings()]
@@ -180,5 +214,6 @@ plt.plot(times, density, color="#6437FF", linewidth=4, label="QPU")
 
 plt.xlabel("Time ($\mu s$)")
 plt.ylabel("Rydberg population")
+plt.title("Single-Atom Rabi Population vs Pulse Area")
 plt.legend()
 plt.show()
