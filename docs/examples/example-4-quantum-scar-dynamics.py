@@ -40,6 +40,11 @@
 # to oscillate but because of the Blockade effect, the atoms will not be able to
 # transition to the Rydberg state. However, the atoms will still oscillate between the
 # ground and some other excited many-body states.
+#
+# The Z2 state is an alternating Rydberg-density pattern along the chain. Quantum scar
+# dynamics are visible as partial revivals of this pattern after the preparation ramp,
+# so the final section plots both the Z2-state probability and the site-resolved
+# Rydberg densities.
 
 
 # %% [markdown]
@@ -166,8 +171,25 @@ def get_z2_probabilities(report):
     return z2_probabilities
 
 
+def get_rydberg_densities(report):
+    return np.array([1 - bitstrings.mean(axis=0) for bitstrings in report.bitstrings()])
+
+
+def parameter_edges(values):
+    values = np.array([float(value) for value in values])
+    if len(values) == 1:
+        return np.array([values[0] - 0.5, values[0] + 0.5])
+
+    midpoints = (values[:-1] + values[1:]) / 2
+    first_edge = values[0] - (midpoints[0] - values[0])
+    last_edge = values[-1] + (values[-1] - midpoints[-1])
+    return np.concatenate(([first_edge], midpoints, [last_edge]))
+
+
 # %% [markdown]
-# We can now plot the results from the emulator and hardware. We see that the emulator
+# We can now plot the results from the emulator and hardware. Peaks in the Z2-state
+# probability mark times where the alternating density pattern partially revives after
+# the drive begins.
 
 # %%
 
@@ -187,4 +209,46 @@ plt.plot(hw_run_times, hw_z2_prob, label="QPU", color="#6437FF")
 plt.legend()
 plt.xlabel("Time ($\mu s$)")
 plt.ylabel("Z2-state Probability")
+plt.show()
+
+# %% [markdown]
+# The Z2-state probability compresses the entire chain into a single number. To see
+# where the revivals come from, we can also plot the Rydberg density at each atom site.
+# The early-time preparation region builds the alternating Z2 pattern, while the later
+# scar dynamics show how that pattern dephases and partially returns over time.
+
+# %%
+emu_densities = get_rydberg_densities(emu_report)
+hw_densities = get_rydberg_densities(hardware_report)
+
+site_edges = np.arange(n_atoms + 1) - 0.5
+
+fig, axes = plt.subplots(
+    1,
+    2,
+    figsize=(12, 4),
+    sharey=True,
+    constrained_layout=True,
+)
+
+for ax, densities, times, title in zip(
+    axes,
+    (emu_densities, hw_densities),
+    (emu_run_times, hw_run_times),
+    ("Emulator", "QPU"),
+):
+    mesh = ax.pcolormesh(
+        parameter_edges(times),
+        site_edges,
+        densities.T,
+        shading="auto",
+        vmin=0,
+        vmax=1,
+        cmap="viridis",
+    )
+    ax.set_title(f"{title} site-resolved densities")
+    ax.set_xlabel("Time ($\mu s$)")
+
+axes[0].set_ylabel("Atom site")
+fig.colorbar(mesh, ax=axes, label="Rydberg density")
 plt.show()
