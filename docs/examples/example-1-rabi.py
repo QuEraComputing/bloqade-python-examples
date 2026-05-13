@@ -39,6 +39,13 @@
 # constant detuning and Rabi frequency. In practice, the Rabi frequency has to start
 # and end at 0.0, so we will use a piecewise linear function to ramp up and down the
 # Rabi frequency.
+#
+# Physically, the Rabi drive coherently rotates a single atom between the ground state
+# and the Rydberg state. On resonance, the pulse area
+# $\int \Omega(t) dt$ sets the rotation angle, so sweeping the flat-top duration lets
+# us observe repeated population transfer between the two states. The short ramps make
+# the waveform compatible with the hardware while keeping most of the pulse area in the
+# constant-amplitude segment.
 # %%
 import os
 
@@ -89,6 +96,61 @@ run_times = np.linspace(0, 3, 101)
 rabi_oscillation_job = rabi_oscillations_program.assign(
     ramp_time=0.06, rabi_ampl=15, detuning_value=0.0
 ).batch_assign(run_time=run_times)
+
+# %% [markdown]
+# ## Visualize the pulse schedule
+# Before submitting the job, it is useful to inspect the actual waveform sent to the
+# emulator and hardware. The schedule below shows one representative pulse from the
+# sweep. The Rabi amplitude ramps up, remains constant while the atom evolves, and
+# ramps back down. The detuning is held at zero, so the observed oscillations are
+# driven by the resonant Rabi coupling rather than by an energy offset.
+
+# %%
+representative_run_time = 1.5
+ramp_time = 0.06
+rabi_ampl = 15
+detuning_value = 0.0
+
+pulse_times = np.array(
+    [
+        0.0,
+        ramp_time,
+        ramp_time + representative_run_time,
+        2 * ramp_time + representative_run_time,
+    ]
+)
+rabi_amplitudes = np.array([0.0, rabi_ampl, rabi_ampl, 0.0])
+detuning_values = np.full_like(pulse_times, detuning_value)
+
+fig, ax = plt.subplots()
+ax.plot(
+    pulse_times,
+    rabi_amplitudes,
+    color="#C8447C",
+    marker="o",
+    label="Rabi amplitude",
+)
+ax.set_xlabel("Time ($\mu s$)")
+ax.set_ylabel("Rabi amplitude (MHz)", color="#C8447C")
+ax.tick_params(axis="y", labelcolor="#C8447C")
+
+detuning_ax = ax.twinx()
+detuning_ax.plot(
+    pulse_times,
+    detuning_values,
+    color="#6437FF",
+    linestyle="--",
+    label="Detuning",
+)
+detuning_ax.set_ylabel("Detuning (MHz)", color="#6437FF")
+detuning_ax.tick_params(axis="y", labelcolor="#6437FF")
+detuning_ax.set_ylim(-1.0, 1.0)
+
+lines = ax.get_lines() + detuning_ax.get_lines()
+ax.legend(lines, [line.get_label() for line in lines], loc="upper right")
+plt.title("Representative resonant Rabi pulse")
+fig.tight_layout()
+plt.show()
 
 # %% [markdown]
 # ## Run Emulator and Hardware
