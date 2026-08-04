@@ -35,7 +35,7 @@
 # %% [markdown]
 # # Solving the Maximal Independent Set Problem on defective King Graph
 # ## Introduction
-# In this tutorial, we show how to use some of Bloqade's built-in tools to generate a
+# In this tutorial, we show how to use some of Bloqade's built-in tools to generate
 # defects in a graph and then use Bloqade to solve the Maximal Independent Set (MIS)
 # problem on a Unit Disk Graph (UDG), which is easily expressible on Neutral Atom
 # Hardware via the Rydberg blockade mechanism. We will not cover hybrid quantum-
